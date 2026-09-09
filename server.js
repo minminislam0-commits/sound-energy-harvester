@@ -1,5 +1,5 @@
 import express from "express";
-import { GoogleGenAI } from "google-genai";
+import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -21,7 +21,7 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 app.use(express.json({ limit: "20kb" }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// AI Chat Route
+// AI Chat Route (Free Gemini API)
 app.post("/api/chat", async (req, res) => {
   try {
     const message = String(req.body?.message || "").trim();
