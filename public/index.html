@@ -1,1 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050807">
+<title>Acoustic Energy Harvester // AI Control Panel</title>
+<style>
+:root{
+  --bg:#050807;--panel:#0b100e;--panel2:#0e1512;--line:#193b2b;
+  --green:#39ff88;--green2:#16c96b;--cyan:#54f7ff;--text:#d9ffe8;
+  --muted:#7da38d;--danger:#ff5577;--yellow:#ffe56b;
+}
+*{box-sizing:border-box}
+body{margin:0;background:
+radial-gradient(circle at 15% 10%,rgba(57,255,136,.08),transparent 28%),
+radial-gradient(circle at 85% 20%,rgba(84,247,255,.06),transparent 25%),
+linear-gradient(135deg,#030504,#08100c 55%,#030504);
+color:var(--text);font-family:Arial,sans-serif;min-height:100vh}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,255,255,.012) 4px);opacity:.5}
+.wrap{max-width:1450px;margin:auto;padding:22px}
+header{border:1px solid var(--line);background:rgba(8,15,11,.92);padding:20px;box-shadow:0 0 35px rgba(57,255,136,.08);position:relative;overflow:hidden}
+header:after{content:"";position:absolute;left:0;bottom:0;width:100%;height:2px;background:linear-gradient(90deg,transparent,var(--green),var(--cyan),transparent)}
+.kicker{font:700 12px monospace;color:var(--cyan);letter-spacing:3px}
+h1{font:800 clamp(24px,4vw,42px) monospace;margin:8px 0;color:var(--green);text-shadow:0 0 18px rgba(57,255,136,.45)}
+.subtitle{color:var(--muted);font-family:monospace}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;margin-top:14px}
+.card{grid-column:span 4;background:rgba(8,15,11,.94);border:1px solid var(--line);padding:16px;min-width:0;box-shadow:inset 0 0 30px rgba(57,255,136,.025)}
+.card.wide{grid-column:span 8}.card.full{grid-column:1/-1}
+.card h2{font:700 15px monospace;color:var(--cyan);letter-spacing:1px;margin:0 0 12px}
+.card h2 span{color:var(--green)}
+p,li{line-height:1.55;color:#b8d6c3}
+ul{padding-left:20px}
+.statrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:#07100b;border:1px solid #173324;padding:12px;text-align:center}
+.stat b{display:block;font:700 25px monospace;color:var(--green)}
+.stat small{color:var(--muted);font-family:monospace}
+.wavebox{height:150px;border:1px solid #173324;background:#020504;overflow:hidden}
+canvas{width:100%;height:100%;display:block}
+.meter{height:18px;background:#020504;border:1px solid #1c4430;margin:12px 0;overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green2),var(--cyan));box-shadow:0 0 18px var(--green);transition:width .2s}
+button{border:1px solid var(--green);background:#07150d;color:var(--green);padding:11px 14px;font:700 12px monospace;cursor:pointer;text-transform:uppercase;transition:.2s}
+button:hover{background:rgba(57,255,136,.12);box-shadow:0 0 18px rgba(57,255,136,.2);transform:translateY(-1px)}
+button.danger{border-color:var(--danger);color:var(--danger)}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.led{width:65px;height:65px;border-radius:50%;margin:10px auto;background:#111;border:4px solid #28322d;box-shadow:inset 0 0 20px #000;transition:.3s}
+.led.on{background:#caffdf;border-color:var(--green);box-shadow:0 0 15px var(--green),0 0 45px var(--green)}
+.center{text-align:center}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.node{padding:13px 6px;text-align:center;border:1px solid #173324;background:#07100b;font:700 11px monospace;color:var(--green)}
+.node:not(:last-child):after{content:" →";color:var(--cyan)}
+.ai{display:grid;grid-template-columns:1fr;min-height:420px}
+.chatlog{height:280px;overflow:auto;background:#030604;border:1px solid #173324;padding:12px}
+.msg{margin:8px 0;padding:9px 11px;border-left:2px solid var(--green);background:#07100b;white-space:pre-wrap}
+.msg.user{border-left-color:var(--cyan)}
+.msg.system{border-left-color:var(--yellow);color:#d9d29a}
+.chatinput{display:flex;gap:8px;margin-top:9px}
+.chatinput input{flex:1;background:#020504;border:1px solid #1b4430;color:var(--text);padding:12px;font-family:monospace;outline:none}
+.quick{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.quick button{font-size:10px;padding:8px}
+.processing{color:var(--yellow);font-family:monospace;animation:blink .75s infinite}
+@keyframes blink{50%{opacity:.35}}
+.badge{display:inline-block;border:1px solid #24563c;padding:4px 7px;color:var(--green);font:10px monospace;margin:3px}
+.success{color:var(--green);font-family:monospace;margin-top:10px;min-height:20px}
+.footer{text-align:center;color:#507463;font:11px monospace;padding:20px}
+@media(max-width:900px){.card,.card.wide{grid-column:1/-1}}
+@media(max-width:600px){.wrap{padding:10px}.statrow,.flow{grid-template-columns:1fr 1fr}.flow .node:not(:last-child):after{content:" ↓"}.chatinput{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<div class="kicker">SCIENCE FAIR // LIVE EXPERIMENT SYSTEM</div>
+<h1>ACOUSTIC ENERGY HARVESTER CONTROL PANEL</h1>
+<div class="subtitle">Developed by Yamin Islam | Class 9 Science | Jhalakathi Govt. High School</div>
+</header>
 
+<div class="grid">
+<section class="card wide">
+<h2><span>01 //</span> THEORY CORE</h2>
+<p><b>Piezoelectricity</b> is the ability of certain materials to produce an electrical voltage when they are mechanically stressed. In this project, sound waves create tiny pressure changes and vibrations. A piezoelectric transducer converts those mechanical changes into a small alternating electrical signal.</p>
+<p>The signal can then pass through a <b>bridge rectifier</b>, which changes the alternating signal into a one-directional output. A capacitor stores charge, and an LED can indicate when enough electrical energy has accumulated.</p>
+<div><span class="badge">SOUND → VIBRATION</span><span class="badge">VIBRATION → AC</span><span class="badge">AC → DC</span><span class="badge">DC → STORED ENERGY</span></div>
+</section>
+
+<section class="card">
+<h2><span>02 //</span> CIRCUIT ARCHITECTURE</h2>
+<div class="flow">
+<div class="node">PIEZO<br>TRANSDUCER</div>
+<div class="node">1N4007<br>BRIDGE</div>
+<div class="node">CAPACITOR</div>
+<div class="node">LED<br>INDICATOR</div>
+</div>
+<p>Energy path: sound pressure → piezoelectric conversion → rectification → storage → visible output.</p>
+</section>
+
+<section class="card wide">
+<h2><span>03 //</span> LIVE SOUND-WAVE SIMULATOR</h2>
+<div class="wavebox"><canvas id="wave"></canvas></div>
+<div class="statrow">
+<div class="stat"><b id="db">35</b><small>dB LEVEL</small></div>
+<div class="stat"><b id="cap">0</b><small>CAPACITOR %</small></div>
+<div class="stat"><b id="voltage">0.00</b><small>SIM. VOLTAGE</small></div>
+</div>
+<div class="meter"><i id="dbbar"></i></div>
+<div class="controls">
+<button id="soundBtn">[ SIMULATE SOUND WAVE ]</button>
+<button id="resetBtn" class="danger">[ DISCHARGE / RESET ]</button>
+</div>
+<div class="success" id="status"></div>
+</section>
+
+<section class="card center">
+<h2><span>04 //</span> LED OUTPUT</h2>
+<div class="led" id="led"></div>
+<div id="ledText" class="processing">STANDBY // CHARGE REQUIRED</div>
+</section>
+
+<section class="card">
+<h2><span>05 //</span> LIVE TELEMETRY</h2>
+<p>System state: <b id="state">IDLE</b></p>
+<p>Wave events: <b id="events">0</b></p>
+<p>Estimated energy: <b id="energy">0.000</b> mJ</p>
+<p>Conversion mode: <b>PIEZOELECTRIC</b></p>
+<p>Controller: <b>LOCAL SIMULATION</b></p>
+</section>
+
+<section class="card full ai">
+<h2><span>06 //</span> AI_CORE // PROJECT ASSISTANT</h2>
+<div class="chatlog" id="chatlog">
+<div class="msg system">AI_CORE ONLINE. Ask me about piezoelectricity, sound energy, rectifiers, capacitors, LEDs, voltage, or this experiment.</div>
+</div>
+<div class="quick">
+<button data-q="What is piezoelectricity?">PIEZOELECTRICITY</button>
+<button data-q="How does sound become electricity?">SOUND → ELECTRICITY</button>
+<button data-q="Why do we use a bridge rectifier?">BRIDGE RECTIFIER</button>
+<button data-q="What does the capacitor do?">CAPACITOR</button>
+<button data-q="Explain this project simply.">EXPLAIN PROJECT</button>
+</div>
+<div class="chatinput">
+<input id="chatInput" placeholder="Ask AI_CORE a question..." autocomplete="off">
+<button id="sendBtn">SEND</button>
+</div>
+</section>
+</div>
+<div class="footer">ACOUSTIC ENERGY HARVESTER // SCIENCE FAIR CONTROL SYSTEM // v2.0</div>
+</div>
+
+<script>
+const state = { db:35, cap:0, events:0, energy:0, active:false };
+
+const $ = id => document.getElementById(id);
+const canvas = $("wave"), ctx = canvas.getContext("2d");
+
+function resizeCanvas(){
+  const r = canvas.getBoundingClientRect();
+  canvas.width = Math.max(300, Math.floor(r.width * devicePixelRatio));
+  canvas.height = Math.max(100, Math.floor(r.height * devicePixelRatio));
+}
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
+
+function drawWave(){
+  const w=canvas.width,h=canvas.height,t=performance.now()/500;
+  ctx.clearRect(0,0,w,h);
+  ctx.lineWidth=3;
+  ctx.strokeStyle="#39ff88";
+  ctx.shadowBlur=12; ctx.shadowColor="#39ff88";
+  ctx.beginPath();
+  const amp=15+(state.db/100)*h*.28;
+  for(let x=0;x<=w;x++){
+    const y=h/2+Math.sin(x*.025+t*4)*amp;
+    if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+  }
+  ctx.stroke(); ctx.shadowBlur=0;
+  requestAnimationFrame(drawWave);
+}
+drawWave();
+
+function updateUI(){
+  $("db").textContent=Math.round(state.db);
+  $("cap").textContent=Math.round(state.cap);
+  $("dbbar").style.width=Math.min(100,state.db)+"%";
+  $("voltage").textContent=(state.cap*.032).toFixed(2);
+  $("events").textContent=state.events;
+  $("energy").textContent=(state.cap*0.0048).toFixed(3);
+  $("state").textContent=state.cap>=100?"ENERGY STORED":state.active?"HARVESTING":"IDLE";
+  $("led").classList.toggle("on",state.cap>=100);
+  $("ledText").textContent=state.cap>=100?"OUTPUT ACTIVE // 100%":"STANDBY // CHARGE REQUIRED";
+  $("status").textContent=state.cap>=100?"✓ CAPACITOR FULL — LED ACTIVATED — ENERGY HARVEST COMPLETE":"";
+}
+
+$("soundBtn").addEventListener("click",()=>{
+  state.active=true;
+  state.events++;
+  state.db=Math.min(100,Math.max(45,state.db+10+Math.random()*15));
+  state.cap=Math.min(100,state.cap+4+Math.random()*7);
+  updateUI();
+  clearTimeout(window.soundTimer);
+  window.soundTimer=setTimeout(()=>{
+    state.db=Math.max(35,state.db-10);
+    state.active=false;
+    updateUI();
+  },650);
+});
+
+$("resetBtn").addEventListener("click",()=>{
+  state.db=35;state.cap=0;state.events=0;state.energy=0;state.active=false;
+  updateUI();
+});
+
+setInterval(()=>{
+  if(!state.active) state.db=Math.max(35,state.db-.6);
+  updateUI();
+},120);
+
+const chatlog=$("chatlog"), input=$("chatInput");
+
+function addMsg(text,type){
+  const d=document.createElement("div");
+  d.className="msg "+type;
+  d.textContent=text;
+  chatlog.appendChild(d);
+  chatlog.scrollTop=chatlog.scrollHeight;
+  return d;
+}
+
+async function askAI(question){
+  const q=question.trim();
+  if(!q)return;
+  addMsg("USER > "+q,"user");
+  input.value="";
+  const processing=addMsg("AI_CORE > PROCESSING...","system");
+  processing.classList.add("processing");
+
+  try{
+    const res=await fetch("/api/chat",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({message:q})
+    });
+    const data=await res.json();
+    processing.remove();
+    if(!res.ok) throw new Error(data.error||"API request failed");
+    addMsg("AI_CORE > "+data.reply,"");
+  }catch(err){
+    processing.remove();
+    addMsg("AI_CORE > Connection error. Check that the backend is running and your API key is configured.","system");
+    console.error(err);
+  }
+}
+
+$("sendBtn").addEventListener("click",()=>askAI(input.value));
+input.addEventListener("keydown",e=>{if(e.key==="Enter")askAI(input.value)});
+document.querySelectorAll(".quick button").forEach(b=>b.addEventListener("click",()=>askAI(b.dataset.q)));
+
+updateUI();
+</script>
+</body>
+</html>
