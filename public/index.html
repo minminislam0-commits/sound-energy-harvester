@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#050807">
-  <title>Acoustic Energy Harvester Control Panel</title>
+  <title>শব্দ থেকে বিদ্যুৎ তৈরি - Science Fair Project</title>
   <style>
     :root {
       --bg: #030504;
@@ -68,10 +68,10 @@
       justify-content: space-between;
       align-items: center;
       gap: 20px;
-      padding: 18px 20px;
+      padding: 24px;
       border: 1px solid var(--line);
       background: linear-gradient(135deg, rgba(9,18,13,.96), rgba(4,8,6,.9));
-      box-shadow: var(--shadow);
+      box-shadow: 0 0 40px rgba(57,255,136,.1);
       border-radius: var(--radius);
       overflow: hidden;
       animation: fadeInDown 0.8s ease-out;
@@ -83,7 +83,7 @@
       left: 0;
       bottom: 0;
       width: 36%;
-      height: 2px;
+      height: 3px;
       background: linear-gradient(90deg, transparent, var(--neon), transparent);
       animation: scan 4s linear infinite;
     }
@@ -94,47 +94,58 @@
       100% { transform: translateX(210%); opacity: .15; }
     }
 
-    /* Smooth Sticky Navigation Bar */
-    .quick-nav {
-      position: sticky;
-      top: 12px;
-      z-index: 999;
-      display: flex;
-      gap: 10px;
-      margin: 14px 0 18px;
-      padding: 10px 14px;
-      background: rgba(5, 12, 9, 0.88);
-      backdrop-filter: blur(12px);
+    /* --- NEW NAVIGATION BOX --- */
+    .nav-box {
+      margin: 20px 0;
+      padding: 20px;
+      background: rgba(5, 12, 9, 0.7);
+      backdrop-filter: blur(16px);
       border: 1px solid var(--line-strong);
       border-radius: var(--radius);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4), var(--shadow);
-      overflow-x: auto;
-      scrollbar-width: none;
+      box-shadow: inset 0 0 20px rgba(57,255,136,.05), 0 8px 32px rgba(0,0,0,0.4);
+      animation: fadeInUp 0.9s ease-out;
     }
 
-    .quick-nav::-webkit-scrollbar { display: none; }
-
-    .nav-link {
-      display: inline-flex;
+    .nav-box-title {
+      color: var(--neon);
+      font-size: 13px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      display: flex;
       align-items: center;
-      gap: 6px;
-      padding: 8px 14px;
-      color: var(--muted);
-      text-decoration: none;
-      font: 12px ui-monospace, SFMono-Regular, Consolas, monospace;
-      border: 1px solid transparent;
-      border-radius: 10px;
-      white-space: nowrap;
-      transition: all 0.25s ease;
-      background: rgba(57,255,136,0.03);
+      gap: 8px;
     }
 
-    .nav-link:hover, .nav-link:focus {
-      color: var(--neon-2);
-      border-color: var(--line-strong);
-      background: rgba(57,255,136,0.12);
-      box-shadow: 0 0 12px rgba(57,255,136,0.25);
-      transform: translateY(-2px);
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .nav-card {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      border: 1px solid rgba(57,255,136,.2);
+      border-radius: 12px;
+      background: linear-gradient(145deg, rgba(57,255,136,.04), rgba(0,0,0,.4));
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .nav-card:hover {
+      background: rgba(57,255,136,.15);
+      border-color: var(--neon);
+      transform: translateY(-4px);
+      box-shadow: 0 6px 20px rgba(57,255,136,.2);
+      color: #fff;
     }
 
     .eyebrow, .panel-label, .mono, .tag, .readout, .meter-value, .stat-value {
@@ -143,7 +154,7 @@
 
     .eyebrow {
       color: var(--neon);
-      font-size: 11px;
+      font-size: 12px;
       letter-spacing: .18em;
       text-transform: uppercase;
       margin-bottom: 7px;
@@ -152,32 +163,32 @@
     h1 {
       margin: 0;
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: clamp(22px, 3vw, 30px);
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      text-shadow: 0 0 16px rgba(57,255,136,.3);
+      font-size: clamp(24px, 3.5vw, 34px);
+      letter-spacing: .04em;
+      text-shadow: 0 0 20px rgba(57,255,136,.4);
     }
 
     .subtitle {
       margin: 8px 0 0;
       color: var(--muted);
-      font-size: 13px;
+      font-size: 14px;
+      font-weight: 500;
     }
 
     .system-status {
       display: flex;
       align-items: center;
       gap: 9px;
-      padding: 10px 12px;
+      padding: 12px 16px;
       border: 1px solid var(--line);
       border-radius: 11px;
-      background: rgba(0,0,0,.2);
+      background: rgba(0,0,0,.4);
       white-space: nowrap;
     }
 
     .status-dot {
-      width: 9px;
-      height: 9px;
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
       background: var(--neon);
       box-shadow: 0 0 16px var(--neon);
@@ -198,7 +209,7 @@
     .panel {
       position: relative;
       min-width: 0;
-      padding: 18px;
+      padding: 20px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
       background: linear-gradient(145deg, var(--panel), var(--panel-2));
@@ -213,36 +224,28 @@
       box-shadow: 0 0 30px rgba(57, 255, 136, 0.18);
     }
 
-    .panel::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
-      opacity: .75;
-    }
-
     .panel-label {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 12px;
       color: var(--neon);
-      font-size: 11px;
-      letter-spacing: .16em;
+      font-size: 12px;
+      letter-spacing: .12em;
       text-transform: uppercase;
-      margin-bottom: 13px;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed rgba(57,255,136,.2);
     }
 
     .tag {
       display: inline-flex;
-      padding: 4px 7px;
+      padding: 4px 8px;
       border: 1px solid var(--line);
       border-radius: 999px;
-      color: var(--muted);
-      font-size: 9px;
+      background: rgba(57,255,136,.05);
+      color: var(--neon-2);
+      font-size: 10px;
       letter-spacing: .08em;
     }
 
@@ -256,44 +259,44 @@
     .telemetry { grid-column: span 5; }
     .detailed-info { grid-column: span 12; }
 
-    p { line-height: 1.65; }
+    p { line-height: 1.65; margin-top: 0;}
     .muted { color: var(--muted); }
-    .highlight { color: var(--neon-2); }
+    .highlight { color: var(--neon-2); font-weight: bold;}
     .cyan { color: var(--cyan); }
 
     .theory-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 12px;
+      gap: 12px;
+      margin-top: 14px;
     }
 
     .mini-card {
-      padding: 12px;
-      border: 1px solid rgba(77,255,243,.13);
-      border-radius: 11px;
-      background: rgba(0,0,0,.16);
+      padding: 14px;
+      border: 1px solid rgba(77,255,243,.15);
+      border-radius: 12px;
+      background: rgba(0,0,0,.25);
       transition: transform 0.25s ease, border-color 0.25s ease;
     }
 
     .mini-card:hover {
       transform: translateY(-3px);
       border-color: var(--cyan);
+      box-shadow: 0 4px 15px rgba(77,255,243,.1);
     }
 
     .mini-card strong {
       display: block;
       margin-bottom: 6px;
       color: var(--cyan);
-      font-size: 12px;
+      font-size: 13px;
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      letter-spacing: .04em;
     }
 
     .mini-card span {
       color: var(--muted);
       font-size: 12px;
-      line-height: 1.45;
+      line-height: 1.5;
     }
 
     .circuit {
@@ -301,74 +304,75 @@
       flex-wrap: wrap;
       align-items: center;
       justify-content: center;
-      gap: 9px;
+      gap: 10px;
       margin-top: 16px;
     }
 
     .node {
-      min-width: 88px;
-      padding: 12px 8px;
+      min-width: 90px;
+      padding: 14px 10px;
       text-align: center;
       border: 1px solid var(--line);
-      border-radius: 11px;
-      background: rgba(57,255,136,.035);
+      border-radius: 12px;
+      background: rgba(57,255,136,.05);
       transition: all 0.3s ease;
     }
 
     .node:hover {
-      background: rgba(57,255,136,.12);
-      box-shadow: 0 0 15px rgba(57,255,136,.2);
+      background: rgba(57,255,136,.15);
+      box-shadow: 0 0 20px rgba(57,255,136,.25);
+      transform: scale(1.05);
     }
 
-    .node b { display: block; color: var(--text); font-size: 11px; }
-    .node small { display: block; margin-top: 4px; color: var(--muted); font-size: 9px; }
-    .arrow { color: var(--neon); font-family: monospace; }
+    .node b { display: block; color: var(--text); font-size: 12px; }
+    .node small { display: block; margin-top: 6px; color: var(--muted); font-size: 10px; }
+    .arrow { color: var(--neon); font-family: monospace; font-size: 18px;}
 
-    .fact-list { display: grid; gap: 9px; }
+    .fact-list { display: grid; gap: 10px; }
 
     .fact-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding: 10px 0;
-      border-bottom: 1px dashed rgba(57,255,136,.14);
+      padding: 12px 0;
+      border-bottom: 1px dashed rgba(57,255,136,.15);
     }
 
     .fact-row:last-child { border-bottom: 0; }
-    .fact-row span:first-child { color: var(--muted); font-size: 12px; }
-    .fact-row span:last-child { color: var(--text); font: 12px ui-monospace, monospace; }
+    .fact-row span:first-child { color: var(--muted); font-size: 13px; }
+    .fact-row span:last-child { color: var(--text); font: 12px ui-monospace, monospace; font-weight: bold;}
 
     .sim-top {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 14px;
+      gap: 16px;
+      margin-bottom: 16px;
     }
 
     .meter-box {
-      padding: 13px;
-      border: 1px solid rgba(57,255,136,.16);
-      border-radius: 12px;
-      background: rgba(0,0,0,.18);
+      padding: 16px;
+      border: 1px solid rgba(57,255,136,.2);
+      border-radius: 14px;
+      background: rgba(0,0,0,.3);
     }
 
     .meter-head {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     .meter-head span:first-child { color: var(--muted); font-size: 12px; }
-    .meter-value { color: var(--neon); font-size: 22px; }
+    .meter-value { color: var(--neon); font-size: 26px; font-weight: bold; text-shadow: 0 0 10px rgba(57,255,136,.4);}
 
     .bar {
-      height: 12px;
+      height: 14px;
       overflow: hidden;
       border-radius: 999px;
       background: #07100b;
-      border: 1px solid rgba(57,255,136,.16);
+      border: 1px solid rgba(57,255,136,.2);
     }
 
     .bar-fill {
@@ -376,28 +380,28 @@
       width: 0%;
       border-radius: inherit;
       background: linear-gradient(90deg, #0e6a35, var(--neon), #b8ffd3);
-      box-shadow: 0 0 14px rgba(57,255,136,.45);
-      transition: width .22s ease-out;
+      box-shadow: 0 0 16px rgba(57,255,136,.6);
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .wave {
       position: relative;
-      height: 115px;
-      border: 1px solid rgba(77,255,243,.16);
-      border-radius: 12px;
+      height: 130px;
+      border: 1px solid rgba(77,255,243,.2);
+      border-radius: 14px;
       overflow: hidden;
-      background: linear-gradient(180deg, rgba(77,255,243,.025), rgba(57,255,136,.01));
-      margin: 12px 0;
+      background: linear-gradient(180deg, rgba(77,255,243,.03), rgba(57,255,136,.02));
+      margin: 16px 0;
     }
 
     .wave-grid {
       position: absolute;
       inset: 0;
       background-image:
-        linear-gradient(rgba(77,255,243,.07) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(77,255,243,.07) 1px, transparent 1px);
+        linear-gradient(rgba(77,255,243,.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(77,255,243,.08) 1px, transparent 1px);
       background-size: 28px 21px;
-      opacity: .45;
+      opacity: .5;
     }
 
     #waveCanvas {
@@ -410,48 +414,54 @@
     .sim-actions {
       display: flex;
       flex-wrap: wrap;
-      gap: 9px;
+      gap: 12px;
     }
 
     .btn {
       border: 1px solid var(--line-strong);
-      border-radius: 10px;
-      padding: 11px 14px;
+      border-radius: 12px;
+      padding: 14px 20px;
       color: #eafff1;
-      background: rgba(57,255,136,.07);
+      background: rgba(57,255,136,.08);
+      font-size: 14px;
+      font-weight: bold;
       box-shadow: inset 0 0 0 1px rgba(57,255,136,.02);
-      transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+      transition: all .2s ease;
     }
 
     .btn:hover {
-      transform: translateY(-2px);
-      background: rgba(57,255,136,.16);
-      box-shadow: 0 0 19px rgba(57,255,136,.25);
+      transform: translateY(-3px);
+      background: rgba(57,255,136,.2);
+      box-shadow: 0 0 25px rgba(57,255,136,.3);
     }
 
     .btn.primary {
-      background: rgba(57,255,136,.14);
+      background: rgba(57,255,136,.15);
       color: var(--neon-2);
       font-family: ui-monospace, monospace;
-      letter-spacing: .04em;
+      letter-spacing: .05em;
     }
 
     .btn.danger {
-      border-color: rgba(255,93,114,.35);
+      border-color: rgba(255,93,114,.4);
       color: #ffb2bd;
-      background: rgba(255,93,114,.055);
+      background: rgba(255,93,114,.08);
+    }
+    .btn.danger:hover {
+      background: rgba(255,93,114,.2);
+      box-shadow: 0 0 25px rgba(255,93,114,.3);
     }
 
     .hint {
-      margin: 10px 0 0;
+      margin: 12px 0 0;
       color: var(--muted);
-      font-size: 11px;
+      font-size: 12px;
     }
 
     .energy-core {
       width: min(220px, 70vw);
       aspect-ratio: 1;
-      margin: 5px auto 15px;
+      margin: 10px auto 20px;
       display: grid;
       place-items: center;
       position: relative;
@@ -461,137 +471,144 @@
       position: absolute;
       inset: 7%;
       border-radius: 50%;
-      border: 1px solid rgba(57,255,136,.25);
-      box-shadow: 0 0 22px rgba(57,255,136,.08), inset 0 0 22px rgba(57,255,136,.05);
-      animation: rotate 13s linear infinite;
+      border: 1px solid rgba(57,255,136,.3);
+      box-shadow: 0 0 25px rgba(57,255,136,.1), inset 0 0 25px rgba(57,255,136,.08);
+      animation: rotate 12s linear infinite;
     }
 
-    .core-ring.r2 { inset: 18%; animation-direction: reverse; animation-duration: 8s; border-style: dashed; }
+    .core-ring.r2 { inset: 18%; animation-direction: reverse; animation-duration: 7s; border-style: dashed; }
 
     @keyframes rotate { to { transform: rotate(360deg); } }
 
     .led-core {
-      width: 88px;
-      height: 88px;
+      width: 95px;
+      height: 95px;
       border-radius: 50%;
-      border: 2px solid rgba(57,255,136,.3);
+      border: 2px solid rgba(57,255,136,.4);
       background: radial-gradient(circle, #0b2a18 0%, #06100a 63%, #020503 100%);
-      box-shadow: 0 0 20px rgba(57,255,136,.06);
-      transition: .35s ease;
+      box-shadow: 0 0 20px rgba(57,255,136,.1);
+      transition: all .4s ease;
     }
 
     .led-core.active {
-      background: radial-gradient(circle, #dcffe8 0%, #57ff9c 18%, #0d8c42 43%, #041e0e 72%, #010502 100%);
-      border-color: var(--neon-2);
-      box-shadow: 0 0 18px var(--neon), 0 0 44px rgba(57,255,136,.65), 0 0 85px rgba(57,255,136,.28);
-      animation: ledPulse .9s ease-in-out infinite alternate;
+      background: radial-gradient(circle, #ffffff 0%, #a8ffcb 15%, #39ff88 40%, #0d8c42 75%, #041e0e 100%);
+      border-color: #fff;
+      box-shadow: 0 0 30px #fff, 0 0 60px var(--neon), 0 0 100px rgba(57,255,136,.8);
+      animation: ledPulse .8s ease-in-out infinite alternate;
     }
 
-    @keyframes ledPulse { to { transform: scale(1.055); } }
+    @keyframes ledPulse { to { transform: scale(1.08); } }
 
     .core-status {
       text-align: center;
-      font: 13px ui-monospace, monospace;
+      font: 14px ui-monospace, monospace;
       color: var(--muted);
+      margin-bottom: 10px;
     }
 
-    .core-status strong { color: var(--neon); }
+    .core-status strong { color: var(--neon); font-size: 16px;}
 
     .energy-bar-label {
       display: flex;
       justify-content: space-between;
-      color: var(--muted);
-      font: 11px ui-monospace, monospace;
-      margin: 13px 0 7px;
+      color: var(--text);
+      font: 12px ui-monospace, monospace;
+      margin: 16px 0 8px;
     }
 
     .monitor-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 9px;
-      margin-top: 14px;
+      gap: 12px;
+      margin-top: 16px;
     }
 
     .monitor-stat {
-      padding: 10px;
+      padding: 12px;
       border: 1px solid var(--line);
-      border-radius: 11px;
-      background: rgba(0,0,0,.17);
+      border-radius: 12px;
+      background: rgba(0,0,0,.25);
       text-align: center;
     }
 
     .monitor-stat .stat-value {
       display: block;
       color: var(--neon-2);
-      font-size: 18px;
+      font-size: 20px;
+      font-weight: bold;
     }
 
     .monitor-stat .stat-label {
       display: block;
-      margin-top: 4px;
+      margin-top: 6px;
       color: var(--muted);
-      font-size: 9px;
+      font-size: 10px;
       text-transform: uppercase;
       letter-spacing: .1em;
     }
 
     /* Chat Section */
     .chat-window {
-      height: 310px;
+      height: 340px;
       overflow-y: auto;
-      padding: 12px;
-      border: 1px solid rgba(57,255,136,.16);
-      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid rgba(57,255,136,.2);
+      border-radius: 14px;
       background: #020604;
       scrollbar-width: thin;
-      scrollbar-color: rgba(57,255,136,.4) transparent;
+      scrollbar-color: rgba(57,255,136,.5) transparent;
     }
 
     .message {
       max-width: 88%;
-      margin-bottom: 10px;
-      padding: 10px 12px;
-      border: 1px solid rgba(57,255,136,.13);
-      border-radius: 11px;
-      font-size: 12.5px;
-      line-height: 1.55;
+      margin-bottom: 14px;
+      padding: 12px 16px;
+      border: 1px solid rgba(57,255,136,.15);
+      border-radius: 12px;
+      font-size: 13.5px;
+      line-height: 1.6;
       white-space: pre-wrap;
       animation: fadeIn 0.3s ease;
     }
 
     .message.bot {
       margin-right: auto;
-      background: rgba(57,255,136,.045);
+      background: rgba(57,255,136,.06);
+      border-top-left-radius: 2px;
     }
 
     .message.user {
       margin-left: auto;
-      background: rgba(77,255,243,.045);
-      border-color: rgba(77,255,243,.16);
+      background: rgba(77,255,243,.06);
+      border-color: rgba(77,255,243,.2);
+      border-top-right-radius: 2px;
     }
 
     .msg-label {
-      display: block;
-      margin-bottom: 4px;
-      font: 9px ui-monospace, monospace;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+      font: 10px ui-monospace, monospace;
       letter-spacing: .12em;
       color: var(--neon);
       text-transform: uppercase;
+      font-weight: bold;
     }
 
     .message.user .msg-label { color: var(--cyan); }
 
     .processing {
       display: inline-flex;
-      gap: 4px;
+      gap: 5px;
       align-items: center;
       color: var(--muted);
-      font: 10px ui-monospace, monospace;
+      font: 11px ui-monospace, monospace;
     }
 
     .processing i {
-      width: 4px;
-      height: 4px;
+      width: 5px;
+      height: 5px;
       border-radius: 50%;
       background: var(--neon);
       animation: blink 1s infinite;
@@ -600,59 +617,63 @@
     .processing i:nth-child(2) { animation-delay: .2s; }
     .processing i:nth-child(3) { animation-delay: .4s; }
 
-    @keyframes blink { 50% { opacity: .2; transform: translateY(-2px); } }
+    @keyframes blink { 50% { opacity: .2; transform: translateY(-3px); } }
 
     .quick-actions {
       display: flex;
       flex-wrap: wrap;
-      gap: 7px;
-      margin: 12px 0;
+      gap: 8px;
+      margin: 16px 0;
     }
 
     .quick-btn {
-      padding: 7px 10px;
+      padding: 8px 14px;
       border-radius: 999px;
-      border: 1px solid rgba(57,255,136,.22);
-      color: var(--muted);
-      background: rgba(57,255,136,.035);
-      font: 10px ui-monospace, monospace;
+      border: 1px solid rgba(57,255,136,.3);
+      color: var(--text);
+      background: rgba(57,255,136,.05);
+      font: 11px ui-monospace, monospace;
       transition: all 0.2s ease;
     }
 
     .quick-btn:hover {
-      color: var(--neon-2);
-      border-color: var(--line-strong);
-      background: rgba(57,255,136,.12);
-      transform: translateY(-1px);
+      color: #fff;
+      border-color: var(--neon);
+      background: rgba(57,255,136,.2);
+      transform: translateY(-2px);
     }
 
     .chat-input-row {
       display: grid;
       grid-template-columns: 1fr auto;
-      gap: 8px;
+      gap: 10px;
     }
 
     .chat-input {
       width: 100%;
       border: 1px solid var(--line);
-      border-radius: 10px;
+      border-radius: 12px;
       outline: none;
-      padding: 11px 12px;
+      padding: 14px 16px;
       color: var(--text);
+      font-size: 14px;
       background: #030805;
-      transition: border-color 0.2s ease;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .chat-input:focus { border-color: var(--line-strong); box-shadow: 0 0 12px rgba(57,255,136,.12); }
+    .chat-input:focus { 
+      border-color: var(--neon); 
+      box-shadow: 0 0 15px rgba(57,255,136,.2); 
+    }
 
     /* Telemetry */
-    .telemetry-list { display: grid; gap: 9px; }
+    .telemetry-list { display: grid; gap: 12px; }
 
     .telemetry-item {
-      padding: 11px;
-      border: 1px solid rgba(57,255,136,.14);
-      border-radius: 10px;
-      background: rgba(0,0,0,.15);
+      padding: 14px;
+      border: 1px solid rgba(57,255,136,.18);
+      border-radius: 12px;
+      background: rgba(0,0,0,.2);
     }
 
     .telemetry-head {
@@ -660,38 +681,38 @@
       justify-content: space-between;
       gap: 12px;
       color: var(--muted);
-      font-size: 11px;
-      margin-bottom: 7px;
+      font-size: 12px;
+      margin-bottom: 10px;
     }
 
-    .telemetry-head b { color: var(--text); font: 12px ui-monospace, monospace; }
+    .telemetry-head b { color: var(--text); font: 13px ui-monospace, monospace; }
 
-    /* Detailed Sound Energy Info Section */
+    /* Q&A Information Section */
     .info-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 14px;
-      margin-top: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
     }
 
     .info-card {
-      padding: 14px;
-      border: 1px solid rgba(57, 255, 137, 0.18);
-      border-radius: 12px;
-      background: rgba(0, 0, 0, 0.25);
+      padding: 18px;
+      border: 1px solid rgba(57, 255, 137, 0.25);
+      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.3);
       transition: transform 0.3s ease, border-color 0.3s ease;
     }
 
     .info-card:hover {
-      transform: translateY(-3px);
+      transform: translateY(-4px);
       border-color: var(--neon);
+      box-shadow: 0 6px 20px rgba(57,255,136,.15);
     }
 
     .info-card h3 {
-      margin: 0 0 8px;
+      margin: 0 0 10px;
       color: var(--neon-2);
-      font-size: 14px;
-      font-family: ui-monospace, monospace;
+      font-size: 16px;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -699,37 +720,42 @@
 
     .info-card p, .info-card ul {
       margin: 0;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.6;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.7;
+      opacity: 0.9;
     }
 
     .info-card ul {
-      padding-left: 18px;
-      margin-top: 6px;
+      padding-left: 20px;
+      margin-top: 8px;
     }
 
     .footer {
-      margin-top: 24px;
+      margin-top: 30px;
       text-align: center;
       color: #5d7465;
-      font: 10px ui-monospace, monospace;
-      letter-spacing: .06em;
+      font: 11px ui-monospace, monospace;
+      letter-spacing: .08em;
+      padding: 20px;
+      border-top: 1px solid rgba(57,255,136,.1);
     }
 
     .success-banner {
       display: none;
-      margin-top: 12px;
-      padding: 11px 12px;
-      border: 1px solid rgba(57,255,136,.45);
-      border-radius: 10px;
-      color: var(--neon-2);
-      background: rgba(57,255,136,.08);
-      box-shadow: 0 0 20px rgba(57,255,136,.12);
-      font: 11px ui-monospace, monospace;
+      margin-top: 16px;
+      padding: 14px;
+      border: 1px solid var(--neon);
+      border-radius: 12px;
+      color: #fff;
+      text-align: center;
+      background: rgba(57,255,136,.15);
+      box-shadow: 0 0 25px rgba(57,255,136,.25);
+      font: 13px ui-monospace, monospace;
+      font-weight: bold;
     }
 
-    .success-banner.show { display: block; animation: successIn .35s ease; }
+    .success-banner.show { display: block; animation: successIn .4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
     /* Keyframe Animations */
     @keyframes fadeInUp {
@@ -748,8 +774,8 @@
     }
 
     @keyframes successIn {
-      from { opacity: 0; transform: translateY(5px); }
-      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(10px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     /* Responsive Breakpoints */
@@ -765,8 +791,7 @@
       .sim-top, .theory-grid { grid-template-columns: 1fr; }
       .monitor-grid { grid-template-columns: 1fr; }
       .system-status { width: 100%; justify-content: center; }
-      h1 { font-size: 19px; }
-      .quick-nav { top: 6px; padding: 8px; }
+      h1 { font-size: 20px; }
     }
   </style>
 </head>
@@ -776,7 +801,7 @@
     <header class="topbar">
       <div>
         <div class="eyebrow">SCIENCE FAIR // ACOUSTIC POWER SYSTEM</div>
-        <h1>Acoustic Energy Harvester (শব্দ থেকে বিদ্যুৎ)</h1>
+        <h1>শব্দ থেকে বিদ্যুৎ তৈরি (Acoustic Harvester)</h1>
         <p class="subtitle">Developed by Yamin Islam | Class 9 Science | Jhalakathi Govt. High School</p>
       </div>
       <div class="system-status">
@@ -785,70 +810,73 @@
       </div>
     </header>
 
-    <!-- Sticky Navigation Bar -->
-    <nav class="quick-nav" aria-label="Quick Navigation">
-      <a href="#theory-section" class="nav-link">🔬 Main Theory</a>
-      <a href="#simulator-section" class="nav-link">⚡ Prototype Simulator</a>
-      <a href="#chat-section" class="nav-link">🤖 AI Terminal</a>
-      <a href="#info-section" class="nav-link">📚 Detailed Info</a>
-    </nav>
+    <!-- NEW: Quick Navigation Box -->
+    <section class="nav-box" id="nav-box">
+      <div class="nav-box-title">📌 কুইক ন্যাভিগেশন মেনু (Quick Menu)</div>
+      <div class="nav-grid">
+        <a href="#theory-section" class="nav-card">🔬 মেইন থিওরি (Theory)</a>
+        <a href="#simulator-section" class="nav-card">⚡ লাইভ সিমুলেশন (Simulator)</a>
+        <a href="#chat-section" class="nav-card">🤖 স্মার্ট চ্যাটবট (Nexus AI)</a>
+        <a href="#info-section" class="nav-card">📚 প্রশ্নোত্তর পর্ব (Q&A Info)</a>
+      </div>
+    </section>
 
     <!-- Main Dashboard Grid -->
     <section class="dashboard">
       <!-- 01: Theory Core -->
       <article class="panel theory" id="theory-section">
-        <div class="panel-label"><span>01 // THEORY CORE</span><span class="tag">PIEZOELECTRIC EFFECT</span></div>
+        <div class="panel-label"><span>01 // মেইন থিওরি (THEORY)</span><span class="tag">PIEZOELECTRIC EFFECT</span></div>
         <p>
-          Sound is a mechanical pressure wave. When this sound wave hits a <span class="highlight">Piezoelectric Transducer</span>, the crystal compresses and expands, generating a small alternating current (AC). A bridge rectifier then converts this AC into DC voltage and stores it in a capacitor.
+          শব্দ (Sound) হলো এক প্রকার যান্ত্রিক তরঙ্গ বা প্রেশার ওয়েভ। যখন এই শব্দ তরঙ্গ একটি <span class="highlight">পিজোইলেকট্রিক ট্রান্সডিউসারের (Piezoelectric Transducer)</span> উপর আঘাত করে, তখন এর ভেতরের ক্রিস্টালে চাপ পড়ে এবং একটি ছোট অল্টারনেটিং কারেন্ট (AC) তৈরি হয়। পরে একটি ব্রিজ রেক্টিফায়ার এই AC-কে DC ভোল্টেজে রূপান্তর করে ক্যাপাসিটরে জমা করে।
         </p>
         <div class="theory-grid">
-          <div class="mini-card"><strong>Sound Waves</strong><span>Changes in air pressure vibrate the piezo element.</span></div>
-          <div class="mini-card"><strong>Mechanical → Electrical</strong><span>Piezo material creates voltage in response to pressure.</span></div>
-          <div class="mini-card"><strong>Bridge Rectifier</strong><span>Converts alternating current (AC) to direct current (DC).</span></div>
-          <div class="mini-card"><strong>Energy Storage</strong><span>The capacitor temporarily holds the generated electrical charge.</span></div>
+          <div class="mini-card"><strong>Sound Waves (শব্দ তরঙ্গ)</strong><span>বাতাসের চাপের পরিবর্তন পিজো সেন্সরে কম্পন সৃষ্টি করে।</span></div>
+          <div class="mini-card"><strong>Mechanical → Electrical</strong><span>পিজো ম্যাটেরিয়াল চাপের ফলে ভোল্টেজ তৈরি করে।</span></div>
+          <div class="mini-card"><strong>Bridge Rectifier</strong><span>তৈরি হওয়া AC কারেন্টকে DC কারেন্টে রূপান্তর করে।</span></div>
+          <div class="mini-card"><strong>Energy Storage (স্টোরেজ)</strong><span>ক্যাপাসিটর এই উৎপন্ন বৈদ্যুতিক শক্তি সাময়িকভাবে ধরে রাখে।</span></div>
         </div>
       </article>
 
       <!-- 02: Circuit Architecture -->
       <article class="panel architecture">
-        <div class="panel-label"><span>02 // CIRCUIT ARCHITECTURE</span><span class="tag">PROTOTYPE FLOW</span></div>
-        <p class="muted">Main signal flow path of the prototype circuit:</p>
+        <div class="panel-label"><span>02 // সার্কিট গঠন (ARCHITECTURE)</span><span class="tag">PROTOTYPE FLOW</span></div>
+        <p class="muted">প্রোটোটাইপ সার্কিটের মূল সিগন্যাল ফ্লো (Signal flow):</p>
         <div class="circuit" aria-label="Circuit block diagram">
           <div class="node"><b>PIEZO</b><small>Sound → AC</small></div>
           <span class="arrow">→</span>
           <div class="node"><b>1N4007 ×4</b><small>Bridge Rectifier</small></div>
           <span class="arrow">→</span>
-          <div class="node"><b>CAPACITOR</b><small>Storage</small></div>
+          <div class="node"><b>CAPACITOR</b><small>Energy Storage</small></div>
           <span class="arrow">→</span>
-          <div class="node"><b>LED</b><small>Indicator</small></div>
+          <div class="node"><b>LED</b><small>Light Indicator</small></div>
         </div>
-        <p class="muted" style="margin-bottom:0;font-size:11px;margin-top:14px;">Note: This is a digital simulation for the science fair. Real output depends on sound decibels (dB) and diaphragm size.</p>
+        <p class="muted" style="margin-bottom:0;font-size:11px;margin-top:14px;">নোট: এটি বিজ্ঞান মেলার জন্য তৈরি একটি ডিজিটাল সিমুলেশন। বাস্তবে উৎপন্ন বিদ্যুতের পরিমাণ শব্দের ডেসিবল (dB) এবং ডায়াফ্রামের আকারের ওপর নির্ভর করে।</p>
       </article>
 
       <!-- 03: Quick Facts -->
       <article class="panel facts">
-        <div class="panel-label"><span>03 // QUICK FACTS</span><span class="tag">LIVE MODEL</span></div>
+        <div class="panel-label"><span>03 // গুরুত্বপূর্ণ তথ্য (FACTS)</span><span class="tag">LIVE MODEL</span></div>
         <div class="fact-list">
-          <div class="fact-row"><span>Power Source</span><span>Sound Wave</span></div>
-          <div class="fact-row"><span>Sensor Type</span><span>PIEZOELECTRIC DISC</span></div>
-          <div class="fact-row"><span>Output Type</span><span>LOW VOLTAGE AC/DC</span></div>
-          <div class="fact-row"><span>Rectifier</span><span>4x 1N4007 DIODE</span></div>
-          <div class="fact-row"><span>Storage</span><span>ELECTROLYTIC CAPACITOR</span></div>
-          <div class="fact-row"><span>Indicator</span><span>LED / MICRO SENSOR</span></div>
-          <div class="fact-row"><span>Future Use</span><span>IOT & LOW POWER SENSORS</span></div>
+          <div class="fact-row"><span>পাওয়ার সোর্স (Source)</span><span>SOUND WAVE (শব্দ)</span></div>
+          <div class="fact-row"><span>সেন্সরের ধরন (Sensor)</span><span>PIEZOELECTRIC DISC</span></div>
+          <div class="fact-row"><span>আউটপুট (Output)</span><span>LOW VOLTAGE AC/DC</span></div>
+          <div class="fact-row"><span>রেক্টিফায়ার (Rectifier)</span><span>4x 1N4007 DIODE</span></div>
+          <div class="fact-row"><span>স্টোরেজ (Storage)</span><span>CAPACITOR</span></div>
+          <div class="fact-row"><span>ইন্ডিকেটর (Indicator)</span><span>LED LIGHT</span></div>
+          <div class="fact-row"><span>ভবিষ্যত ব্যবহার (Future Use)</span><span>IOT & SENSORS</span></div>
         </div>
       </article>
 
       <!-- 04: Live Sound Simulator -->
       <article class="panel simulator" id="simulator-section">
-        <div class="panel-label"><span>04 // LIVE SOUND SIMULATION</span><span class="tag" id="simulationState">READY</span></div>
+        <div class="panel-label"><span>04 // লাইভ সিমুলেশন (LIVE SIMULATOR)</span><span class="tag" id="simulationState">READY</span></div>
         <div class="sim-top">
           <div class="meter-box">
-            <div class="meter-head"><span>DECIBEL LEVEL (dB)</span><span class="meter-value" id="dbValue">42 dB</span></div>
+            <div class="meter-head"><span>শব্দের মাত্রা (DECIBEL LEVEL)</span><span class="meter-value" id="dbValue">42 dB</span></div>
             <div class="bar"><div class="bar-fill" id="dbBar"></div></div>
           </div>
           <div class="meter-box">
-            <div class="meter-head"><span>CAPACITOR CHARGE</span><span class="meter-value" id="chargeValue">0%</span></div>
+            <div class="meter-head"><span>ক্যাপাসিটর চার্জ (CHARGE)</span><span class="meter-value" id="chargeValue">0%</span></div>
             <div class="bar"><div class="bar-fill" id="chargeBar"></div></div>
           </div>
         </div>
@@ -859,35 +887,36 @@
         </div>
 
         <div class="sim-actions">
-          <button class="btn primary" id="simulateBtn">[ INPUT SOUND PULSE ]</button>
-          <button class="btn danger" id="resetBtn">[ DISCHARGE / RESET ]</button>
+          <!-- Button click action has been updated in JS to fill faster -->
+          <button class="btn primary" id="simulateBtn">[ সাউন্ড পালস দিন (INPUT SOUND) ]</button>
+          <button class="btn danger" id="resetBtn">[ রিসেট করুন (RESET) ]</button>
         </div>
-        <p class="hint">Keep clicking the button to simulate loud noise. Faster clicks will charge the capacitor faster. The LED will activate at 100%.</p>
-        <div class="success-banner" id="successBanner">⚡ ENERGY HARVEST COMPLETE // CAPACITOR REACHED 100% // LED ACTIVATED ⚡</div>
+        <p class="hint">জোরে শব্দের সিমুলেশন করতে বাটনে ক্লিক করুন। ২-৩ বার ক্লিক করলেই ক্যাপাসিটর দ্রুত চার্জ হবে এবং ১০০% হলে LED জ্বলে উঠবে।</p>
+        <div class="success-banner" id="successBanner">⚡ এনার্জি হারভেস্ট সম্পন্ন // ক্যাপাসিটর ১০০% চার্জড // LED লাইট অন হয়েছে ⚡</div>
       </article>
 
       <!-- 05: Energy Flow Monitor -->
       <article class="panel monitor">
-        <div class="panel-label"><span>05 // ENERGY FLOW MONITOR</span><span class="tag">OUTPUT NODE</span></div>
+        <div class="panel-label"><span>05 // এনার্জি মনিটর (ENERGY MONITOR)</span><span class="tag">OUTPUT NODE</span></div>
         <div class="energy-core">
           <div class="core-ring"></div>
           <div class="core-ring r2"></div>
           <div class="led-core" id="ledCore"></div>
         </div>
-        <div class="core-status">LED STATE: <strong id="ledState">STANDBY</strong></div>
-        <div class="energy-bar-label"><span>STORED ENERGY INDEX</span><span id="energyPercent">0%</span></div>
+        <div class="core-status">LED লাইট স্ট্যাটাস: <strong id="ledState">স্ট্যান্ডবাই (STANDBY)</strong></div>
+        <div class="energy-bar-label"><span>স্টোর করা এনার্জি (STORED ENERGY)</span><span id="energyPercent">0%</span></div>
         <div class="bar"><div class="bar-fill" id="energyBar"></div></div>
 
         <div class="monitor-grid">
-          <div class="monitor-stat"><span class="stat-value" id="eventCount">0</span><span class="stat-label">Sound Pulses</span></div>
-          <div class="monitor-stat"><span class="stat-value" id="peakDb">42</span><span class="stat-label">Peak dB</span></div>
-          <div class="monitor-stat"><span class="stat-value" id="elapsed">0s</span><span class="stat-label">Run time</span></div>
+          <div class="monitor-stat"><span class="stat-value" id="eventCount">0</span><span class="stat-label">সাউন্ড পালস</span></div>
+          <div class="monitor-stat"><span class="stat-value" id="peakDb">42</span><span class="stat-label">সর্বোচ্চ dB</span></div>
+          <div class="monitor-stat"><span class="stat-value" id="elapsed">0s</span><span class="stat-label">রান টাইম</span></div>
         </div>
       </article>
 
       <!-- 06: AI Chatbot -->
       <article class="panel chat" id="chat-section">
-        <div class="panel-label"><span>06 // AI_CORE KNOWLEDGE TERMINAL</span><span class="tag">BACKEND API CONNECTED</span></div>
+        <div class="panel-label"><span>06 // NEXUS AI (স্মার্ট চ্যাটবট)</span><span class="tag">API CONNECTED</span></div>
         <div class="chat-window" id="chatWindow" aria-live="polite"></div>
         <div class="quick-actions">
           <button class="quick-btn" data-question="How does acoustic energy harvesting work?">How does it work?</button>
@@ -897,68 +926,68 @@
           <button class="quick-btn" data-question="What are the limitations of this project?">Limitations?</button>
         </div>
         <div class="chat-input-row">
-          <input class="chat-input" id="chatInput" type="text" placeholder="Ask AI about acoustic energy..." autocomplete="off">
+          <input class="chat-input" id="chatInput" type="text" placeholder="Nexus AI-কে প্রজেক্ট সম্পর্কে যেকোনো প্রশ্ন করুন (Ask anything)..." autocomplete="off">
           <button class="btn primary" id="sendBtn">SEND</button>
         </div>
       </article>
 
       <!-- 07: System Telemetry -->
       <article class="panel telemetry">
-        <div class="panel-label"><span>07 // SYSTEM TELEMETRY</span><span class="tag">REAL-TIME</span></div>
+        <div class="panel-label"><span>07 // সিস্টেম টেলিমেট্রি (TELEMETRY)</span><span class="tag">REAL-TIME</span></div>
         <div class="telemetry-list">
           <div class="telemetry-item">
-            <div class="telemetry-head"><span>Sound input</span><b id="telemetryDb">42 dB</b></div>
+            <div class="telemetry-head"><span>Sound input (শব্দ)</span><b id="telemetryDb">42 dB</b></div>
             <div class="bar"><div class="bar-fill" id="telemetryDbBar"></div></div>
           </div>
           <div class="telemetry-item">
-            <div class="telemetry-head"><span>Capacitor storage</span><b id="telemetryCharge">0%</b></div>
+            <div class="telemetry-head"><span>Capacitor storage (চার্জ)</span><b id="telemetryCharge">0%</b></div>
             <div class="bar"><div class="bar-fill" id="telemetryChargeBar"></div></div>
           </div>
           <div class="telemetry-item">
-            <div class="telemetry-head"><span>Piezo activity</span><b id="piezoActivity">IDLE</b></div>
+            <div class="telemetry-head"><span>Piezo activity (সেন্সর)</span><b id="piezoActivity">IDLE</b></div>
             <div class="bar"><div class="bar-fill" id="piezoBar"></div></div>
           </div>
           <div class="telemetry-item">
-            <div class="telemetry-head"><span>Output node</span><b id="telemetryOutput">LED OFF</b></div>
-            <p class="muted" style="margin:6px 0 0;font-size:10px;">Indicator light activates when capacitor charge reaches 100%.</p>
+            <div class="telemetry-head"><span>Output node (আউটপুট)</span><b id="telemetryOutput">LED OFF</b></div>
+            <p class="muted" style="margin:6px 0 0;font-size:11px;">ক্যাপাসিটরের চার্জ ১০০% হলে ইন্ডিকেটর লাইটটি জ্বলে উঠবে।</p>
           </div>
         </div>
       </article>
 
-      <!-- 08: Detailed Information Section -->
+      <!-- 08: Q&A Detailed Info Section -->
       <article class="panel detailed-info" id="info-section">
-        <div class="panel-label"><span>08 // DETAILED KNOWLEDGE BASE</span><span class="tag">ACOUSTIC HARVESTING IN DEPTH</span></div>
+        <div class="panel-label"><span>08 // প্রশ্নোত্তর পর্ব (Q&A INFO)</span><span class="tag">PROJECT DETAILS</span></div>
         
         <div class="info-grid">
           <div class="info-card">
-            <h3>📢 What is Sound Energy?</h3>
-            <p>Sound is a mechanical vibration or pressure wave traveling through the air. When we speak or generate noise, air molecules vibrate. This mechanical vibration applies pressure to the piezo sensor, converting it into electrical energy.</p>
+            <h3>📢 সাউন্ড এনার্জি কী? (What is Sound Energy?)</h3>
+            <p>শব্দ বা সাউন্ড হলো বাতাসের মাধ্যমে ছড়িয়ে পড়া এক ধরনের মেকানিক্যাল ভাইব্রেশন বা কম্পন। যখন আমরা কথা বলি বা কোনো আওয়াজ হয়, তখন বাতাসের অণুগুলো কাঁপতে থাকে। এই মেকানিক্যাল শক্তিকেই পিজো সেন্সরের মাধ্যমে ইলেকট্রিক্যাল শক্তিতে (বিদ্যুৎ) রূপান্তর করা হয়।</p>
           </div>
 
           <div class="info-card">
-            <h3>⚡ The Piezoelectric Secret</h3>
-            <p>Piezoelectric crystals (like Quartz or PZT) are special materials that generate an electrical charge when mechanical stress is applied. As sound waves strike its diaphragm, it vibrates rapidly, producing a small Alternating Current (AC).</p>
+            <h3>⚡ পিজোইলেকট্রিক ইফেক্ট কীভাবে কাজ করে?</h3>
+            <p>পিজোইলেকট্রিক ক্রিস্টাল (যেমন Quartz বা PZT) হলো এমন বিশেষ পদার্থ, যার ওপর মেকানিক্যাল চাপ বা আঘাত দিলে তা থেকে বৈদ্যুতিক চার্জ উৎপন্ন হয়। যখন শব্দ তরঙ্গ সেন্সরের ডায়াফ্রামে আঘাত করে, এটি দ্রুত কাঁপতে থাকে এবং ছোট মাত্রার AC বিদ্যুৎ তৈরি করে।</p>
           </div>
 
           <div class="info-card">
-            <h3>🚦 Real-life Applications</h3>
+            <h3>🚦 বাস্তব জীবনে এর ব্যবহার (Real-life Uses)</h3>
             <ul>
-              <li><b>Highways & Roads:</b> Utilizing the high decibel noise from car horns and engines to power streetlights.</li>
-              <li><b>Airports & Railways:</b> Harvesting extreme noise pollution to keep low-power terminal sensors active.</li>
-              <li><b>Industrial Factories:</b> Converting continuous loud machine noises into energy for power banks or small LEDs.</li>
+              <li><b>মহাসড়ক ও রাস্তা:</b> গাড়ির হর্ন এবং ইঞ্জিনের প্রচণ্ড শব্দ কাজে লাগিয়ে স্ট্রিটলাইটের জন্য বিদ্যুৎ তৈরি করা সম্ভব।</li>
+              <li><b>বিমানবন্দর ও রেলওয়ে:</b> এসব জায়গার তীব্র শব্দদূষণ থেকে শক্তি সঞ্চয় করে ছোট সেন্সর বা ডিসপ্লে চালানো যায়।</li>
+              <li><b>ইন্ডাস্ট্রিয়াল কারখানা:</b> কারখানার মেশিনের একটানা বিকট শব্দ থেকে এনার্জি হারভেস্ট করা যায়।</li>
             </ul>
           </div>
 
           <div class="info-card">
-            <h3>🔍 Project Benefits & Limitations</h3>
-            <p><b>Benefits:</b> Converts unused noise pollution into a renewable energy source.<br>
-            <b>Limitations:</b> The energy produced by normal sound is extremely low (milliwatt level). Therefore, it cannot power heavy appliances directly and requires capacitors or batteries to store the charge over time.</p>
+            <h3>🔍 প্রজেক্টের সুবিধা ও সীমাবদ্ধতা (Pros & Cons)</h3>
+            <p><b>সুবিধা (Benefits):</b> শব্দদূষণ (Noise pollution) যা আমাদের কোনো কাজে আসে না, সেটিকে ব্যবহার করে নবায়নযোগ্য শক্তি বা রিনিউয়েবল এনার্জি তৈরি করা।<br><br>
+            <b>সীমাবদ্ধতা (Limitations):</b> সাধারণ শব্দ থেকে তৈরি হওয়া বিদ্যুতের পরিমাণ খুবই সামান্য (মিলিওয়াট লেভেলের)। তাই সরাসরি ভারী যন্ত্রপাতি চালানো যায় না, শক্তি সঞ্চয়ের জন্য ক্যাপাসিটর বা ব্যাটারি প্রয়োজন হয়।</p>
           </div>
         </div>
       </article>
     </section>
 
-    <div class="footer">ACOUSTIC ENERGY HARVESTER // SCIENCE FAIR EDITION // DEVELOPED BY YAMIN ISLAM</div>
+    <div class="footer">ACOUSTIC ENERGY HARVESTER (শব্দ থেকে বিদ্যুৎ) // SCIENCE FAIR EDITION // DEVELOPED BY YAMIN ISLAM</div>
   </main>
 
   <script>
@@ -966,9 +995,6 @@
 
     // =========================================================================
     // ⚠️ IMPORTANT API CONFIGURATION ⚠️
-    // If your frontend and backend are hosted on different domains,
-    // you MUST put your full backend URL here (e.g., "https://my-backend.onrender.com/api/chat")
-    // =========================================================================
     const BACKEND_ENDPOINT = "/api/chat"; // <-- UPDATE THIS LINK IF NEEDED
     // =========================================================================
 
@@ -1038,13 +1064,13 @@
 
       if (state.ledOn) {
         el.ledCore.classList.add("active");
-        el.ledState.textContent = "ACTIVE / HARVEST COMPLETE";
+        el.ledState.textContent = "ACTIVE (লাইট অন)";
         el.telemetryOutput.textContent = "LED ON";
         el.simulationState.textContent = "100% // COMPLETE";
         el.successBanner.classList.add("show");
       } else {
         el.ledCore.classList.remove("active");
-        el.ledState.textContent = "STANDBY";
+        el.ledState.textContent = "STANDBY (স্ট্যান্ডবাই)";
         el.telemetryOutput.textContent = "LED OFF";
         el.successBanner.classList.remove("show");
         el.simulationState.textContent = state.charge > 0 ? "CHARGING" : "READY";
@@ -1056,13 +1082,14 @@
 
       if (!state.startedAt) state.startedAt = Date.now();
 
-      const pulseDb = 65 + Math.random() * 30;
+      const pulseDb = 75 + Math.random() * 30; // Increased base DB for more visual impact
       state.db = clamp(pulseDb, 0, 110);
       state.peakDb = Math.max(state.peakDb, state.db);
       state.pulses += 1;
-      state.activeUntil = Date.now() + 420;
+      state.activeUntil = Date.now() + 450;
 
-      const gain = 3.4 + ((state.db - 60) / 50) * 3.8;
+      // UPDATED LOGIC: Gain is drastically increased so 2-3 clicks reach 100%
+      const gain = 35 + ((state.db - 60) / 50) * 15; 
       state.charge = clamp(state.charge + gain, 0, 100);
 
       if (state.charge >= 100) {
@@ -1125,22 +1152,22 @@
       const width = canvas.clientWidth;
       const height = canvas.clientHeight;
       const center = height / 2;
-      const strength = 8 + ((state.db - 30) / 80) * 28;
-      const frequency = 0.018 + (state.db / 110) * 0.018;
+      const strength = 10 + ((state.db - 30) / 80) * 32;
+      const frequency = 0.018 + (state.db / 110) * 0.02;
 
       ctx.clearRect(0, 0, width, height);
       ctx.beginPath();
 
       for (let x = 0; x <= width; x += 2) {
         const envelope = 0.65 + 0.35 * Math.sin(x * 0.008 + time * 0.0014);
-        const y = center + Math.sin(x * frequency + time * 0.006) * strength * envelope;
+        const y = center + Math.sin(x * frequency + time * 0.007) * strength * envelope;
         if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
       }
 
-      ctx.lineWidth = state.ledOn ? 2.6 : 1.8;
-      ctx.strokeStyle = state.ledOn ? "rgba(168,255,203,.98)" : "rgba(57,255,136,.88)";
-      ctx.shadowBlur = state.ledOn ? 18 : 10;
-      ctx.shadowColor = "rgba(57,255,136,.75)";
+      ctx.lineWidth = state.ledOn ? 3.5 : 2.2;
+      ctx.strokeStyle = state.ledOn ? "rgba(255,255,255,.98)" : "rgba(57,255,136,.95)";
+      ctx.shadowBlur = state.ledOn ? 25 : 12;
+      ctx.shadowColor = state.ledOn ? "rgba(168,255,203,.9)" : "rgba(57,255,136,.8)";
       ctx.stroke();
       ctx.shadowBlur = 0;
 
@@ -1152,7 +1179,7 @@
     requestAnimationFrame(drawWave);
 
     // -------------------------------
-    // Backend API Connected Chatbot
+    // Backend API Connected Chatbot (NEXUS AI)
     // -------------------------------
     const chatWindow = document.getElementById("chatWindow");
     const chatInput = document.getElementById("chatInput");
@@ -1163,7 +1190,8 @@
 
       const label = document.createElement("span");
       label.className = "msg-label";
-      label.textContent = role === "bot" ? "AI_CORE" : "YOU";
+      // Update chatbot label name
+      label.innerHTML = role === "bot" ? "🤖 NEXUS AI" : "👤 YOU";
 
       const body = document.createElement("span");
       body.textContent = text;
@@ -1181,7 +1209,7 @@
 
       const label = document.createElement("span");
       label.className = "msg-label";
-      label.textContent = "AI_CORE";
+      label.innerHTML = "🤖 NEXUS AI";
 
       const status = document.createElement("span");
       status.className = "processing";
@@ -1244,7 +1272,7 @@
     });
 
     // Initial Chatbot Message
-    addMessage("bot", "Welcome! I am the AI_CORE assistant. You can ask me any science-related questions about acoustic energy harvesting.");
+    addMessage("bot", "স্বাগতম! আমি Nexus AI (স্মার্ট চ্যাটবট)। শব্দ থেকে বিদ্যুৎ তৈরির এই প্রজেক্ট নিয়ে আমাকে যেকোনো প্রশ্ন করতে পারো।");
     updateUI();
   </script>
 </body>
