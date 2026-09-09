@@ -1,1123 +1,260 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#050807">
-  <title>Acoustic Energy Harvester Control Panel</title>
-  <style>
-    :root {
-      --bg: #030504;
-      --bg-soft: #08100c;
-      --panel: rgba(8, 17, 13, 0.92);
-      --panel-2: rgba(5, 10, 8, 0.95);
-      --line: rgba(59, 255, 137, 0.22);
-      --line-strong: rgba(59, 255, 137, 0.55);
-      --neon: #39ff88;
-      --neon-2: #a8ffcb;
-      --cyan: #4dfff3;
-      --yellow: #ffe36e;
-      --danger: #ff5d72;
-      --text: #e9fff2;
-      --muted: #83a692;
-      --shadow: 0 0 26px rgba(57, 255, 136, 0.11);
-      --radius: 16px;
-    }
-
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      color: var(--text);
-      background:
-        radial-gradient(circle at 15% 10%, rgba(57,255,136,.08), transparent 30%),
-        radial-gradient(circle at 85% 0%, rgba(77,255,243,.06), transparent 25%),
-        linear-gradient(180deg, #020403 0%, #050907 45%, #020403 100%);
-      font-family: "Segoe UI", Arial, sans-serif;
-      overflow-x: hidden;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: .08;
-      background-image:
-        linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
-      background-size: 28px 28px;
-      mask-image: linear-gradient(to bottom, black, transparent 82%);
-    }
-
-    button, input { font: inherit; }
-    button { cursor: pointer; }
-
-    .hud-shell {
-      width: min(1500px, 94vw);
-      margin: 0 auto;
-      padding: 22px 0 36px;
-    }
-
-    .topbar {
-      position: relative;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-      padding: 18px 20px;
-      border: 1px solid var(--line);
-      background: linear-gradient(135deg, rgba(9,18,13,.96), rgba(4,8,6,.9));
-      box-shadow: var(--shadow);
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-
-    .topbar::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 36%;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--neon), transparent);
-      animation: scan 4s linear infinite;
-    }
-
-    @keyframes scan {
-      0% { transform: translateX(-20%); opacity: .2; }
-      50% { opacity: 1; }
-      100% { transform: translateX(210%); opacity: .15; }
-    }
-
-    .eyebrow, .panel-label, .mono, .tag, .readout, .meter-value, .stat-value {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    }
-
-    .eyebrow {
-      color: var(--neon);
-      font-size: 11px;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      margin-bottom: 7px;
-    }
-
-    h1 {
-      margin: 0;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: clamp(22px, 3vw, 35px);
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      text-shadow: 0 0 16px rgba(57,255,136,.3);
-    }
-
-    .subtitle {
-      margin: 8px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .system-status {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      padding: 10px 12px;
-      border: 1px solid var(--line);
-      border-radius: 11px;
-      background: rgba(0,0,0,.2);
-      white-space: nowrap;
-    }
-
-    .status-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: var(--neon);
-      box-shadow: 0 0 16px var(--neon);
-      animation: pulse 1.6s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      50% { transform: scale(1.5); opacity: .65; }
-    }
-
-    .dashboard {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 14px;
-      margin-top: 14px;
-    }
-
-    .panel {
-      position: relative;
-      min-width: 0;
-      padding: 17px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      background: linear-gradient(145deg, var(--panel), var(--panel-2));
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-
-    .panel::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
-      opacity: .75;
-    }
-
-    .panel-label {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      color: var(--neon);
-      font-size: 11px;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      margin-bottom: 13px;
-    }
-
-    .tag {
-      display: inline-flex;
-      padding: 4px 7px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      color: var(--muted);
-      font-size: 9px;
-      letter-spacing: .08em;
-    }
-
-    .theory { grid-column: span 5; }
-    .architecture { grid-column: span 4; }
-    .facts { grid-column: span 3; }
-    .simulator { grid-column: span 7; }
-    .monitor { grid-column: span 5; }
-    .chat { grid-column: span 8; }
-    .telemetry { grid-column: span 4; }
-
-    p { line-height: 1.65; }
-    .muted { color: var(--muted); }
-    .highlight { color: var(--neon-2); }
-    .cyan { color: var(--cyan); }
-
-    .theory-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 12px;
-    }
-
-    .mini-card {
-      padding: 11px;
-      border: 1px solid rgba(77,255,243,.13);
-      border-radius: 11px;
-      background: rgba(0,0,0,.16);
-    }
-
-    .mini-card strong {
-      display: block;
-      margin-bottom: 6px;
-      color: var(--cyan);
-      font-size: 12px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      letter-spacing: .04em;
-    }
-
-    .mini-card span {
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.45;
-    }
-
-    .circuit {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: 9px;
-      margin-top: 16px;
-    }
-
-    .node {
-      min-width: 88px;
-      padding: 12px 8px;
-      text-align: center;
-      border: 1px solid var(--line);
-      border-radius: 11px;
-      background: rgba(57,255,136,.035);
-    }
-
-    .node b {
-      display: block;
-      color: var(--text);
-      font-size: 11px;
-    }
-
-    .node small {
-      display: block;
-      margin-top: 4px;
-      color: var(--muted);
-      font-size: 9px;
-    }
-
-    .arrow { color: var(--neon); font-family: monospace; }
-
-    .fact-list {
-      display: grid;
-      gap: 9px;
-    }
-
-    .fact-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 10px 0;
-      border-bottom: 1px dashed rgba(57,255,136,.14);
-    }
-
-    .fact-row:last-child { border-bottom: 0; }
-    .fact-row span:first-child { color: var(--muted); font-size: 12px; }
-    .fact-row span:last-child { color: var(--text); font: 12px ui-monospace, monospace; }
-
-    .sim-top {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-
-    .meter-box {
-      padding: 13px;
-      border: 1px solid rgba(57,255,136,.16);
-      border-radius: 12px;
-      background: rgba(0,0,0,.18);
-    }
-
-    .meter-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    .meter-head span:first-child { color: var(--muted); font-size: 12px; }
-    .meter-value { color: var(--neon); font-size: 22px; }
-
-    .bar {
-      height: 12px;
-      overflow: hidden;
-      border-radius: 999px;
-      background: #07100b;
-      border: 1px solid rgba(57,255,136,.16);
-    }
-
-    .bar-fill {
-      height: 100%;
-      width: 0%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, #0e6a35, var(--neon), #b8ffd3);
-      box-shadow: 0 0 14px rgba(57,255,136,.45);
-      transition: width .22s ease-out;
-    }
-
-    .wave {
-      position: relative;
-      height: 105px;
-      border: 1px solid rgba(77,255,243,.16);
-      border-radius: 12px;
-      overflow: hidden;
-      background: linear-gradient(180deg, rgba(77,255,243,.025), rgba(57,255,136,.01));
-      margin: 12px 0;
-    }
-
-    .wave-grid {
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(77,255,243,.07) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(77,255,243,.07) 1px, transparent 1px);
-      background-size: 28px 21px;
-      opacity: .45;
-    }
-
-    #waveCanvas {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    .sim-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 9px;
-    }
-
-    .btn {
-      border: 1px solid var(--line-strong);
-      border-radius: 10px;
-      padding: 11px 14px;
-      color: #eafff1;
-      background: rgba(57,255,136,.07);
-      box-shadow: inset 0 0 0 1px rgba(57,255,136,.02);
-      transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-      background: rgba(57,255,136,.13);
-      box-shadow: 0 0 19px rgba(57,255,136,.15);
-    }
-
-    .btn.primary {
-      background: rgba(57,255,136,.14);
-      color: var(--neon-2);
-      font-family: ui-monospace, monospace;
-      letter-spacing: .04em;
-    }
-
-    .btn.danger {
-      border-color: rgba(255,93,114,.35);
-      color: #ffb2bd;
-      background: rgba(255,93,114,.055);
-    }
-
-    .hint {
-      margin: 10px 0 0;
-      color: var(--muted);
-      font-size: 11px;
-    }
-
-    .energy-core {
-      width: min(220px, 70vw);
-      aspect-ratio: 1;
-      margin: 5px auto 15px;
-      display: grid;
-      place-items: center;
-      position: relative;
-    }
-
-    .core-ring {
-      position: absolute;
-      inset: 7%;
-      border-radius: 50%;
-      border: 1px solid rgba(57,255,136,.25);
-      box-shadow: 0 0 22px rgba(57,255,136,.08), inset 0 0 22px rgba(57,255,136,.05);
-      animation: rotate 13s linear infinite;
-    }
-
-    .core-ring.r2 { inset: 18%; animation-direction: reverse; animation-duration: 8s; border-style: dashed; }
-
-    @keyframes rotate { to { transform: rotate(360deg); } }
-
-    .led-core {
-      width: 88px;
-      height: 88px;
-      border-radius: 50%;
-      border: 2px solid rgba(57,255,136,.3);
-      background: radial-gradient(circle, #0b2a18 0%, #06100a 63%, #020503 100%);
-      box-shadow: 0 0 20px rgba(57,255,136,.06);
-      transition: .35s ease;
-    }
-
-    .led-core.active {
-      background: radial-gradient(circle, #dcffe8 0%, #57ff9c 18%, #0d8c42 43%, #041e0e 72%, #010502 100%);
-      border-color: var(--neon-2);
-      box-shadow: 0 0 18px var(--neon), 0 0 44px rgba(57,255,136,.65), 0 0 85px rgba(57,255,136,.28);
-      animation: ledPulse .9s ease-in-out infinite alternate;
-    }
-
-    @keyframes ledPulse { to { transform: scale(1.055); } }
-
-    .core-status {
-      text-align: center;
-      font: 13px ui-monospace, monospace;
-      color: var(--muted);
-    }
-
-    .core-status strong { color: var(--neon); }
-
-    .energy-bar-label {
-      display: flex;
-      justify-content: space-between;
-      color: var(--muted);
-      font: 11px ui-monospace, monospace;
-      margin: 13px 0 7px;
-    }
-
-    .monitor-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 9px;
-      margin-top: 14px;
-    }
-
-    .monitor-stat {
-      padding: 10px;
-      border: 1px solid var(--line);
-      border-radius: 11px;
-      background: rgba(0,0,0,.17);
-      text-align: center;
-    }
-
-    .monitor-stat .stat-value {
-      display: block;
-      color: var(--neon-2);
-      font-size: 18px;
-    }
-
-    .monitor-stat .stat-label {
-      display: block;
-      margin-top: 4px;
-      color: var(--muted);
-      font-size: 9px;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-    }
-
-    .chat-window {
-      height: 295px;
-      overflow-y: auto;
-      padding: 12px;
-      border: 1px solid rgba(57,255,136,.16);
-      border-radius: 12px;
-      background: #020604;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(57,255,136,.4) transparent;
-    }
-
-    .message {
-      max-width: 86%;
-      margin-bottom: 10px;
-      padding: 10px 11px;
-      border: 1px solid rgba(57,255,136,.13);
-      border-radius: 11px;
-      font-size: 12px;
-      line-height: 1.55;
-      white-space: pre-wrap;
-    }
-
-    .message.bot {
-      margin-right: auto;
-      background: rgba(57,255,136,.045);
-    }
-
-    .message.user {
-      margin-left: auto;
-      background: rgba(77,255,243,.045);
-      border-color: rgba(77,255,243,.16);
-    }
-
-    .msg-label {
-      display: block;
-      margin-bottom: 4px;
-      font: 9px ui-monospace, monospace;
-      letter-spacing: .12em;
-      color: var(--neon);
-      text-transform: uppercase;
-    }
-
-    .message.user .msg-label { color: var(--cyan); }
-
-    .processing {
-      display: inline-flex;
-      gap: 4px;
-      align-items: center;
-      color: var(--muted);
-      font: 10px ui-monospace, monospace;
-    }
-
-    .processing i {
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: var(--neon);
-      animation: blink 1s infinite;
-    }
-
-    .processing i:nth-child(2) { animation-delay: .2s; }
-    .processing i:nth-child(3) { animation-delay: .4s; }
-
-    @keyframes blink { 50% { opacity: .2; transform: translateY(-2px); } }
-
-    .quick-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      margin: 10px 0;
-    }
-
-    .quick-btn {
-      padding: 7px 9px;
-      border-radius: 999px;
-      border: 1px solid rgba(57,255,136,.22);
-      color: var(--muted);
-      background: rgba(57,255,136,.035);
-      font: 10px ui-monospace, monospace;
-    }
-
-    .quick-btn:hover { color: var(--neon-2); border-color: var(--line-strong); }
-
-    .chat-input-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 8px;
-    }
-
-    .chat-input {
-      width: 100%;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      outline: none;
-      padding: 11px 12px;
-      color: var(--text);
-      background: #030805;
-    }
-
-    .chat-input:focus { border-color: var(--line-strong); box-shadow: 0 0 12px rgba(57,255,136,.08); }
-
-    .telemetry-list { display: grid; gap: 9px; }
-
-    .telemetry-item {
-      padding: 11px;
-      border: 1px solid rgba(57,255,136,.14);
-      border-radius: 10px;
-      background: rgba(0,0,0,.15);
-    }
-
-    .telemetry-head {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      color: var(--muted);
-      font-size: 11px;
-      margin-bottom: 7px;
-    }
-
-    .telemetry-head b { color: var(--text); font: 12px ui-monospace, monospace; }
-
-    .footer {
-      margin-top: 13px;
-      text-align: center;
-      color: #5d7465;
-      font: 10px ui-monospace, monospace;
-      letter-spacing: .06em;
-    }
-
-    .success-banner {
-      display: none;
-      margin-top: 12px;
-      padding: 11px 12px;
-      border: 1px solid rgba(57,255,136,.45);
-      border-radius: 10px;
-      color: var(--neon-2);
-      background: rgba(57,255,136,.08);
-      box-shadow: 0 0 20px rgba(57,255,136,.12);
-      font: 11px ui-monospace, monospace;
-    }
-
-    .success-banner.show { display: block; animation: successIn .35s ease; }
-    @keyframes successIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-    @media (max-width: 1050px) {
-      .theory, .architecture, .facts, .simulator, .monitor, .chat, .telemetry { grid-column: span 6; }
-    }
-
-    @media (max-width: 720px) {
-      .hud-shell { width: min(94vw, 680px); padding-top: 11px; }
-      .topbar { align-items: flex-start; flex-direction: column; }
-      .dashboard { grid-template-columns: 1fr; }
-      .theory, .architecture, .facts, .simulator, .monitor, .chat, .telemetry { grid-column: 1; }
-      .sim-top, .theory-grid { grid-template-columns: 1fr; }
-      .monitor-grid { grid-template-columns: 1fr; }
-      .system-status { width: 100%; justify-content: center; }
-      h1 { font-size: 21px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050807">
+<title>Acoustic Energy Harvester // AI Control Panel</title>
+<style>
+:root{
+  --bg:#050807;--panel:#0b100e;--panel2:#0e1512;--line:#193b2b;
+  --green:#39ff88;--green2:#16c96b;--cyan:#54f7ff;--text:#d9ffe8;
+  --muted:#7da38d;--danger:#ff5577;--yellow:#ffe56b;
+}
+*{box-sizing:border-box}
+body{margin:0;background:
+radial-gradient(circle at 15% 10%,rgba(57,255,136,.08),transparent 28%),
+radial-gradient(circle at 85% 20%,rgba(84,247,255,.06),transparent 25%),
+linear-gradient(135deg,#030504,#08100c 55%,#030504);
+color:var(--text);font-family:Arial,sans-serif;min-height:100vh}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,255,255,.012) 4px);opacity:.5}
+.wrap{max-width:1450px;margin:auto;padding:22px}
+header{border:1px solid var(--line);background:rgba(8,15,11,.92);padding:20px;box-shadow:0 0 35px rgba(57,255,136,.08);position:relative;overflow:hidden}
+header:after{content:"";position:absolute;left:0;bottom:0;width:100%;height:2px;background:linear-gradient(90deg,transparent,var(--green),var(--cyan),transparent)}
+.kicker{font:700 12px monospace;color:var(--cyan);letter-spacing:3px}
+h1{font:800 clamp(24px,4vw,42px) monospace;margin:8px 0;color:var(--green);text-shadow:0 0 18px rgba(57,255,136,.45)}
+.subtitle{color:var(--muted);font-family:monospace}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;margin-top:14px}
+.card{grid-column:span 4;background:rgba(8,15,11,.94);border:1px solid var(--line);padding:16px;min-width:0;box-shadow:inset 0 0 30px rgba(57,255,136,.025)}
+.card.wide{grid-column:span 8}.card.full{grid-column:1/-1}
+.card h2{font:700 15px monospace;color:var(--cyan);letter-spacing:1px;margin:0 0 12px}
+.card h2 span{color:var(--green)}
+p,li{line-height:1.55;color:#b8d6c3}
+ul{padding-left:20px}
+.statrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:#07100b;border:1px solid #173324;padding:12px;text-align:center}
+.stat b{display:block;font:700 25px monospace;color:var(--green)}
+.stat small{color:var(--muted);font-family:monospace}
+.wavebox{height:150px;border:1px solid #173324;background:#020504;overflow:hidden}
+canvas{width:100%;height:100%;display:block}
+.meter{height:18px;background:#020504;border:1px solid #1c4430;margin:12px 0;overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green2),var(--cyan));box-shadow:0 0 18px var(--green);transition:width .2s}
+button{border:1px solid var(--green);background:#07150d;color:var(--green);padding:11px 14px;font:700 12px monospace;cursor:pointer;text-transform:uppercase;transition:.2s}
+button:hover{background:rgba(57,255,136,.12);box-shadow:0 0 18px rgba(57,255,136,.2);transform:translateY(-1px)}
+button.danger{border-color:var(--danger);color:var(--danger)}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.led{width:65px;height:65px;border-radius:50%;margin:10px auto;background:#111;border:4px solid #28322d;box-shadow:inset 0 0 20px #000;transition:.3s}
+.led.on{background:#caffdf;border-color:var(--green);box-shadow:0 0 15px var(--green),0 0 45px var(--green)}
+.center{text-align:center}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.node{padding:13px 6px;text-align:center;border:1px solid #173324;background:#07100b;font:700 11px monospace;color:var(--green)}
+.node:not(:last-child):after{content:" →";color:var(--cyan)}
+.ai{display:grid;grid-template-columns:1fr;min-height:420px}
+.chatlog{height:280px;overflow:auto;background:#030604;border:1px solid #173324;padding:12px}
+.msg{margin:8px 0;padding:9px 11px;border-left:2px solid var(--green);background:#07100b;white-space:pre-wrap}
+.msg.user{border-left-color:var(--cyan)}
+.msg.system{border-left-color:var(--yellow);color:#d9d29a}
+.chatinput{display:flex;gap:8px;margin-top:9px}
+.chatinput input{flex:1;background:#020504;border:1px solid #1b4430;color:var(--text);padding:12px;font-family:monospace;outline:none}
+.quick{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.quick button{font-size:10px;padding:8px}
+.processing{color:var(--yellow);font-family:monospace;animation:blink .75s infinite}
+@keyframes blink{50%{opacity:.35}}
+.badge{display:inline-block;border:1px solid #24563c;padding:4px 7px;color:var(--green);font:10px monospace;margin:3px}
+.success{color:var(--green);font-family:monospace;margin-top:10px;min-height:20px}
+.footer{text-align:center;color:#507463;font:11px monospace;padding:20px}
+@media(max-width:900px){.card,.card.wide{grid-column:1/-1}}
+@media(max-width:600px){.wrap{padding:10px}.statrow,.flow{grid-template-columns:1fr 1fr}.flow .node:not(:last-child):after{content:" ↓"}.chatinput{flex-direction:column}}
+</style>
 </head>
 <body>
-  <main class="hud-shell">
-    <header class="topbar">
-      <div>
-        <div class="eyebrow">SCIENCE FAIR // ACOUSTIC POWER SYSTEM</div>
-        <h1>Acoustic Energy Harvester Control Panel</h1>
-        <p class="subtitle">Developed by Yamin Islam | Class 9 Science | Jhalakathi Govt. High School</p>
-      </div>
-      <div class="system-status">
-        <span class="status-dot" aria-hidden="true"></span>
-        <span class="mono" id="systemStatus">SYSTEM ONLINE</span>
-      </div>
-    </header>
+<div class="wrap">
+<header>
+<div class="kicker">SCIENCE FAIR // LIVE EXPERIMENT SYSTEM</div>
+<h1>ACOUSTIC ENERGY HARVESTER CONTROL PANEL</h1>
+<div class="subtitle">Developed by Yamin Islam | Class 9 Science | Jhalakathi Govt. High School</div>
+</header>
 
-    <section class="dashboard">
-      <article class="panel theory">
-        <div class="panel-label"><span>01 // THEORY CORE</span><span class="tag">PIEZOELECTRIC EFFECT</span></div>
-        <p>
-          A <span class="highlight">piezoelectric transducer</span> can create a small electrical voltage when its material is mechanically stressed.
-          Sound is a moving pressure wave. In this project, stronger sound pressure causes the transducer to vibrate, producing a small changing
-          electrical signal. A rectifier converts that alternating signal into one-way electrical pulses that can charge a capacitor.
-        </p>
-        <div class="theory-grid">
-          <div class="mini-card"><strong>SOUND PRESSURE</strong><span>Air pressure changes make the piezo element flex and vibrate.</span></div>
-          <div class="mini-card"><strong>MECHANICAL → ELECTRICAL</strong><span>The piezo material responds to stress by generating voltage.</span></div>
-          <div class="mini-card"><strong>RECTIFICATION</strong><span>A bridge rectifier guides the changing signal into the same charging direction.</span></div>
-          <div class="mini-card"><strong>ENERGY STORAGE</strong><span>A capacitor temporarily stores the generated electrical energy.</span></div>
-        </div>
-      </article>
+<div class="grid">
+<section class="card wide">
+<h2><span>01 //</span> THEORY CORE</h2>
+<p><b>Piezoelectricity</b> is the ability of certain materials to produce an electrical voltage when they are mechanically stressed. In this project, sound waves create tiny pressure changes and vibrations. A piezoelectric transducer converts those mechanical changes into a small alternating electrical signal.</p>
+<p>The signal can then pass through a <b>bridge rectifier</b>, which changes the alternating signal into a one-directional output. A capacitor stores charge, and an LED can indicate when enough electrical energy has accumulated.</p>
+<div><span class="badge">SOUND → VIBRATION</span><span class="badge">VIBRATION → AC</span><span class="badge">AC → DC</span><span class="badge">DC → STORED ENERGY</span></div>
+</section>
 
-      <article class="panel architecture">
-        <div class="panel-label"><span>02 // CIRCUIT ARCHITECTURE</span><span class="tag">PROTOTYPE FLOW</span></div>
-        <p class="muted">The physical prototype can be organized in this simple signal path:</p>
-        <div class="circuit" aria-label="Circuit block diagram">
-          <div class="node"><b>PIEZO</b><small>Sound → AC</small></div>
-          <span class="arrow">→</span>
-          <div class="node"><b>1N4007 ×4</b><small>Bridge</small></div>
-          <span class="arrow">→</span>
-          <div class="node"><b>CAPACITOR</b><small>Storage</small></div>
-          <span class="arrow">→</span>
-          <div class="node"><b>LED</b><small>Indicator</small></div>
-        </div>
-        <p class="muted" style="margin-bottom:0;font-size:11px;">Note: the simulator is a visual model for the science-fair explanation; real output depends on the transducer, sound level, frequency, circuit losses, and storage components.</p>
-      </article>
+<section class="card">
+<h2><span>02 //</span> CIRCUIT ARCHITECTURE</h2>
+<div class="flow">
+<div class="node">PIEZO<br>TRANSDUCER</div>
+<div class="node">1N4007<br>BRIDGE</div>
+<div class="node">CAPACITOR</div>
+<div class="node">LED<br>INDICATOR</div>
+</div>
+<p>Energy path: sound pressure → piezoelectric conversion → rectification → storage → visible output.</p>
+</section>
 
-      <article class="panel facts">
-        <div class="panel-label"><span>03 // QUICK FACTS</span><span class="tag">LIVE MODEL</span></div>
-        <div class="fact-list">
-          <div class="fact-row"><span>Energy source</span><span>SOUND WAVES</span></div>
-          <div class="fact-row"><span>Sensor type</span><span>PIEZOELECTRIC</span></div>
-          <div class="fact-row"><span>Signal</span><span>LOW-LEVEL AC</span></div>
-          <div class="fact-row"><span>Rectifier</span><span>1N4007 BRIDGE</span></div>
-          <div class="fact-row"><span>Storage</span><span>CAPACITOR</span></div>
-          <div class="fact-row"><span>Output indicator</span><span>LED</span></div>
-        </div>
-      </article>
+<section class="card wide">
+<h2><span>03 //</span> LIVE SOUND-WAVE SIMULATOR</h2>
+<div class="wavebox"><canvas id="wave"></canvas></div>
+<div class="statrow">
+<div class="stat"><b id="db">35</b><small>dB LEVEL</small></div>
+<div class="stat"><b id="cap">0</b><small>CAPACITOR %</small></div>
+<div class="stat"><b id="voltage">0.00</b><small>SIM. VOLTAGE</small></div>
+</div>
+<div class="meter"><i id="dbbar"></i></div>
+<div class="controls">
+<button id="soundBtn">[ SIMULATE SOUND WAVE ]</button>
+<button id="resetBtn" class="danger">[ DISCHARGE / RESET ]</button>
+</div>
+<div class="success" id="status"></div>
+</section>
 
-      <article class="panel simulator">
-        <div class="panel-label"><span>04 // LIVE SOUND SIMULATION</span><span class="tag" id="simulationState">READY</span></div>
-        <div class="sim-top">
-          <div class="meter-box">
-            <div class="meter-head"><span>DECIBEL LEVEL</span><span class="meter-value" id="dbValue">42 dB</span></div>
-            <div class="bar"><div class="bar-fill" id="dbBar"></div></div>
-          </div>
-          <div class="meter-box">
-            <div class="meter-head"><span>CAPACITOR CHARGE</span><span class="meter-value" id="chargeValue">0%</span></div>
-            <div class="bar"><div class="bar-fill" id="chargeBar"></div></div>
-          </div>
-        </div>
+<section class="card center">
+<h2><span>04 //</span> LED OUTPUT</h2>
+<div class="led" id="led"></div>
+<div id="ledText" class="processing">STANDBY // CHARGE REQUIRED</div>
+</section>
 
-        <div class="wave">
-          <div class="wave-grid"></div>
-          <canvas id="waveCanvas" aria-label="Animated sound wave simulation"></canvas>
-        </div>
+<section class="card">
+<h2><span>05 //</span> LIVE TELEMETRY</h2>
+<p>System state: <b id="state">IDLE</b></p>
+<p>Wave events: <b id="events">0</b></p>
+<p>Estimated energy: <b id="energy">0.000</b> mJ</p>
+<p>Conversion mode: <b>PIEZOELECTRIC</b></p>
+<p>Controller: <b>LOCAL SIMULATION</b></p>
+</section>
 
-        <div class="sim-actions">
-          <button class="btn primary" id="simulateBtn">[ SIMULATE SOUND WAVE ]</button>
-          <button class="btn danger" id="resetBtn">[ DISCHARGE / RESET ]</button>
-        </div>
-        <p class="hint">Click repeatedly to model repeated acoustic input. Higher / faster clicking increases the simulated charging rate. The values are for demonstration, not a real measurement.</p>
-        <div class="success-banner" id="successBanner">⚡ ENERGY HARVEST COMPLETE // CAPACITOR REACHED 100% // LED ACTIVATED ⚡</div>
-      </article>
+<section class="card full ai">
+<h2><span>06 //</span> AI_CORE // PROJECT ASSISTANT</h2>
+<div class="chatlog" id="chatlog">
+<div class="msg system">AI_CORE ONLINE. Ask me about piezoelectricity, sound energy, rectifiers, capacitors, LEDs, voltage, or this experiment.</div>
+</div>
+<div class="quick">
+<button data-q="What is piezoelectricity?">PIEZOELECTRICITY</button>
+<button data-q="How does sound become electricity?">SOUND → ELECTRICITY</button>
+<button data-q="Why do we use a bridge rectifier?">BRIDGE RECTIFIER</button>
+<button data-q="What does the capacitor do?">CAPACITOR</button>
+<button data-q="Explain this project simply.">EXPLAIN PROJECT</button>
+</div>
+<div class="chatinput">
+<input id="chatInput" placeholder="Ask AI_CORE a question..." autocomplete="off">
+<button id="sendBtn">SEND</button>
+</div>
+</section>
+</div>
+<div class="footer">ACOUSTIC ENERGY HARVESTER // SCIENCE FAIR CONTROL SYSTEM // v2.0</div>
+</div>
 
-      <article class="panel monitor">
-        <div class="panel-label"><span>05 // ENERGY FLOW MONITOR</span><span class="tag">OUTPUT NODE</span></div>
-        <div class="energy-core">
-          <div class="core-ring"></div>
-          <div class="core-ring r2"></div>
-          <div class="led-core" id="ledCore"></div>
-        </div>
-        <div class="core-status">LED STATE: <strong id="ledState">STANDBY</strong></div>
-        <div class="energy-bar-label"><span>STORED ENERGY INDEX</span><span id="energyPercent">0%</span></div>
-        <div class="bar"><div class="bar-fill" id="energyBar"></div></div>
+<script>
+const state = { db:35, cap:0, events:0, energy:0, active:false };
 
-        <div class="monitor-grid">
-          <div class="monitor-stat"><span class="stat-value" id="eventCount">0</span><span class="stat-label">Sound pulses</span></div>
-          <div class="monitor-stat"><span class="stat-value" id="peakDb">42</span><span class="stat-label">Peak dB</span></div>
-          <div class="monitor-stat"><span class="stat-value" id="elapsed">0s</span><span class="stat-label">Run time</span></div>
-        </div>
-      </article>
+const $ = id => document.getElementById(id);
+const canvas = $("wave"), ctx = canvas.getContext("2d");
 
-      <article class="panel chat">
-        <div class="panel-label"><span>06 // AI_CORE KNOWLEDGE TERMINAL</span><span class="tag">LOCAL OFFLINE AI</span></div>
-        <div class="chat-window" id="chatWindow" aria-live="polite"></div>
-        <div class="quick-actions">
-          <button class="quick-btn" data-question="What is piezoelectricity?">What is piezoelectricity?</button>
-          <button class="quick-btn" data-question="How does the circuit work?">How does the circuit work?</button>
-          <button class="quick-btn" data-question="Why do we use a bridge rectifier?">Why use a rectifier?</button>
-          <button class="quick-btn" data-question="What does the capacitor do?">What does the capacitor do?</button>
-          <button class="quick-btn" data-question="Why is the LED not always on?">Why is the LED not always on?</button>
-          <button class="quick-btn" data-question="What are the limits of this project?">What are the limits?</button>
-        </div>
-        <div class="chat-input-row">
-          <input class="chat-input" id="chatInput" type="text" placeholder="Ask AI_CORE about the project..." autocomplete="off">
-          <button class="btn primary" id="sendBtn">SEND</button>
-        </div>
-      </article>
+function resizeCanvas(){
+  const r = canvas.getBoundingClientRect();
+  canvas.width = Math.max(300, Math.floor(r.width * devicePixelRatio));
+  canvas.height = Math.max(100, Math.floor(r.height * devicePixelRatio));
+}
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
 
-      <article class="panel telemetry">
-        <div class="panel-label"><span>07 // SYSTEM TELEMETRY</span><span class="tag">REAL-TIME</span></div>
-        <div class="telemetry-list">
-          <div class="telemetry-item">
-            <div class="telemetry-head"><span>Sound input</span><b id="telemetryDb">42 dB</b></div>
-            <div class="bar"><div class="bar-fill" id="telemetryDbBar"></div></div>
-          </div>
-          <div class="telemetry-item">
-            <div class="telemetry-head"><span>Capacitor storage</span><b id="telemetryCharge">0%</b></div>
-            <div class="bar"><div class="bar-fill" id="telemetryChargeBar"></div></div>
-          </div>
-          <div class="telemetry-item">
-            <div class="telemetry-head"><span>Piezo activity</span><b id="piezoActivity">IDLE</b></div>
-            <div class="bar"><div class="bar-fill" id="piezoBar"></div></div>
-          </div>
-          <div class="telemetry-item">
-            <div class="telemetry-head"><span>Output node</span><b id="telemetryOutput">LED OFF</b></div>
-            <p class="muted" style="margin:6px 0 0;font-size:10px;">When the simulated storage reaches 100%, the indicator node activates.</p>
-          </div>
-        </div>
-      </article>
-    </section>
+function drawWave(){
+  const w=canvas.width,h=canvas.height,t=performance.now()/500;
+  ctx.clearRect(0,0,w,h);
+  ctx.lineWidth=3;
+  ctx.strokeStyle="#39ff88";
+  ctx.shadowBlur=12; ctx.shadowColor="#39ff88";
+  ctx.beginPath();
+  const amp=15+(state.db/100)*h*.28;
+  for(let x=0;x<=w;x++){
+    const y=h/2+Math.sin(x*.025+t*4)*amp;
+    if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+  }
+  ctx.stroke(); ctx.shadowBlur=0;
+  requestAnimationFrame(drawWave);
+}
+drawWave();
 
-    <div class="footer">ACOUSTIC ENERGY HARVESTER // EDUCATIONAL DIGITAL TWIN // SINGLE-FILE BUILD // NO EXTERNAL LIBRARIES</div>
-  </main>
+function updateUI(){
+  $("db").textContent=Math.round(state.db);
+  $("cap").textContent=Math.round(state.cap);
+  $("dbbar").style.width=Math.min(100,state.db)+"%";
+  $("voltage").textContent=(state.cap*.032).toFixed(2);
+  $("events").textContent=state.events;
+  $("energy").textContent=(state.cap*0.0048).toFixed(3);
+  $("state").textContent=state.cap>=100?"ENERGY STORED":state.active?"HARVESTING":"IDLE";
+  $("led").classList.toggle("on",state.cap>=100);
+  $("ledText").textContent=state.cap>=100?"OUTPUT ACTIVE // 100%":"STANDBY // CHARGE REQUIRED";
+  $("status").textContent=state.cap>=100?"✓ CAPACITOR FULL — LED ACTIVATED — ENERGY HARVEST COMPLETE":"";
+}
 
-  <script>
-    "use strict";
-
-    // -------------------------------
-    // Simulation state
-    // -------------------------------
-    const state = {
-      db: 42,
-      charge: 0,
-      peakDb: 42,
-      pulses: 0,
-      startedAt: null,
-      activeUntil: 0,
-      ledOn: false,
-      processing: false
-    };
-
-    const el = {
-      dbValue: document.getElementById("dbValue"),
-      dbBar: document.getElementById("dbBar"),
-      chargeValue: document.getElementById("chargeValue"),
-      chargeBar: document.getElementById("chargeBar"),
-      energyBar: document.getElementById("energyBar"),
-      energyPercent: document.getElementById("energyPercent"),
-      ledCore: document.getElementById("ledCore"),
-      ledState: document.getElementById("ledState"),
-      successBanner: document.getElementById("successBanner"),
-      eventCount: document.getElementById("eventCount"),
-      peakDb: document.getElementById("peakDb"),
-      elapsed: document.getElementById("elapsed"),
-      simulationState: document.getElementById("simulationState"),
-      telemetryDb: document.getElementById("telemetryDb"),
-      telemetryDbBar: document.getElementById("telemetryDbBar"),
-      telemetryCharge: document.getElementById("telemetryCharge"),
-      telemetryChargeBar: document.getElementById("telemetryChargeBar"),
-      piezoActivity: document.getElementById("piezoActivity"),
-      piezoBar: document.getElementById("piezoBar"),
-      telemetryOutput: document.getElementById("telemetryOutput"),
-      systemStatus: document.getElementById("systemStatus")
-    };
-
-    function clamp(value, min, max) {
-      return Math.min(max, Math.max(min, value));
-    }
-
-    function updateUI() {
-      el.dbValue.textContent = Math.round(state.db) + " dB";
-      el.dbBar.style.width = clamp(((state.db - 30) / 70) * 100, 0, 100) + "%";
-
-      el.chargeValue.textContent = Math.round(state.charge) + "%";
-      el.chargeBar.style.width = state.charge + "%";
-      el.energyBar.style.width = state.charge + "%";
-      el.energyPercent.textContent = Math.round(state.charge) + "%";
-
-      el.eventCount.textContent = state.pulses;
-      el.peakDb.textContent = Math.round(state.peakDb);
-      el.elapsed.textContent = state.startedAt ? Math.floor((Date.now() - state.startedAt) / 1000) + "s" : "0s";
-
-      el.telemetryDb.textContent = Math.round(state.db) + " dB";
-      el.telemetryDbBar.style.width = clamp(((state.db - 30) / 70) * 100, 0, 100) + "%";
-      el.telemetryCharge.textContent = Math.round(state.charge) + "%";
-      el.telemetryChargeBar.style.width = state.charge + "%";
-
-      const piezoLevel = clamp(((state.db - 30) / 70) * 100, 0, 100);
-      el.piezoBar.style.width = piezoLevel + "%";
-      el.piezoActivity.textContent = Date.now() < state.activeUntil ? "ACTIVE" : "IDLE";
-
-      if (state.ledOn) {
-        el.ledCore.classList.add("active");
-        el.ledState.textContent = "ACTIVE / HARVEST COMPLETE";
-        el.telemetryOutput.textContent = "LED ON";
-        el.simulationState.textContent = "100% // COMPLETE";
-        el.successBanner.classList.add("show");
-      } else {
-        el.ledCore.classList.remove("active");
-        el.ledState.textContent = "STANDBY";
-        el.telemetryOutput.textContent = "LED OFF";
-        el.successBanner.classList.remove("show");
-        el.simulationState.textContent = state.charge > 0 ? "CHARGING" : "READY";
-      }
-    }
-
-    function triggerSoundPulse() {
-      if (state.ledOn) return;
-
-      if (!state.startedAt) state.startedAt = Date.now();
-
-      // Strong, visible pulse. Repeated clicking creates a slow charge-up.
-      const pulseDb = 65 + Math.random() * 30;
-      state.db = clamp(pulseDb, 0, 110);
-      state.peakDb = Math.max(state.peakDb, state.db);
-      state.pulses += 1;
-      state.activeUntil = Date.now() + 420;
-
-      // Charge depends on pulse strength, plus a small minimum increment.
-      const gain = 3.4 + ((state.db - 60) / 50) * 3.8;
-      state.charge = clamp(state.charge + gain, 0, 100);
-
-      if (state.charge >= 100) {
-        state.charge = 100;
-        state.ledOn = true;
-        el.systemStatus.textContent = "HARVEST COMPLETE";
-        setTimeout(() => {
-          if (state.ledOn) el.systemStatus.textContent = "OUTPUT NODE ACTIVE";
-        }, 1200);
-      }
-
-      updateUI();
-    }
-
-    function resetSimulation() {
-      state.db = 42;
-      state.charge = 0;
-      state.peakDb = 42;
-      state.pulses = 0;
-      state.startedAt = null;
-      state.activeUntil = 0;
-      state.ledOn = false;
-      el.systemStatus.textContent = "SYSTEM ONLINE";
-      updateUI();
-    }
-
-    document.getElementById("simulateBtn").addEventListener("click", triggerSoundPulse);
-    document.getElementById("resetBtn").addEventListener("click", resetSimulation);
-
-    // Idle animation: sound level falls back naturally and storage discharges very slowly.
-    setInterval(() => {
-      if (!state.ledOn) {
-        state.db += (42 - state.db) * 0.09;
-        if (Date.now() > state.activeUntil && state.charge > 0) {
-          state.charge = Math.max(0, state.charge - 0.025);
-        }
-      } else {
-        state.db += (48 - state.db) * 0.06;
-      }
-      updateUI();
-    }, 120);
-
-    setInterval(updateUI, 1000);
-
-    // -------------------------------
-    // Canvas waveform animation
-    // -------------------------------
-    const canvas = document.getElementById("waveCanvas");
-    const ctx = canvas.getContext("2d");
-
-    function resizeCanvas() {
-      const rect = canvas.getBoundingClientRect();
-      const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-      canvas.width = Math.round(rect.width * dpr);
-      canvas.height = Math.round(rect.height * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-
-    function drawWave(time) {
-      const width = canvas.clientWidth;
-      const height = canvas.clientHeight;
-      const center = height / 2;
-      const strength = 8 + ((state.db - 30) / 80) * 28;
-      const frequency = 0.018 + (state.db / 110) * 0.018;
-
-      ctx.clearRect(0, 0, width, height);
-      ctx.beginPath();
-
-      for (let x = 0; x <= width; x += 2) {
-        const envelope = 0.65 + 0.35 * Math.sin(x * 0.008 + time * 0.0014);
-        const y = center + Math.sin(x * frequency + time * 0.006) * strength * envelope;
-        if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-      }
-
-      ctx.lineWidth = state.ledOn ? 2.6 : 1.8;
-      ctx.strokeStyle = state.ledOn ? "rgba(168,255,203,.98)" : "rgba(57,255,136,.88)";
-      ctx.shadowBlur = state.ledOn ? 18 : 10;
-      ctx.shadowColor = "rgba(57,255,136,.75)";
-      ctx.stroke();
-      ctx.shadowBlur = 0;
-
-      requestAnimationFrame(drawWave);
-    }
-
-    window.addEventListener("resize", resizeCanvas);
-    resizeCanvas();
-    requestAnimationFrame(drawWave);
-
-    // -------------------------------
-    // Offline chatbot knowledge base
-    // -------------------------------
-    const knowledge = [
-      {
-        keys: ["piezo", "piezoelectric", "piezoelectricity"],
-        answer: "Piezoelectricity is the ability of certain materials to produce an electrical voltage when mechanical stress is applied. In this project, sound makes the piezo element vibrate, and that mechanical stress creates a small electrical signal."
-      },
-      {
-        keys: ["circuit", "work", "working", "architecture"],
-        answer: "The model follows this path: PIEZO TRANSDUCER → 1N4007 BRIDGE RECTIFIER → CAPACITOR → LED. The piezo creates a changing signal, the bridge rectifier converts it into one charging direction, the capacitor stores energy, and the LED represents the stored output becoming sufficient for indication."
-      },
-      {
-        keys: ["rectifier", "1n4007", "diode", "bridge"],
-        answer: "A bridge rectifier uses four diodes so both halves of the piezo's changing signal contribute to the same output polarity. The 1N4007 is a common general-purpose diode used here as the educational circuit example."
-      },
-      {
-        keys: ["capacitor", "storage", "charge"],
-        answer: "The capacitor stores electrical energy so the small pulses from the piezo can accumulate. In the simulator, repeated sound-wave clicks increase the charge percentage until the LED threshold is reached."
-      },
-      {
-        keys: ["led", "light", "indicator", "100"],
-        answer: "The LED is the visual output indicator. This digital model turns it on when the simulated capacitor reaches 100%. In a real circuit, the LED would only light clearly when the available voltage/current is high enough for that LED and its circuit."
-      },
-      {
-        keys: ["sound", "decibel", "db", "noise"],
-        answer: "Decibels (dB) describe sound level on a logarithmic scale. In this website, the dB meter is a simulation control, not a microphone measurement. Stronger simulated sound creates a larger electrical-energy contribution."
-      },
-      {
-        keys: ["limit", "limits", "problem", "weak", "why not", "efficient"],
-        answer: "A major challenge is that ordinary environmental sound contains limited usable energy. Piezo harvesters can produce voltage, but available power may be quite small and depends on frequency, mechanical coupling, material properties, circuit losses, and sound intensity."
-      },
-      {
-        keys: ["real", "actual", "experiment", "prototype"],
-        answer: "For a real prototype, you would measure the piezo output with suitable instruments, choose a bridge rectifier and capacitor based on the expected voltage/current, and compare output under different sound levels and frequencies."
-      },
-      {
-        keys: ["class", "student", "project", "science fair"],
-        answer: "This dashboard is designed as a Class 9 science-fair explanation: it shows the theory, circuit architecture, a safe visual simulation, live telemetry, and an offline AI-style guide for visitors."
-      }
-    ];
-
-    function getAIResponse(question) {
-      const q = question.toLowerCase().trim();
-      if (!q) return "Please type a question so AI_CORE can process it.";
-      if (/^(hi|hello|hey|yo)\b/.test(q)) {
-        return "Hello. AI_CORE is online. Ask me about piezoelectricity, the rectifier, capacitor storage, LED activation, sound levels, or the limits of acoustic energy harvesting.";
-      }
-      if (q.includes("how are you") || q.includes("status")) {
-        return "SYSTEM STATUS: ONLINE. Knowledge base: LOCAL. External libraries: NONE. Simulation engine: ACTIVE."
-      }
-
-      let best = null;
-      let bestScore = 0;
-      for (const item of knowledge) {
-        let score = 0;
-        for (const key of item.keys) {
-          if (q.includes(key)) score += key.length > 5 ? 2 : 1;
-        }
-        if (score > bestScore) {
-          bestScore = score;
-          best = item;
-        }
-      }
-
-      if (best) return best.answer;
-      return "AI_CORE could not find a strong match in its offline science database. Try asking: “What is piezoelectricity?”, “How does the circuit work?”, “Why use a rectifier?”, or “What does the capacitor do?”";
-    }
-
-    const chatWindow = document.getElementById("chatWindow");
-    const chatInput = document.getElementById("chatInput");
-
-    function addMessage(role, text) {
-      const box = document.createElement("div");
-      box.className = "message " + role;
-
-      const label = document.createElement("span");
-      label.className = "msg-label";
-      label.textContent = role === "bot" ? "AI_CORE" : "YOU";
-
-      const body = document.createElement("span");
-      body.textContent = text;
-
-      box.appendChild(label);
-      box.appendChild(body);
-      chatWindow.appendChild(box);
-      chatWindow.scrollTop = chatWindow.scrollHeight;
-    }
-
-    function addProcessing() {
-      const box = document.createElement("div");
-      box.className = "message bot";
-      box.id = "processingMessage";
-
-      const label = document.createElement("span");
-      label.className = "msg-label";
-      label.textContent = "AI_CORE";
-
-      const status = document.createElement("span");
-      status.className = "processing";
-      status.appendChild(document.createTextNode("PROCESSING"));
-      for (let i = 0; i < 3; i++) {
-        const dot = document.createElement("i");
-        status.appendChild(dot);
-      }
-
-      box.appendChild(label);
-      box.appendChild(status);
-      chatWindow.appendChild(box);
-      chatWindow.scrollTop = chatWindow.scrollHeight;
-    }
-
-    function removeProcessing() {
-      const node = document.getElementById("processingMessage");
-      if (node) node.remove();
-    }
-
-    function askAI(question) {
-      if (state.processing) return;
-      const clean = question.trim();
-      if (!clean) return;
-
-      state.processing = true;
-      addMessage("user", clean);
-      addProcessing();
-      chatInput.value = "";
-
-      const delay = 800 + Math.floor(Math.random() * 900);
-      setTimeout(() => {
-        removeProcessing();
-        addMessage("bot", getAIResponse(clean));
-        state.processing = false;
-      }, delay);
-    }
-
-    document.getElementById("sendBtn").addEventListener("click", () => askAI(chatInput.value));
-    chatInput.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") askAI(chatInput.value);
-    });
-
-    document.querySelectorAll(".quick-btn").forEach(button => {
-      button.addEventListener("click", () => askAI(button.dataset.question || button.textContent));
-    });
-
-    // Initial chatbot message.
-    addMessage("bot", "AI_CORE online. I am the local project assistant. I can explain the piezoelectric effect, circuit path, capacitor storage, LED threshold, sound level, and project limitations.");
+$("soundBtn").addEventListener("click",()=>{
+  state.active=true;
+  state.events++;
+  state.db=Math.min(100,Math.max(45,state.db+10+Math.random()*15));
+  state.cap=Math.min(100,state.cap+4+Math.random()*7);
+  updateUI();
+  clearTimeout(window.soundTimer);
+  window.soundTimer=setTimeout(()=>{
+    state.db=Math.max(35,state.db-10);
+    state.active=false;
     updateUI();
-  </script>
+  },650);
+});
+
+$("resetBtn").addEventListener("click",()=>{
+  state.db=35;state.cap=0;state.events=0;state.energy=0;state.active=false;
+  updateUI();
+});
+
+setInterval(()=>{
+  if(!state.active) state.db=Math.max(35,state.db-.6);
+  updateUI();
+},120);
+
+const chatlog=$("chatlog"), input=$("chatInput");
+
+function addMsg(text,type){
+  const d=document.createElement("div");
+  d.className="msg "+type;
+  d.textContent=text;
+  chatlog.appendChild(d);
+  chatlog.scrollTop=chatlog.scrollHeight;
+  return d;
+}
+
+async function askAI(question){
+  const q=question.trim();
+  if(!q)return;
+  addMsg("USER > "+q,"user");
+  input.value="";
+  const processing=addMsg("AI_CORE > PROCESSING...","system");
+  processing.classList.add("processing");
+
+  try{
+    const res=await fetch("/api/chat",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({message:q})
+    });
+    const data=await res.json();
+    processing.remove();
+    if(!res.ok) throw new Error(data.error||"API request failed");
+    addMsg("AI_CORE > "+data.reply,"");
+  }catch(err){
+    processing.remove();
+    addMsg("AI_CORE > Connection error. Check that the backend is running and your API key is configured.","system");
+    console.error(err);
+  }
+}
+
+$("sendBtn").addEventListener("click",()=>askAI(input.value));
+input.addEventListener("keydown",e=>{if(e.key==="Enter")askAI(input.value)});
+document.querySelectorAll(".quick button").forEach(b=>b.addEventListener("click",()=>askAI(b.dataset.q)));
+
+updateUI();
+</script>
 </body>
 </html>
