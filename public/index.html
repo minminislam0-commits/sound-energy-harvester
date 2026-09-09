@@ -152,7 +152,7 @@
     h1 {
       margin: 0;
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: clamp(22px, 3vw, 35px);
+      font-size: clamp(22px, 3vw, 30px);
       letter-spacing: .06em;
       text-transform: uppercase;
       text-shadow: 0 0 16px rgba(57,255,136,.3);
@@ -765,7 +765,7 @@
       .sim-top, .theory-grid { grid-template-columns: 1fr; }
       .monitor-grid { grid-template-columns: 1fr; }
       .system-status { width: 100%; justify-content: center; }
-      h1 { font-size: 21px; }
+      h1 { font-size: 19px; }
       .quick-nav { top: 6px; padding: 8px; }
     }
   </style>
@@ -776,7 +776,7 @@
     <header class="topbar">
       <div>
         <div class="eyebrow">SCIENCE FAIR // ACOUSTIC POWER SYSTEM</div>
-        <h1>শব্দ দিয়ে বিদ্যুৎ তৈরি (Acoustic Energy Harvester)</h1>
+        <h1>Acoustic Energy Harvester (শব্দ থেকে বিদ্যুৎ)</h1>
         <p class="subtitle">Developed by Yamin Islam | Class 9 Science | Jhalakathi Govt. High School</p>
       </div>
       <div class="system-status">
@@ -785,12 +785,12 @@
       </div>
     </header>
 
-    <!-- Sticky Navigation Bar for Smooth Sliding -->
+    <!-- Sticky Navigation Bar -->
     <nav class="quick-nav" aria-label="Quick Navigation">
-      <a href="#theory-section" class="nav-link">🔬 মেইন থিওরি (Theory)</a>
-      <a href="#simulator-section" class="nav-link">⚡ প্রোটোটাইপ সিমুলেটর</a>
-      <a href="#chat-section" class="nav-link">🤖 AI চ্যাটবট (AI Terminal)</a>
-      <a href="#info-section" class="nav-link">📚 শব্দ বিদ্যুৎ বিস্তারিত (Details)</a>
+      <a href="#theory-section" class="nav-link">🔬 Main Theory</a>
+      <a href="#simulator-section" class="nav-link">⚡ Prototype Simulator</a>
+      <a href="#chat-section" class="nav-link">🤖 AI Terminal</a>
+      <a href="#info-section" class="nav-link">📚 Detailed Info</a>
     </nav>
 
     <!-- Main Dashboard Grid -->
@@ -799,20 +799,20 @@
       <article class="panel theory" id="theory-section">
         <div class="panel-label"><span>01 // THEORY CORE</span><span class="tag">PIEZOELECTRIC EFFECT</span></div>
         <p>
-          শব্দ হলো এক প্রকারের যান্ত্রিক মেকানিক্যাল শক্তি বা চাপ তরঙ্গ (Sound Pressure Wave)। যখন এই শব্দ তরঙ্গ একটি <span class="highlight">পাইজোইলেকট্রিক ট্রান্সডিউসার (Piezoelectric Transducer)</span> এর ওপর আঘাত করে, তখন পাইজো ক্রিস্টাল সংকুচিত ও প্রসারিত হয়ে ক্ষুদ্র পরিবর্তনশীল এসি (AC) বিদ্যুৎ উৎপন্ন করে। একটি রেকটিফায়ার তা ডিসি (DC) তে রূপান্তর করে ক্যাপাসিটরে জমা করে।
+          Sound is a mechanical pressure wave. When this sound wave hits a <span class="highlight">Piezoelectric Transducer</span>, the crystal compresses and expands, generating a small alternating current (AC). A bridge rectifier then converts this AC into DC voltage and stores it in a capacitor.
         </p>
         <div class="theory-grid">
-          <div class="mini-card"><strong>শব্দ তরঙ্গ (Sound Waves)</strong><span>বাতাসের চাপ পরিবর্তন করে পাইজো উপাদানকে কাঁপায়।</span></div>
-          <div class="mini-card"><strong>যান্ত্রিক → বিদ্যুৎ</strong><span>পাইজোমেটেরিয়াল চাপের প্রতিক্রিয়ায় ভোল্টেজ তৈরি করে।</span></div>
-          <div class="mini-card"><strong>একমুখী বিদ্যুৎ (Bridge)</strong><span>রেকটিফায়ার দিক পরিবর্তনশীল এসি-কে ডিসিতে রূপান্তর করে।</span></div>
-          <div class="mini-card"><strong>শক্তি সঞ্চয় (Storage)</strong><span>ক্যাপাসিটর উৎপন্ন চার্জ সাময়িকভাবে ধরে রাখে।</span></div>
+          <div class="mini-card"><strong>Sound Waves</strong><span>Changes in air pressure vibrate the piezo element.</span></div>
+          <div class="mini-card"><strong>Mechanical → Electrical</strong><span>Piezo material creates voltage in response to pressure.</span></div>
+          <div class="mini-card"><strong>Bridge Rectifier</strong><span>Converts alternating current (AC) to direct current (DC).</span></div>
+          <div class="mini-card"><strong>Energy Storage</strong><span>The capacitor temporarily holds the generated electrical charge.</span></div>
         </div>
       </article>
 
       <!-- 02: Circuit Architecture -->
       <article class="panel architecture">
         <div class="panel-label"><span>02 // CIRCUIT ARCHITECTURE</span><span class="tag">PROTOTYPE FLOW</span></div>
-        <p class="muted">প্রোটোটাইপ সার্কিটের মূল সিগন্যাল প্রবাহ পথ:</p>
+        <p class="muted">Main signal flow path of the prototype circuit:</p>
         <div class="circuit" aria-label="Circuit block diagram">
           <div class="node"><b>PIEZO</b><small>Sound → AC</small></div>
           <span class="arrow">→</span>
@@ -822,20 +822,20 @@
           <span class="arrow">→</span>
           <div class="node"><b>LED</b><small>Indicator</small></div>
         </div>
-        <p class="muted" style="margin-bottom:0;font-size:11px;margin-top:14px;">নোট: এটি বিজ্ঞান মেলার জন্য একটি ডিজিটাল সিমুলেশন মডেল। বাস্তব আউটপুট শব্দের ডেসিবল (dB) মাত্রা ও ডায়াফ্রামের আকারের ওপর নির্ভর করে।</p>
+        <p class="muted" style="margin-bottom:0;font-size:11px;margin-top:14px;">Note: This is a digital simulation for the science fair. Real output depends on sound decibels (dB) and diaphragm size.</p>
       </article>
 
       <!-- 03: Quick Facts -->
       <article class="panel facts">
         <div class="panel-label"><span>03 // QUICK FACTS</span><span class="tag">LIVE MODEL</span></div>
         <div class="fact-list">
-          <div class="fact-row"><span>শক্তির উৎস</span><span>শব্দ তরঙ্গ (Sound Wave)</span></div>
-          <div class="fact-row"><span>সেন্সর টাইপ</span><span>PIEZOELECTRIC DISC</span></div>
-          <div class="fact-row"><span>আউটপুট টাইপ</span><span>LOW VOLTAGE AC/DC</span></div>
-          <div class="fact-row"><span>রেকটিফায়ার</span><span>4x 1N4007 DIODE</span></div>
-          <div class="fact-row"><span>স্টোরেজ</span><span>ELECTROLYTIC CAPACITOR</span></div>
-          <div class="fact-row"><span>সূচক লাইট</span><span>LED / MICRO SENSOR</span></div>
-          <div class="fact-row"><span>ভবিষ্যত প্রয়োগ</span><span>IOT & LOW POWER SENSORS</span></div>
+          <div class="fact-row"><span>Power Source</span><span>Sound Wave</span></div>
+          <div class="fact-row"><span>Sensor Type</span><span>PIEZOELECTRIC DISC</span></div>
+          <div class="fact-row"><span>Output Type</span><span>LOW VOLTAGE AC/DC</span></div>
+          <div class="fact-row"><span>Rectifier</span><span>4x 1N4007 DIODE</span></div>
+          <div class="fact-row"><span>Storage</span><span>ELECTROLYTIC CAPACITOR</span></div>
+          <div class="fact-row"><span>Indicator</span><span>LED / MICRO SENSOR</span></div>
+          <div class="fact-row"><span>Future Use</span><span>IOT & LOW POWER SENSORS</span></div>
         </div>
       </article>
 
@@ -859,10 +859,10 @@
         </div>
 
         <div class="sim-actions">
-          <button class="btn primary" id="simulateBtn">[ শব্দ তরঙ্গ ইনপুট দিন / CLICK TO SOUND PULSE ]</button>
-          <button class="btn danger" id="resetBtn">[ রিসেট / DISCHARGE ]</button>
+          <button class="btn primary" id="simulateBtn">[ INPUT SOUND PULSE ]</button>
+          <button class="btn danger" id="resetBtn">[ DISCHARGE / RESET ]</button>
         </div>
-        <p class="hint">বার বারবার ক্লিক করে শব্দ ইনপুট বৃদ্ধি করুন। যত বেশি ও দ্রুত ক্লিক করবেন, ক্যাপাসিটর তত দ্রুত চার্জ হবে। ১০০% চার্জ হলে LED জ্বলে উঠবে।</p>
+        <p class="hint">Keep clicking the button to simulate loud noise. Faster clicks will charge the capacitor faster. The LED will activate at 100%.</p>
         <div class="success-banner" id="successBanner">⚡ ENERGY HARVEST COMPLETE // CAPACITOR REACHED 100% // LED ACTIVATED ⚡</div>
       </article>
 
@@ -890,14 +890,14 @@
         <div class="panel-label"><span>06 // AI_CORE KNOWLEDGE TERMINAL</span><span class="tag">BACKEND API CONNECTED</span></div>
         <div class="chat-window" id="chatWindow" aria-live="polite"></div>
         <div class="quick-actions">
-          <button class="quick-btn" data-question="শব্দ থেকে বিদ্যুৎ তৈরির মূল নীতি কি?">শব্দ থেকে বিদ্যুৎ তৈরির নীতি?</button>
-          <button class="quick-btn" data-question="পাইজোইলেকট্রিক ডিস্ক কীভাবে কাজ করে?">পাইজোইলেকট্রিক কীভাবে কাজ করে?</button>
-          <button class="quick-btn" data-question="কেন ব্রিজ রেকটিফায়ার প্রয়োজন?">রেকটিফায়ারের কাজ কি?</button>
-          <button class="quick-btn" data-question="বাস্তব জীবনে শব্দ বিদ্যুতের ব্যবহার কী?">বাস্তব জীবনে ব্যবহার?</button>
-          <button class="quick-btn" data-question="প্রকল্পের সীমাবদ্ধতাগুলো কী কী?">সীমাবদ্ধতা কী কী?</button>
+          <button class="quick-btn" data-question="How does acoustic energy harvesting work?">How does it work?</button>
+          <button class="quick-btn" data-question="Explain the Piezoelectric effect in simple terms.">Piezoelectric effect?</button>
+          <button class="quick-btn" data-question="Why do we need a bridge rectifier in this circuit?">Why use a Rectifier?</button>
+          <button class="quick-btn" data-question="What are the real-life applications of sound energy?">Real-life usage?</button>
+          <button class="quick-btn" data-question="What are the limitations of this project?">Limitations?</button>
         </div>
         <div class="chat-input-row">
-          <input class="chat-input" id="chatInput" type="text" placeholder="শব্দ দিয়ে বিদ্যুৎ তৈরি সম্পর্কে AI কে প্রশ্ন করুন..." autocomplete="off">
+          <input class="chat-input" id="chatInput" type="text" placeholder="Ask AI about acoustic energy..." autocomplete="off">
           <button class="btn primary" id="sendBtn">SEND</button>
         </div>
       </article>
@@ -920,39 +920,39 @@
           </div>
           <div class="telemetry-item">
             <div class="telemetry-head"><span>Output node</span><b id="telemetryOutput">LED OFF</b></div>
-            <p class="muted" style="margin:6px 0 0;font-size:10px;">সংগৃহীত চার্জ ১০০% এ পৌঁছালে ইন্ডিকেটর লাইটটি সচল হবে।</p>
+            <p class="muted" style="margin:6px 0 0;font-size:10px;">Indicator light activates when capacitor charge reaches 100%.</p>
           </div>
         </div>
       </article>
 
-      <!-- 08: Detailed Information Section on "শব্দ দিয়ে বিদ্যুৎ তৈরি" -->
+      <!-- 08: Detailed Information Section -->
       <article class="panel detailed-info" id="info-section">
         <div class="panel-label"><span>08 // DETAILED KNOWLEDGE BASE</span><span class="tag">ACOUSTIC HARVESTING IN DEPTH</span></div>
         
         <div class="info-grid">
           <div class="info-card">
-            <h3>📢 শব্দ তরঙ্গ কী ও কীভাবে শক্তি দেয়?</h3>
-            <p>শব্দ হলো বাতাসে ছড়িয়ে পড়া যান্ত্রিক কম্পন বা চাপ তরঙ্গ। আমরা যখন কথা বলি বা কোনো সাউন্ড সোর্স তৈরি হয়, তখন বাতাসের অণুগুলো কাঁপতে থাকে। এই মেকানিক্যাল কম্পনই পাইজো সেন্সরে প্রেসার বা চাপ সৃষ্টি করে বিদ্যুতে রূপান্তরিত হয়।</p>
+            <h3>📢 What is Sound Energy?</h3>
+            <p>Sound is a mechanical vibration or pressure wave traveling through the air. When we speak or generate noise, air molecules vibrate. This mechanical vibration applies pressure to the piezo sensor, converting it into electrical energy.</p>
           </div>
 
           <div class="info-card">
-            <h3>⚡ পাইজোইলেকট্রিক প্রযুক্তির মূল রহস্য</h3>
-            <p>পাইজোইলেকট্রিক ক্রিস্টাল (যেমন: কোয়ার্টজ, PZT) এমন বিশেষ বস্তু যার ওপর যান্ত্রিক চাপ প্রয়োগ করলে উপাদানটির ভেতরে চার্জ তৈরি হয়। শব্দ তরঙ্গ যখন এর ডায়াফ্রামে আঘাত করে, এটি দ্রুত কাঁপতে থাকে এবং ক্ষুদ্র পরিমাণ অল্টারনেটিং কারেন্ট (AC) তৈরি করে।</p>
+            <h3>⚡ The Piezoelectric Secret</h3>
+            <p>Piezoelectric crystals (like Quartz or PZT) are special materials that generate an electrical charge when mechanical stress is applied. As sound waves strike its diaphragm, it vibrates rapidly, producing a small Alternating Current (AC).</p>
           </div>
 
           <div class="info-card">
-            <h3>🚦 বাস্তব জীবনে এর সম্ভাব্য ব্যবহার</h3>
+            <h3>🚦 Real-life Applications</h3>
             <ul>
-              <li><b>হাইওয়ে ও ব্যস্ত সড়ক:</b> হর্ন ও গাড়ির উচ্চ শব্দ ব্যবহার করে স্ট্রিট লাইটের পাওয়ার যোগানো।</li>
-              <li><b>বিমানবন্দর ও ট্রেন স্টেশন:</b> তীব্র শব্দের অপচয় রোধ করে লো-পাওয়ার সেন্সর সচল রাখা।</li>
-              <li><b>কলকারখানা:</b> মেশিনের অনবরত বিকট শব্দকে বিদ্যুতে বদলে পাওয়ার ব্যাংক বা ছোট লাইট জ্বালানো।</li>
+              <li><b>Highways & Roads:</b> Utilizing the high decibel noise from car horns and engines to power streetlights.</li>
+              <li><b>Airports & Railways:</b> Harvesting extreme noise pollution to keep low-power terminal sensors active.</li>
+              <li><b>Industrial Factories:</b> Converting continuous loud machine noises into energy for power banks or small LEDs.</li>
             </ul>
           </div>
 
           <div class="info-card">
-            <h3>🔍 বিজ্ঞান মেলা প্রকল্পের সুবিধা ও সীমাবদ্ধতা</h3>
-            <p><b>সুবিধা:</b> অব্যাবহৃত পরিবেশ দূষণকারী শব্দকে নবায়নযোগ্য শক্তিতে রূপান্তর করা যায়।<br>
-            <b>সীমাবদ্ধতা:</b> সাধারণ শব্দের শক্তি অত্যন্ত কম থাকে (milliwatt লেভেল)। তাই এটি দিয়ে সরাসরি বড় কোনো সরঞ্জাম চালানো কষ্টসাধ্য, ক্যাপাসিটরে জমা করে ব্যবহার করতে হয়।</p>
+            <h3>🔍 Project Benefits & Limitations</h3>
+            <p><b>Benefits:</b> Converts unused noise pollution into a renewable energy source.<br>
+            <b>Limitations:</b> The energy produced by normal sound is extremely low (milliwatt level). Therefore, it cannot power heavy appliances directly and requires capacitors or batteries to store the charge over time.</p>
           </div>
         </div>
       </article>
@@ -963,6 +963,14 @@
 
   <script>
     "use strict";
+
+    // =========================================================================
+    // ⚠️ IMPORTANT API CONFIGURATION ⚠️
+    // If your frontend and backend are hosted on different domains,
+    // you MUST put your full backend URL here (e.g., "https://my-backend.onrender.com/api/chat")
+    // =========================================================================
+    const BACKEND_ENDPOINT = "/api/chat"; // <-- UPDATE THIS LINK IF NEEDED
+    // =========================================================================
 
     // -------------------------------
     // Simulation state
@@ -1205,19 +1213,22 @@
       chatInput.value = "";
 
       try {
-        const res = await fetch("/api/chat", {
+        console.log("Sending request to:", BACKEND_ENDPOINT);
+        const res = await fetch(BACKEND_ENDPOINT, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message: clean })
         });
         const data = await res.json();
         removeProcessing();
-        if (!res.ok) throw new Error(data.error || "API request failed");
+        
+        if (!res.ok) throw new Error(data.error || "API request failed with status: " + res.status);
+        
         addMessage("bot", data.reply);
       } catch (err) {
         removeProcessing();
-        addMessage("bot", "SYSTEM ERROR: ব্যাকএন্ড সার্ভারের সাথে সংযোগে ব্যর্থ হয়েছে। অনুগ্রহ করে নিশ্চিত করুন ব্যাকএন্ড সার্ভার চালু আছে।");
-        console.error(err);
+        addMessage("bot", "SYSTEM ERROR: Failed to connect to the backend server. Check the browser console for details.");
+        console.error("Chatbot Fetch Error Details:", err);
       } finally {
         state.processing = false;
       }
@@ -1233,7 +1244,7 @@
     });
 
     // Initial Chatbot Message
-    addMessage("bot", "স্বাগতম! আমি AI_CORE অ্যাসিস্ট্যান্ট। শব্দ দিয়ে বিদ্যুৎ তৈরি প্রকল্প সম্পর্কিত যেকোন বিজ্ঞানভিত্তিক প্রশ্ন আমাকে করতে পারো।");
+    addMessage("bot", "Welcome! I am the AI_CORE assistant. You can ask me any science-related questions about acoustic energy harvesting.");
     updateUI();
   </script>
 </body>
