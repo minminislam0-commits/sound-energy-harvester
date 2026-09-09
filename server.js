@@ -21,7 +21,7 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 app.use(express.json({ limit: "20kb" }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// AI Chat Route (Free Gemini API)
+// AI Chat Route
 app.post("/api/chat", async (req, res) => {
   try {
     const message = String(req.body?.message || "").trim();
@@ -59,7 +59,7 @@ app.post("/api/chat", async (req, res) => {
   }
 });
 
-// Serper Web Search Route
+// Serper Search Route
 app.post("/api/search", async (req, res) => {
   try {
     const query = String(req.body?.query || "").trim();
