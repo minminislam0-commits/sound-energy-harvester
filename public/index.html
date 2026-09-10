@@ -877,6 +877,56 @@
       }
     }
 
+
+    /* Portfolio scroll animation */
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(34px);
+      filter: blur(2px);
+      transition: opacity .7s ease, transform .7s cubic-bezier(.22,1,.36,1), filter .7s ease;
+    }
+    .scroll-reveal.revealed { opacity: 1; transform: translateY(0); filter: blur(0); }
+    .scroll-reveal.from-left { transform: translateX(-42px); }
+    .scroll-reveal.from-right { transform: translateX(42px); }
+    .scroll-reveal.from-left.revealed,
+    .scroll-reveal.from-right.revealed { transform: translateX(0); }
+    .scroll-reveal.scale-in { transform: translateY(20px) scale(.94); }
+    .scroll-reveal.scale-in.revealed { transform: translateY(0) scale(1); }
+
+    .scroll-stagger > * {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .6s ease, transform .6s cubic-bezier(.22,1,.36,1);
+    }
+    .scroll-stagger.revealed > * { opacity: 1; transform: translateY(0); }
+    .scroll-stagger.revealed > *:nth-child(1) { transition-delay:.04s; }
+    .scroll-stagger.revealed > *:nth-child(2) { transition-delay:.10s; }
+    .scroll-stagger.revealed > *:nth-child(3) { transition-delay:.16s; }
+    .scroll-stagger.revealed > *:nth-child(4) { transition-delay:.22s; }
+    .scroll-stagger.revealed > *:nth-child(5) { transition-delay:.28s; }
+    .scroll-stagger.revealed > *:nth-child(6) { transition-delay:.34s; }
+
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 3px;
+      z-index: 2000;
+      background: linear-gradient(90deg, var(--neon), var(--cyan));
+      box-shadow: 0 0 12px rgba(57,255,136,.45);
+      pointer-events: none;
+    }
+    body.light-mode .scroll-progress {
+      background: linear-gradient(90deg, #4f46e5, #2563eb);
+      box-shadow: 0 0 12px rgba(79,70,229,.35);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .scroll-reveal, .scroll-stagger > * {
+        opacity:1 !important; transform:none !important; filter:none !important; transition:none !important;
+      }
+    }
+
     /* Responsive Breakpoints */
     @media (max-width: 1050px) {
       .theory, .architecture, .facts, .simulator, .monitor, .chat, .telemetry { grid-column: span 6; }
@@ -1278,6 +1328,7 @@
   </style>
 </head>
 <body>
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
   <main class="hud-shell">
     <!-- Top Header -->
     <header class="topbar">
@@ -1319,7 +1370,7 @@
     </section>
 
     <!-- Main Dashboard Grid -->
-    <section class="dashboard">
+    <section class="dashboard scroll-reveal">
       <!-- 01: Theory Core -->
       <article class="panel theory" id="theory-section">
         <div class="panel-label"><span>01 // মেইন থিওরি (THEORY)</span><span class="tag">PIEZOELECTRIC EFFECT</span></div>
@@ -1546,6 +1597,42 @@
       return Math.min(max, Math.max(min, value));
     }
 
+
+    // -------------------------------
+    // Portfolio Scroll Animation
+    // -------------------------------
+    const scrollProgress = document.getElementById("scrollProgress");
+    const revealItems = document.querySelectorAll(".scroll-reveal, .scroll-stagger");
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("revealed");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.14, rootMargin: "0px 0px -45px 0px" });
+
+    revealItems.forEach(item => revealObserver.observe(item));
+
+    requestAnimationFrame(() => {
+      revealItems.forEach(item => {
+        if (item.getBoundingClientRect().top < window.innerHeight * .92) {
+          item.classList.add("revealed");
+          revealObserver.unobserve(item);
+        }
+      });
+    });
+
+    function updateScrollProgress() {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const percent = max > 0 ? (window.scrollY / max) * 100 : 0;
+      if (scrollProgress) scrollProgress.style.width = `${Math.min(100, Math.max(0, percent))}%`;
+    }
+
+    window.addEventListener("scroll", updateScrollProgress, { passive: true });
+    window.addEventListener("resize", updateScrollProgress);
+    updateScrollProgress();
 
     // -------------------------------
     // Floating Back-to-Top Button
