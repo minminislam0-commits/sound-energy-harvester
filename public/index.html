@@ -226,20 +226,29 @@
       box-shadow:
         inset 0 0 22px rgba(57,255,136,.07),
         0 0 20px rgba(57,255,136,.08);
-      animation: portfolioCtaPulse 2.8s ease-in-out infinite;
+      animation: portfolioCtaPulse 3.2s ease-in-out infinite;
     }
 
     .portfolio-nav-card::before {
       content: "";
       position: absolute;
-      top: -35%;
-      left: -35%;
-      width: 38%;
-      height: 170%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
-      transform: rotate(18deg) translateX(-180%);
-      animation: portfolioSweep 3.6s ease-in-out infinite;
+      top: -30%;
+      left: -42%;
+      width: 46%;
+      height: 160%;
       pointer-events: none;
+      background: linear-gradient(
+        105deg,
+        transparent 0%,
+        rgba(255,255,255,.04) 28%,
+        rgba(255,255,255,.78) 48%,
+        rgba(168,255,203,.58) 56%,
+        rgba(255,255,255,.10) 72%,
+        transparent 100%
+      );
+      filter: blur(1px) drop-shadow(0 0 10px rgba(57,255,136,.38));
+      transform: rotate(14deg) translateX(-180%);
+      animation: portfolioSweep 4.0s ease-in-out infinite;
     }
 
     .portfolio-nav-card:hover {
@@ -294,15 +303,130 @@
       transform: translate(3px,-3px);
     }
 
+
+    /* Interactive Science Lab CTA */
+    .lab-nav-card {
+      position: relative;
+      justify-content: flex-start;
+      min-height: 70px;
+      gap: 11px;
+      overflow: hidden;
+      border-color: rgba(77,255,243,.48);
+      background:
+        radial-gradient(circle at 12% 50%, rgba(77,255,243,.16), transparent 38%),
+        linear-gradient(145deg, rgba(77,255,243,.10), rgba(0,0,0,.42));
+      box-shadow:
+        inset 0 0 22px rgba(77,255,243,.06),
+        0 0 20px rgba(77,255,243,.08);
+      animation: labCtaPulse 3.1s ease-in-out infinite;
+    }
+
+    .lab-nav-card::before {
+      content: "";
+      position: absolute;
+      top: -30%;
+      left: -44%;
+      width: 46%;
+      height: 160%;
+      pointer-events: none;
+      background: linear-gradient(
+        105deg,
+        transparent 0%,
+        rgba(255,255,255,.04) 28%,
+        rgba(255,255,255,.72) 48%,
+        rgba(77,255,243,.55) 56%,
+        rgba(255,255,255,.08) 72%,
+        transparent 100%
+      );
+      filter: blur(1px) drop-shadow(0 0 10px rgba(77,255,243,.30));
+      transform: rotate(14deg) translateX(-180%);
+      animation: labSweep 3.8s ease-in-out infinite;
+    }
+
+    .lab-nav-card:hover {
+      background:
+        radial-gradient(circle at 12% 50%, rgba(77,255,243,.26), transparent 40%),
+        linear-gradient(145deg, rgba(77,255,243,.17), rgba(0,0,0,.34));
+      border-color: var(--cyan);
+      box-shadow:
+        inset 0 0 22px rgba(77,255,243,.10),
+        0 0 30px rgba(77,255,243,.22);
+      transform: translateY(-5px) scale(1.01);
+    }
+
+    .lab-nav-icon {
+      width: 37px;
+      height: 37px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: 11px;
+      color: #03100f;
+      background: var(--cyan);
+      box-shadow: 0 0 18px rgba(77,255,243,.40);
+      font-weight: 900;
+    }
+
+    .lab-nav-text {
+      display: grid;
+      gap: 3px;
+      text-align: left;
+      flex: 1;
+    }
+
+    .lab-nav-text strong {
+      font-size: 13px;
+      letter-spacing: .08em;
+      color: #b8fff9;
+    }
+
+    .lab-nav-text small {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: .04em;
+    }
+
+    .lab-nav-arrow {
+      font-size: 20px;
+      color: var(--cyan);
+      transition: transform .25s ease;
+    }
+
+    .lab-nav-card:hover .lab-nav-arrow {
+      transform: translate(3px,-3px);
+    }
+
+    @keyframes labCtaPulse {
+      0%, 100% { box-shadow: inset 0 0 22px rgba(77,255,243,.06), 0 0 16px rgba(77,255,243,.06); }
+      50% { box-shadow: inset 0 0 28px rgba(77,255,243,.10), 0 0 27px rgba(77,255,243,.14); }
+    }
+
+    @keyframes labSweep {
+      0%, 55% { transform: rotate(14deg) translateX(-180%); opacity: 0; }
+      68% { opacity: .22; }
+      73% { opacity: 1; }
+      88%, 100% { transform: rotate(14deg) translateX(430%); opacity: 0; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .lab-nav-card,
+      .lab-nav-card::before,
+      .lab-nav-card:hover .lab-nav-arrow {
+        animation: none !important;
+        transition-duration: .01ms !important;
+      }
+    }
+
     @keyframes portfolioCtaPulse {
       0%, 100% { box-shadow: inset 0 0 22px rgba(57,255,136,.07), 0 0 16px rgba(57,255,136,.06); }
       50% { box-shadow: inset 0 0 28px rgba(57,255,136,.11), 0 0 27px rgba(57,255,136,.15); }
     }
 
     @keyframes portfolioSweep {
-      0%, 55% { transform: rotate(18deg) translateX(-180%); opacity: 0; }
-      70% { opacity: 1; }
-      88%, 100% { transform: rotate(18deg) translateX(470%); opacity: 0; }
+      0%, 55% { transform: rotate(14deg) translateX(-180%); opacity: 0; }
+      68% { opacity: .25; }
+      73% { opacity: 1; }
+      88%, 100% { transform: rotate(14deg) translateX(430%); opacity: 0; }
     }
 
     .main-scroll-progress {
@@ -316,9 +440,10 @@
       box-shadow: 0 0 18px rgba(57,255,136,.45);
     }
 
+    /* Interactive-Lab style scroll reveal animation */
     .main-reveal {
       opacity: 0;
-      transform: translateY(28px);
+      transform: translateY(24px);
       filter: blur(2px);
       transition:
         opacity .65s ease,
@@ -326,32 +451,24 @@
         filter .65s ease;
     }
 
-    .main-reveal.from-left { transform: translateX(-32px); }
-    .main-reveal.from-right { transform: translateX(32px); }
     .main-reveal.visible {
       opacity: 1;
       transform: none;
-      filter: blur(0);
+      filter: none;
     }
 
-    .main-reveal-stagger > * {
-      opacity: 0;
-      transform: translateY(18px);
-      transition:
-        opacity .55s ease,
-        transform .55s cubic-bezier(.22,1,.36,1);
+    /* The dashboard wrapper itself should never hide its children.
+       Individual panels handle their own scroll reveal. */
+    .main-reveal-stagger {
+      opacity: 1;
+      transform: none;
+      filter: none;
     }
-
-    .main-reveal-stagger.visible > * { opacity: 1; transform: none; }
-    .main-reveal-stagger.visible > *:nth-child(2) { transition-delay: .07s; }
-    .main-reveal-stagger.visible > *:nth-child(3) { transition-delay: .14s; }
-    .main-reveal-stagger.visible > *:nth-child(4) { transition-delay: .21s; }
 
     @media (prefers-reduced-motion: reduce) {
       .portfolio-nav-card,
       .portfolio-nav-card::before,
-      .main-reveal,
-      .main-reveal-stagger > * {
+      .main-reveal {
         animation: none !important;
         transition-duration: .01ms !important;
       }
@@ -552,6 +669,134 @@
     .fact-row:last-child { border-bottom: 0; }
     .fact-row span:first-child { color: var(--muted); font-size: 13px; }
     .fact-row span:last-child { color: var(--text); font: 12px ui-monospace, monospace; font-weight: bold;}
+
+    /* Interactive Science Lab launcher inside Live Simulation */
+    .simulator {
+      position: relative;
+    }
+
+    /* Reserve a clean lane for the lab launcher so the simulator header text/tag never sits underneath it. */
+    .simulator .panel-label {
+      padding-right: 64px;
+    }
+
+    .sim-lab-launch {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(77,255,243,.48);
+      border-radius: 12px;
+      color: var(--cyan);
+      background:
+        radial-gradient(circle at 50% 45%, rgba(77,255,243,.18), transparent 68%),
+        rgba(2,10,9,.78);
+      box-shadow:
+        inset 0 0 14px rgba(77,255,243,.06),
+        0 0 14px rgba(77,255,243,.08);
+      text-decoration: none;
+      z-index: 5;
+      isolation: isolate;
+      transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease, background .25s ease;
+      animation: simLabLauncherPulse 3s ease-in-out infinite;
+    }
+
+    .sim-lab-launch .lab-launch-icon {
+      font-size: 19px;
+      line-height: 1;
+      filter: drop-shadow(0 0 7px rgba(77,255,243,.75));
+      transition: transform .25s ease, filter .25s ease;
+    }
+
+    .sim-lab-launch::after {
+      content: "INTERACTIVE SCIENCE LAB ↗";
+      position: absolute;
+      top: 50%;
+      right: calc(100% + 10px);
+      transform: translateY(-50%) translateX(6px);
+      width: max-content;
+      max-width: min(260px, 62vw);
+      padding: 8px 10px;
+      border: 1px solid rgba(77,255,243,.36);
+      border-radius: 9px;
+      color: #cafffa;
+      background: rgba(2,8,7,.96);
+      box-shadow: 0 8px 26px rgba(0,0,0,.38), 0 0 18px rgba(77,255,243,.12);
+      font: 700 10px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      letter-spacing: .08em;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease, visibility .2s ease;
+    }
+
+    .sim-lab-launch:hover,
+    .sim-lab-launch:focus-visible {
+      transform: translateY(-2px) scale(1.04);
+      border-color: var(--cyan);
+      background:
+        radial-gradient(circle at 50% 45%, rgba(77,255,243,.28), transparent 72%),
+        rgba(3,12,11,.92);
+      box-shadow:
+        inset 0 0 16px rgba(77,255,243,.10),
+        0 0 24px rgba(77,255,243,.24),
+        0 0 44px rgba(77,255,243,.08);
+      outline: none;
+      animation-play-state: paused;
+    }
+
+    .sim-lab-launch:hover .lab-launch-icon,
+    .sim-lab-launch:focus-visible .lab-launch-icon {
+      transform: scale(1.12) rotate(-3deg);
+      filter: drop-shadow(0 0 11px rgba(77,255,243,.95));
+    }
+
+    .sim-lab-launch:hover::after,
+    .sim-lab-launch:focus-visible::after {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(-50%) translateX(0);
+    }
+
+    @keyframes simLabLauncherPulse {
+      0%, 100% { box-shadow: inset 0 0 14px rgba(77,255,243,.05), 0 0 12px rgba(77,255,243,.06); }
+      50% { box-shadow: inset 0 0 18px rgba(77,255,243,.09), 0 0 22px rgba(77,255,243,.12); }
+    }
+
+    @media (max-width: 700px) {
+      .sim-lab-launch {
+        top: 12px;
+        right: 12px;
+        width: 40px;
+        height: 40px;
+      }
+
+      .simulator .panel-label {
+        padding-right: 58px;
+      }
+
+      .sim-lab-launch::after {
+        right: 0;
+        top: calc(100% + 8px);
+        transform: translateY(-4px);
+      }
+
+      .sim-lab-launch:hover::after,
+      .sim-lab-launch:focus-visible::after {
+        transform: translateY(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .sim-lab-launch {
+        animation: none !important;
+        transition-duration: .01ms !important;
+      }
+    }
 
     .sim-top {
       display: grid;
@@ -1492,7 +1737,376 @@
       }
     }
 
-  </style>
+  
+
+    /* =========================================================
+       LIGHT MODE POLISH
+       Keeps the original layout/design, but gives Light Mode a
+       cleaner, brighter and more premium visual treatment.
+       ========================================================= */
+    body.light-mode {
+      --bg: #f4faf7;
+      --bg-soft: #e9f5ee;
+      --panel: rgba(255, 255, 255, 0.92);
+      --panel-2: rgba(250, 254, 251, 0.98);
+      --line: rgba(18, 126, 70, 0.16);
+      --line-strong: rgba(18, 126, 70, 0.34);
+      --neon: #15965a;
+      --neon-2: #0e7545;
+      --cyan: #138f8a;
+      --yellow: #a36c00;
+      --danger: #c33d55;
+      --text: #183328;
+      --muted: #60766b;
+      --shadow: 0 18px 44px rgba(36, 78, 57, 0.10);
+      --wave-active: rgba(21, 150, 90, .95);
+      --wave-active-shadow: rgba(19, 143, 138, .52);
+      background:
+        radial-gradient(circle at 8% 4%, rgba(76, 201, 138, .16), transparent 26%),
+        radial-gradient(circle at 92% 3%, rgba(74, 186, 180, .13), transparent 24%),
+        radial-gradient(circle at 50% 100%, rgba(255, 255, 255, .85), transparent 38%),
+        linear-gradient(180deg, #ffffff 0%, #f4faf7 46%, #eaf5ef 100%);
+    }
+
+    body.light-mode::before {
+      opacity: .035;
+      background-image:
+        linear-gradient(rgba(24, 51, 40, .11) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(24, 51, 40, .11) 1px, transparent 1px);
+      mask-image: linear-gradient(to bottom, black, transparent 74%);
+    }
+
+    body.light-mode .topbar {
+      background: linear-gradient(135deg, rgba(255,255,255,.97), rgba(240,250,245,.96));
+      border-color: rgba(21,150,90,.20);
+      box-shadow:
+        0 18px 42px rgba(35, 76, 56, .11),
+        0 2px 8px rgba(35, 76, 56, .05),
+        inset 0 1px 0 rgba(255,255,255,.98);
+    }
+
+    body.light-mode .nav-box {
+      background: rgba(255,255,255,.76);
+      border-color: rgba(21,150,90,.20);
+      box-shadow:
+        inset 0 0 26px rgba(21,150,90,.025),
+        0 14px 34px rgba(35,76,56,.08);
+    }
+
+    body.light-mode .nav-card {
+      background: linear-gradient(145deg, rgba(255,255,255,.92), rgba(235,247,240,.88));
+      border-color: rgba(21,150,90,.14);
+      box-shadow: 0 7px 20px rgba(35,76,56,.055);
+    }
+
+    body.light-mode .nav-card:hover {
+      color: var(--text);
+      background: linear-gradient(145deg, rgba(255,255,255,.99), rgba(224,244,232,.96));
+      border-color: rgba(21,150,90,.34);
+      box-shadow: 0 12px 28px rgba(21,150,90,.12), inset 0 1px 0 rgba(255,255,255,.95);
+    }
+
+    body.light-mode .panel {
+      background: linear-gradient(145deg, rgba(255,255,255,.96), rgba(247,252,249,.95));
+      border-color: rgba(21,150,90,.15);
+      box-shadow:
+        0 16px 38px rgba(36,78,57,.085),
+        0 2px 8px rgba(36,78,57,.035),
+        inset 0 1px 0 rgba(255,255,255,.98);
+    }
+
+    body.light-mode .mini-card,
+    body.light-mode .node,
+    body.light-mode .monitor-stat,
+    body.light-mode .telemetry-item,
+    body.light-mode .info-card {
+      background: linear-gradient(145deg, rgba(255,255,255,.94), rgba(239,248,243,.88));
+      border-color: rgba(21,150,90,.13);
+      box-shadow: 0 7px 18px rgba(36,78,57,.045);
+    }
+
+    body.light-mode .node:hover,
+    body.light-mode .mini-card:hover,
+    body.light-mode .monitor-stat:hover,
+    body.light-mode .telemetry-item:hover,
+    body.light-mode .info-card:hover {
+      border-color: rgba(21,150,90,.28);
+      box-shadow: 0 10px 24px rgba(21,150,90,.085);
+    }
+
+    body.light-mode .meter-box {
+      background: linear-gradient(145deg, rgba(255,255,255,.98), rgba(241,249,245,.94));
+      border-color: rgba(21,150,90,.15);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.95), 0 8px 20px rgba(36,78,57,.045);
+    }
+
+    body.light-mode .bar {
+      background: linear-gradient(90deg, #dfeee5, #e8f3ed);
+      border-color: rgba(21,150,90,.16);
+      box-shadow: inset 0 1px 2px rgba(40,80,59,.06);
+    }
+
+    body.light-mode .wave {
+      background: linear-gradient(180deg, rgba(19,143,138,.04), rgba(21,150,90,.025));
+      border-color: rgba(21,150,90,.14);
+      box-shadow: inset 0 0 28px rgba(21,150,90,.025);
+    }
+
+    body.light-mode .wave-grid {
+      opacity: .24;
+      background-image:
+        linear-gradient(rgba(19,143,138,.10) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(19,143,138,.10) 1px, transparent 1px);
+    }
+
+    body.light-mode .led-core {
+      background: radial-gradient(circle, #ffffff 0%, #e5f9ed 58%, #bfe9cf 100%);
+      border-color: rgba(21,150,90,.30);
+      box-shadow: 0 0 24px rgba(21,150,90,.16), 0 0 54px rgba(19,143,138,.10);
+    }
+
+    body.light-mode .led-core.active {
+      background: radial-gradient(circle, #ffffff 0%, #e7fbef 18%, #73d7a1 48%, #15965a 76%, #0d6d42 100%);
+      border-color: #ffffff;
+      box-shadow:
+        0 0 22px rgba(115,215,161,.72),
+        0 0 48px rgba(21,150,90,.34),
+        0 0 86px rgba(19,143,138,.18);
+    }
+
+    body.light-mode .chat-window {
+      background: linear-gradient(180deg, #f6fbf8, #edf6f1);
+      border-color: rgba(21,150,90,.13);
+    }
+
+    body.light-mode .chat-input {
+      background: rgba(255,255,255,.98);
+      color: var(--text);
+      border-color: rgba(21,150,90,.18);
+      box-shadow: inset 0 1px 3px rgba(36,78,57,.035);
+    }
+
+    body.light-mode .message.bot {
+      background: rgba(21,150,90,.075);
+      border-color: rgba(21,150,90,.12);
+    }
+
+    body.light-mode .message.user {
+      background: rgba(19,143,138,.07);
+      border-color: rgba(19,143,138,.16);
+    }
+
+    body.light-mode .quick-btn {
+      background: rgba(21,150,90,.055);
+      border-color: rgba(21,150,90,.20);
+    }
+
+    body.light-mode .quick-btn:hover {
+      color: #ffffff;
+      background: linear-gradient(135deg, #15965a, #138f8a);
+      border-color: transparent;
+      box-shadow: 0 8px 20px rgba(21,150,90,.20);
+    }
+
+    body.light-mode .btn {
+      color: var(--text);
+      background: rgba(21,150,90,.055);
+      border-color: rgba(21,150,90,.22);
+      box-shadow: inset 0 0 0 1px rgba(21,150,90,.025), 0 6px 16px rgba(36,78,57,.04);
+    }
+
+    body.light-mode .btn:hover {
+      color: #ffffff;
+      background: linear-gradient(135deg, #15965a, #138f8a);
+      border-color: transparent;
+      box-shadow: 0 10px 24px rgba(21,150,90,.20);
+    }
+
+    body.light-mode .btn.primary {
+      color: #0e7545;
+      background: linear-gradient(135deg, rgba(21,150,90,.10), rgba(19,143,138,.07));
+      border-color: rgba(21,150,90,.25);
+    }
+
+    body.light-mode .btn.primary:hover {
+      color: #ffffff;
+    }
+
+    body.light-mode .btn.danger {
+      color: #a9344a;
+      background: rgba(195,61,85,.055);
+      border-color: rgba(195,61,85,.20);
+    }
+
+    body.light-mode .btn.danger:hover {
+      color: #ffffff;
+      background: #c33d55;
+      border-color: transparent;
+      box-shadow: 0 10px 24px rgba(195,61,85,.18);
+    }
+
+    body.light-mode .theme-toggle {
+      background: rgba(255,255,255,.80);
+      border-color: rgba(21,150,90,.22);
+      box-shadow: 0 7px 20px rgba(36,78,57,.075), inset 0 1px 0 rgba(255,255,255,.95);
+    }
+
+    body.light-mode .theme-toggle::before {
+      background: linear-gradient(135deg, rgba(255,193,70,.34), rgba(255,223,145,.22));
+      border-color: rgba(219,157,35,.30);
+      box-shadow: 0 4px 14px rgba(219,157,35,.16);
+    }
+
+    body.light-mode .theme-toggle.light-selected {
+      background: rgba(255,252,244,.88);
+      border-color: rgba(219,157,35,.30);
+    }
+
+    body.light-mode .theme-toggle.light-selected::before {
+      background: linear-gradient(135deg, rgba(255,193,70,.38), rgba(255,226,157,.25));
+      border-color: rgba(219,157,35,.34);
+      box-shadow: 0 4px 16px rgba(219,157,35,.20);
+    }
+
+    body.light-mode .theme-toggle.light-selected .theme-option.active {
+      color: #8a5a00;
+    }
+
+    body.light-mode .theme-toggle:hover {
+      border-color: rgba(21,150,90,.36);
+      box-shadow: 0 10px 24px rgba(36,78,57,.10), 0 0 18px rgba(21,150,90,.08);
+    }
+
+    body.light-mode .back-to-top {
+      box-shadow: 0 10px 26px rgba(36,78,57,.12), var(--shadow);
+    }
+
+    body.light-mode .back-to-top:hover {
+      box-shadow: 0 12px 30px rgba(36,78,57,.14), 0 0 22px rgba(21,150,90,.16);
+    }
+
+    body.light-mode .system-status {
+      background: rgba(255,255,255,.82);
+      border-color: rgba(21,150,90,.14);
+      box-shadow: 0 7px 18px rgba(36,78,57,.045);
+    }
+
+    body.light-mode .success-banner {
+      color: #205b3e;
+      background: linear-gradient(135deg, rgba(21,150,90,.10), rgba(19,143,138,.06));
+      border-color: rgba(21,150,90,.16);
+    }
+
+    body.light-mode .footer {
+      color: #6a7f74;
+    }
+
+    /* Interactive Science Lab-style scroll reveal */
+    .main-reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      filter: blur(2px);
+      will-change: opacity, transform, filter;
+      transition: opacity .65s ease, transform .65s cubic-bezier(.22,1,.36,1), filter .65s ease;
+    }
+
+    .main-reveal.visible {
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
+
+    /* Fallback for browsers where the observer is unavailable */
+    .main-reveal-stagger {
+      opacity: 1;
+    }
+
+    .credits-card {
+      grid-column: 1 / -1;
+      width: 100%;
+      margin-top: 18px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: linear-gradient(145deg, rgba(57,255,136,.055), rgba(0,0,0,.18));
+      box-shadow: 0 10px 28px rgba(0,0,0,.14);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .credits-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(120deg, transparent 20%, rgba(57,255,136,.08) 50%, transparent 80%);
+      transform: translateX(-110%);
+      transition: transform .8s ease;
+    }
+
+    .credits-card:hover::before { transform: translateX(110%); }
+
+    .credits-title {
+      margin: 0 0 14px;
+      color: var(--neon);
+      font: 700 12px ui-monospace, monospace;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .credits-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .credits-list li {
+      padding: 11px 13px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: rgba(255,255,255,.025);
+      color: var(--text);
+      font-size: 12px;
+    }
+
+    .credits-list li:first-child {
+      border-color: var(--line-strong);
+      background: rgba(57,255,136,.08);
+      font-weight: 700;
+    }
+
+    body.light-mode .credits-card {
+      background: linear-gradient(145deg, rgba(255,255,255,.98), rgba(234,247,239,.92));
+      border-color: rgba(21,150,90,.18);
+      box-shadow: 0 12px 30px rgba(36,78,57,.075), inset 0 1px 0 rgba(255,255,255,.98);
+    }
+
+    body.light-mode .credits-card::before {
+      background: linear-gradient(120deg, transparent 20%, rgba(21,150,90,.08) 50%, transparent 80%);
+    }
+
+    body.light-mode .credits-list li {
+      background: rgba(255,255,255,.62);
+      border-color: rgba(21,150,90,.14);
+    }
+
+    body.light-mode .credits-list li:first-child {
+      background: linear-gradient(135deg, rgba(21,150,90,.10), rgba(19,143,138,.06));
+      border-color: rgba(21,150,90,.25);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .main-reveal {
+        transform: none !important;
+        filter: none !important;
+      }
+      .credits-card::before { display: none; }
+    }
+
+</style>
 </head>
 <body>
   <div class="main-scroll-progress" id="mainScrollProgress"></div>
@@ -1537,7 +2151,14 @@
           </span>
           <span class="portfolio-nav-arrow">↗</span>
         </a>
-        <a href="mailto:rkygamer95@gmail.com" class="nav-card">✉ EMAIL ME</a>
+        <a href="interactive-lab.html" class="nav-card lab-nav-card" aria-label="Open Interactive Science Lab">
+          <span class="lab-nav-icon">🔬</span>
+          <span class="lab-nav-text">
+            <strong>INTERACTIVE SCIENCE LAB</strong>
+            <small>Open Live Science Lab</small>
+          </span>
+          <span class="lab-nav-arrow">↗</span>
+        </a>
         <a href="#theory-section" class="nav-card">🔬 মেইন থিওরি (Theory)</a>
         <a href="#simulator-section" class="nav-card">⚡ লাইভ সিমুলেশন (Simulator)</a>
         <a href="#chat-section" class="nav-card">🤖 স্মার্ট চ্যাটবট (Nexus AI)</a>
@@ -1548,7 +2169,7 @@
     <!-- Main Dashboard Grid -->
     <section class="dashboard main-reveal-stagger">
       <!-- 01: Theory Core -->
-      <article class="panel theory main-reveal from-left" id="theory-section">
+      <article class="panel theory main-reveal" id="theory-section">
         <div class="panel-label"><span>01 // মেইন থিওরি (THEORY)</span><span class="tag">PIEZOELECTRIC EFFECT</span></div>
         <p>
           শব্দ (Sound) হলো এক প্রকার যান্ত্রিক তরঙ্গ বা প্রেশার ওয়েভ। যখন এই শব্দ তরঙ্গ একটি <span class="highlight">পিজোইলেকট্রিক ট্রান্সডিউসারের (Piezoelectric Transducer)</span> উপর আঘাত করে, তখন এর ভেতরের ক্রিস্টালে চাপ পড়ে এবং একটি ছোট অল্টারনেটিং কারেন্ট (AC) তৈরি হয়। পরে একটি ব্রিজ রেক্টিফায়ার এই AC-কে DC ভোল্টেজে রূপান্তর করে ক্যাপাসিটরে জমা করে।
@@ -1562,7 +2183,7 @@
       </article>
 
       <!-- 02: Circuit Architecture -->
-      <article class="panel architecture main-reveal from-right">
+      <article class="panel architecture main-reveal">
         <div class="panel-label"><span>02 // সার্কিট গঠন (ARCHITECTURE)</span><span class="tag">PROTOTYPE FLOW</span></div>
         <p class="muted">প্রোটোটাইপ সার্কিটের মূল সিগন্যাল ফ্লো (Signal flow):</p>
         <div class="circuit" aria-label="Circuit block diagram">
@@ -1592,7 +2213,10 @@
       </article>
 
       <!-- 04: Live Sound Simulator -->
-      <article class="panel simulator main-reveal from-left" id="simulator-section">
+      <article class="panel simulator main-reveal" id="simulator-section">
+        <a class="sim-lab-launch" href="interactive-lab.html" aria-label="Open Interactive Science Lab" title="Interactive Science Lab">
+          <span class="lab-launch-icon" aria-hidden="true">🔬</span>
+        </a>
         <div class="panel-label"><span>04 // লাইভ সিমুলেশন (LIVE SIMULATOR)</span><span class="tag" id="simulationState">READY</span></div>
         <div class="sim-top">
           <div class="meter-box">
@@ -1620,7 +2244,7 @@
       </article>
 
       <!-- 05: Energy Flow Monitor -->
-      <article class="panel monitor main-reveal from-right">
+      <article class="panel monitor main-reveal">
         <div class="panel-label"><span>05 // এনার্জি মনিটর (ENERGY MONITOR)</span><span class="tag">OUTPUT NODE</span></div>
         <div class="energy-core">
           <div class="core-ring"></div>
@@ -1639,7 +2263,7 @@
       </article>
 
       <!-- 06: AI Chatbot -->
-      <article class="panel chat main-reveal from-left" id="chat-section">
+      <article class="panel chat main-reveal" id="chat-section">
         <div class="panel-label"><span>06 // NEXUS AI (স্মার্ট চ্যাটবট)</span><span class="tag">API CONNECTED</span></div>
         <div class="chat-window" id="chatWindow" aria-live="polite"></div>
         <div class="quick-actions">
@@ -1656,7 +2280,7 @@
       </article>
 
       <!-- 07: System Telemetry -->
-      <article class="panel telemetry main-reveal from-right">
+      <article class="panel telemetry main-reveal">
         <div class="panel-label"><span>07 // সিস্টেম টেলিমেট্রি (TELEMETRY)</span><span class="tag">REAL-TIME</span></div>
         <div class="telemetry-list">
           <div class="telemetry-item">
@@ -1709,6 +2333,17 @@
           </div>
         </div>
       </article>
+
+
+      <div class="credits-card main-reveal" aria-label="Project credits">
+        <div class="credits-title">PROJECT CREDITS // TEAM</div>
+        <ul class="credits-list">
+          <li>Developed by Yamin Islam</li>
+          <li>Masons</li>
+          <li>Taky</li>
+          <li>Jahid</li>
+        </ul>
+      </div>
     </section>
 
     <button
@@ -1723,36 +2358,65 @@
   </main>
 
   <script>
-    // Portfolio-style scroll motion for the main science-fair page.
+    // Interactive Science Lab-style scroll motion with sequential reveals.
     const mainScrollProgress = document.getElementById("mainScrollProgress");
-    const mainRevealItems = document.querySelectorAll(
-      ".main-reveal, .main-reveal-stagger"
-    );
+    const mainRevealItems = [...document.querySelectorAll(".main-reveal:not(.visible)")];
+    const mainPrefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    const mainRevealObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add("visible");
-        mainRevealObserver.unobserve(entry.target);
-      });
-    }, {
-      threshold: 0.10,
-      rootMargin: "0px 0px -45px 0px"
-    });
+    if (mainPrefersReduced) {
+      mainRevealItems.forEach((item) => item.classList.add("visible"));
+    } else if ("IntersectionObserver" in window) {
+      let revealQueue = [];
+      let revealTimer = null;
+      let isRevealing = false;
 
-    mainRevealItems.forEach((item) => {
-      if (item.classList.contains("visible")) return;
-      mainRevealObserver.observe(item);
-    });
-
-    requestAnimationFrame(() => {
-      mainRevealItems.forEach((item) => {
-        if (item.getBoundingClientRect().top < window.innerHeight * 0.92) {
-          item.classList.add("visible");
-          mainRevealObserver.unobserve(item);
+      const revealNext = () => {
+        if (!revealQueue.length) {
+          isRevealing = false;
+          revealTimer = null;
+          return;
         }
+
+        isRevealing = true;
+        const item = revealQueue.shift();
+        item.classList.add("visible");
+        mainRevealObserver.unobserve(item);
+
+        revealTimer = window.setTimeout(revealNext, 125);
+      };
+
+      const mainRevealObserver = new IntersectionObserver((entries) => {
+        const freshEntries = entries
+          .filter((entry) => entry.isIntersecting && !entry.target.classList.contains("visible"))
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+        freshEntries.forEach((entry) => {
+          if (!revealQueue.includes(entry.target)) revealQueue.push(entry.target);
+        });
+
+        revealQueue.sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top);
+        if (!isRevealing) revealNext();
+      }, {
+        threshold: 0.04,
+        rootMargin: "0px 0px 100px 0px"
       });
-    });
+
+      mainRevealItems.forEach((item) => mainRevealObserver.observe(item));
+
+      // Catch the opening viewport without changing the existing page-load animation.
+      requestAnimationFrame(() => {
+        const initial = mainRevealItems
+          .filter((item) => item.getBoundingClientRect().top < window.innerHeight * 0.92)
+          .sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top);
+
+        initial.forEach((item) => {
+          if (!revealQueue.includes(item)) revealQueue.push(item);
+        });
+        if (!isRevealing) revealNext();
+      });
+    } else {
+      mainRevealItems.forEach((item) => item.classList.add("visible"));
+    }
 
     function updateMainScrollProgress() {
       const max = document.documentElement.scrollHeight - window.innerHeight;
