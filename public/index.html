@@ -148,6 +148,154 @@
       color: #fff;
     }
 
+    /* ================================
+       PORTFOLIO CTA + SMOOTH SCROLL
+       ================================ */
+    .portfolio-nav-card {
+      position: relative;
+      justify-content: flex-start;
+      min-height: 70px;
+      gap: 11px;
+      overflow: hidden;
+      border-color: rgba(57,255,136,.55);
+      background:
+        radial-gradient(circle at 12% 50%, rgba(57,255,136,.18), transparent 38%),
+        linear-gradient(145deg, rgba(57,255,136,.13), rgba(0,0,0,.45));
+      box-shadow:
+        inset 0 0 22px rgba(57,255,136,.07),
+        0 0 20px rgba(57,255,136,.08);
+      animation: portfolioCtaPulse 2.8s ease-in-out infinite;
+    }
+
+    .portfolio-nav-card::before {
+      content: "";
+      position: absolute;
+      top: -35%;
+      left: -35%;
+      width: 38%;
+      height: 170%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
+      transform: rotate(18deg) translateX(-180%);
+      animation: portfolioSweep 3.6s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .portfolio-nav-card:hover {
+      background:
+        radial-gradient(circle at 12% 50%, rgba(57,255,136,.28), transparent 40%),
+        linear-gradient(145deg, rgba(57,255,136,.20), rgba(0,0,0,.34));
+      box-shadow:
+        inset 0 0 22px rgba(57,255,136,.11),
+        0 0 30px rgba(57,255,136,.25);
+      transform: translateY(-5px) scale(1.01);
+    }
+
+    .portfolio-nav-icon {
+      width: 37px;
+      height: 37px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: 11px;
+      color: #06100a;
+      background: var(--neon);
+      box-shadow: 0 0 18px rgba(57,255,136,.45);
+      font-weight: 900;
+    }
+
+    .portfolio-nav-text {
+      display: grid;
+      gap: 3px;
+      text-align: left;
+      flex: 1;
+    }
+
+    .portfolio-nav-text strong {
+      font-size: 13px;
+      letter-spacing: .08em;
+      color: var(--neon-2);
+    }
+
+    .portfolio-nav-text small {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: .04em;
+    }
+
+    .portfolio-nav-arrow {
+      font-size: 20px;
+      color: var(--neon);
+      transition: transform .25s ease;
+    }
+
+    .portfolio-nav-card:hover .portfolio-nav-arrow {
+      transform: translate(3px,-3px);
+    }
+
+    @keyframes portfolioCtaPulse {
+      0%, 100% { box-shadow: inset 0 0 22px rgba(57,255,136,.07), 0 0 16px rgba(57,255,136,.06); }
+      50% { box-shadow: inset 0 0 28px rgba(57,255,136,.11), 0 0 27px rgba(57,255,136,.15); }
+    }
+
+    @keyframes portfolioSweep {
+      0%, 55% { transform: rotate(18deg) translateX(-180%); opacity: 0; }
+      70% { opacity: 1; }
+      88%, 100% { transform: rotate(18deg) translateX(470%); opacity: 0; }
+    }
+
+    .main-scroll-progress {
+      position: fixed;
+      inset: 0 0 auto;
+      width: 0;
+      height: 3px;
+      z-index: 1500;
+      pointer-events: none;
+      background: linear-gradient(90deg, var(--neon), var(--cyan));
+      box-shadow: 0 0 18px rgba(57,255,136,.45);
+    }
+
+    .main-reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      filter: blur(2px);
+      transition:
+        opacity .65s ease,
+        transform .65s cubic-bezier(.22,1,.36,1),
+        filter .65s ease;
+    }
+
+    .main-reveal.from-left { transform: translateX(-32px); }
+    .main-reveal.from-right { transform: translateX(32px); }
+    .main-reveal.visible {
+      opacity: 1;
+      transform: none;
+      filter: blur(0);
+    }
+
+    .main-reveal-stagger > * {
+      opacity: 0;
+      transform: translateY(18px);
+      transition:
+        opacity .55s ease,
+        transform .55s cubic-bezier(.22,1,.36,1);
+    }
+
+    .main-reveal-stagger.visible > * { opacity: 1; transform: none; }
+    .main-reveal-stagger.visible > *:nth-child(2) { transition-delay: .07s; }
+    .main-reveal-stagger.visible > *:nth-child(3) { transition-delay: .14s; }
+    .main-reveal-stagger.visible > *:nth-child(4) { transition-delay: .21s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .portfolio-nav-card,
+      .portfolio-nav-card::before,
+      .main-reveal,
+      .main-reveal-stagger > * {
+        animation: none !important;
+        transition-duration: .01ms !important;
+      }
+    }
+
+
     .eyebrow, .panel-label, .mono, .tag, .readout, .meter-value, .stat-value {
       font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
     }
@@ -877,56 +1025,6 @@
       }
     }
 
-
-    /* Portfolio scroll animation */
-    .scroll-reveal {
-      opacity: 0;
-      transform: translateY(34px);
-      filter: blur(2px);
-      transition: opacity .7s ease, transform .7s cubic-bezier(.22,1,.36,1), filter .7s ease;
-    }
-    .scroll-reveal.revealed { opacity: 1; transform: translateY(0); filter: blur(0); }
-    .scroll-reveal.from-left { transform: translateX(-42px); }
-    .scroll-reveal.from-right { transform: translateX(42px); }
-    .scroll-reveal.from-left.revealed,
-    .scroll-reveal.from-right.revealed { transform: translateX(0); }
-    .scroll-reveal.scale-in { transform: translateY(20px) scale(.94); }
-    .scroll-reveal.scale-in.revealed { transform: translateY(0) scale(1); }
-
-    .scroll-stagger > * {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity .6s ease, transform .6s cubic-bezier(.22,1,.36,1);
-    }
-    .scroll-stagger.revealed > * { opacity: 1; transform: translateY(0); }
-    .scroll-stagger.revealed > *:nth-child(1) { transition-delay:.04s; }
-    .scroll-stagger.revealed > *:nth-child(2) { transition-delay:.10s; }
-    .scroll-stagger.revealed > *:nth-child(3) { transition-delay:.16s; }
-    .scroll-stagger.revealed > *:nth-child(4) { transition-delay:.22s; }
-    .scroll-stagger.revealed > *:nth-child(5) { transition-delay:.28s; }
-    .scroll-stagger.revealed > *:nth-child(6) { transition-delay:.34s; }
-
-    .scroll-progress {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 0;
-      height: 3px;
-      z-index: 2000;
-      background: linear-gradient(90deg, var(--neon), var(--cyan));
-      box-shadow: 0 0 12px rgba(57,255,136,.45);
-      pointer-events: none;
-    }
-    body.light-mode .scroll-progress {
-      background: linear-gradient(90deg, #4f46e5, #2563eb);
-      box-shadow: 0 0 12px rgba(79,70,229,.35);
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .scroll-reveal, .scroll-stagger > * {
-        opacity:1 !important; transform:none !important; filter:none !important; transition:none !important;
-      }
-    }
-
     /* Responsive Breakpoints */
     @media (max-width: 1050px) {
       .theory, .architecture, .facts, .simulator, .monitor, .chat, .telemetry { grid-column: span 6; }
@@ -1328,10 +1426,10 @@
   </style>
 </head>
 <body>
-  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+  <div class="main-scroll-progress" id="mainScrollProgress"></div>
   <main class="hud-shell">
     <!-- Top Header -->
-    <header class="topbar">
+    <header class="topbar main-reveal visible">
       <div>
         <div class="eyebrow">SCIENCE FAIR // ACOUSTIC POWER SYSTEM</div>
         <h1>শব্দ থেকে বিদ্যুৎ তৈরি (Acoustic Harvester)</h1>
@@ -1359,9 +1457,18 @@
     </header>
 
     <!-- NEW: Quick Navigation Box -->
-    <section class="nav-box" id="nav-box">
+    <section class="nav-box main-reveal visible" id="nav-box">
       <div class="nav-box-title">📌 কুইক ন্যাভিগেশন মেনু (Quick Menu)</div>
       <div class="nav-grid">
+        <a href="portfolio.html" class="nav-card portfolio-nav-card" aria-label="Open MD Yamin Islam portfolio">
+          <span class="portfolio-nav-icon">✦</span>
+          <span class="portfolio-nav-text">
+            <strong>PORTFOLIO / ABOUT ME</strong>
+            <small>MD Yamin Islam</small>
+          </span>
+          <span class="portfolio-nav-arrow">↗</span>
+        </a>
+        <a href="mailto:rkygamer95@gmail.com" class="nav-card">✉ EMAIL ME</a>
         <a href="#theory-section" class="nav-card">🔬 মেইন থিওরি (Theory)</a>
         <a href="#simulator-section" class="nav-card">⚡ লাইভ সিমুলেশন (Simulator)</a>
         <a href="#chat-section" class="nav-card">🤖 স্মার্ট চ্যাটবট (Nexus AI)</a>
@@ -1370,9 +1477,9 @@
     </section>
 
     <!-- Main Dashboard Grid -->
-    <section class="dashboard scroll-reveal">
+    <section class="dashboard main-reveal-stagger">
       <!-- 01: Theory Core -->
-      <article class="panel theory" id="theory-section">
+      <article class="panel theory main-reveal from-left" id="theory-section">
         <div class="panel-label"><span>01 // মেইন থিওরি (THEORY)</span><span class="tag">PIEZOELECTRIC EFFECT</span></div>
         <p>
           শব্দ (Sound) হলো এক প্রকার যান্ত্রিক তরঙ্গ বা প্রেশার ওয়েভ। যখন এই শব্দ তরঙ্গ একটি <span class="highlight">পিজোইলেকট্রিক ট্রান্সডিউসারের (Piezoelectric Transducer)</span> উপর আঘাত করে, তখন এর ভেতরের ক্রিস্টালে চাপ পড়ে এবং একটি ছোট অল্টারনেটিং কারেন্ট (AC) তৈরি হয়। পরে একটি ব্রিজ রেক্টিফায়ার এই AC-কে DC ভোল্টেজে রূপান্তর করে ক্যাপাসিটরে জমা করে।
@@ -1386,7 +1493,7 @@
       </article>
 
       <!-- 02: Circuit Architecture -->
-      <article class="panel architecture">
+      <article class="panel architecture main-reveal from-right">
         <div class="panel-label"><span>02 // সার্কিট গঠন (ARCHITECTURE)</span><span class="tag">PROTOTYPE FLOW</span></div>
         <p class="muted">প্রোটোটাইপ সার্কিটের মূল সিগন্যাল ফ্লো (Signal flow):</p>
         <div class="circuit" aria-label="Circuit block diagram">
@@ -1402,7 +1509,7 @@
       </article>
 
       <!-- 03: Quick Facts -->
-      <article class="panel facts">
+      <article class="panel facts main-reveal">
         <div class="panel-label"><span>03 // গুরুত্বপূর্ণ তথ্য (FACTS)</span><span class="tag">LIVE MODEL</span></div>
         <div class="fact-list">
           <div class="fact-row"><span>পাওয়ার সোর্স (Source)</span><span>SOUND WAVE (শব্দ)</span></div>
@@ -1416,7 +1523,7 @@
       </article>
 
       <!-- 04: Live Sound Simulator -->
-      <article class="panel simulator" id="simulator-section">
+      <article class="panel simulator main-reveal from-left" id="simulator-section">
         <div class="panel-label"><span>04 // লাইভ সিমুলেশন (LIVE SIMULATOR)</span><span class="tag" id="simulationState">READY</span></div>
         <div class="sim-top">
           <div class="meter-box">
@@ -1444,7 +1551,7 @@
       </article>
 
       <!-- 05: Energy Flow Monitor -->
-      <article class="panel monitor">
+      <article class="panel monitor main-reveal from-right">
         <div class="panel-label"><span>05 // এনার্জি মনিটর (ENERGY MONITOR)</span><span class="tag">OUTPUT NODE</span></div>
         <div class="energy-core">
           <div class="core-ring"></div>
@@ -1463,7 +1570,7 @@
       </article>
 
       <!-- 06: AI Chatbot -->
-      <article class="panel chat" id="chat-section">
+      <article class="panel chat main-reveal from-left" id="chat-section">
         <div class="panel-label"><span>06 // NEXUS AI (স্মার্ট চ্যাটবট)</span><span class="tag">API CONNECTED</span></div>
         <div class="chat-window" id="chatWindow" aria-live="polite"></div>
         <div class="quick-actions">
@@ -1480,7 +1587,7 @@
       </article>
 
       <!-- 07: System Telemetry -->
-      <article class="panel telemetry">
+      <article class="panel telemetry main-reveal from-right">
         <div class="panel-label"><span>07 // সিস্টেম টেলিমেট্রি (TELEMETRY)</span><span class="tag">REAL-TIME</span></div>
         <div class="telemetry-list">
           <div class="telemetry-item">
@@ -1503,7 +1610,7 @@
       </article>
 
       <!-- 08: Q&A Detailed Info Section -->
-      <article class="panel detailed-info" id="info-section">
+      <article class="panel detailed-info main-reveal" id="info-section">
         <div class="panel-label"><span>08 // প্রশ্নোত্তর পর্ব (Q&A INFO)</span><span class="tag">PROJECT DETAILS</span></div>
         
         <div class="info-grid">
@@ -1543,10 +1650,53 @@
       title="Back to top"
     ><span class="arrow" aria-hidden="true">↑</span></button>
 
-    <div class="footer">ACOUSTIC ENERGY HARVESTER (শব্দ থেকে বিদ্যুৎ) // SCIENCE FAIR EDITION // DEVELOPED BY YAMIN ISLAM</div>
+    <div class="footer">ACOUSTIC ENERGY HARVESTER (শব্দ থেকে বিদ্যুৎ) // SCIENCE FAIR EDITION // DEVELOPED BY YAMIN ISLAM<br><a href="mailto:rkygamer95@gmail.com" style="display:inline-block;margin-top:8px;color:var(--neon-2);text-decoration:none;">✉ rkygamer95@gmail.com</a> · <a href="portfolio.html" style="color:var(--neon-2);text-decoration:none;">PORTFOLIO / ABOUT ME ↗</a></div>
   </main>
 
   <script>
+    // Portfolio-style scroll motion for the main science-fair page.
+    const mainScrollProgress = document.getElementById("mainScrollProgress");
+    const mainRevealItems = document.querySelectorAll(
+      ".main-reveal, .main-reveal-stagger"
+    );
+
+    const mainRevealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("visible");
+        mainRevealObserver.unobserve(entry.target);
+      });
+    }, {
+      threshold: 0.10,
+      rootMargin: "0px 0px -45px 0px"
+    });
+
+    mainRevealItems.forEach((item) => {
+      if (item.classList.contains("visible")) return;
+      mainRevealObserver.observe(item);
+    });
+
+    requestAnimationFrame(() => {
+      mainRevealItems.forEach((item) => {
+        if (item.getBoundingClientRect().top < window.innerHeight * 0.92) {
+          item.classList.add("visible");
+          mainRevealObserver.unobserve(item);
+        }
+      });
+    });
+
+    function updateMainScrollProgress() {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+      if (mainScrollProgress) {
+        mainScrollProgress.style.width = Math.max(0, Math.min(100, pct)) + "%";
+      }
+    }
+
+    window.addEventListener("scroll", updateMainScrollProgress, { passive: true });
+    window.addEventListener("resize", updateMainScrollProgress);
+    updateMainScrollProgress();
+
     "use strict";
 
     // =========================================================================
@@ -1597,42 +1747,6 @@
       return Math.min(max, Math.max(min, value));
     }
 
-
-    // -------------------------------
-    // Portfolio Scroll Animation
-    // -------------------------------
-    const scrollProgress = document.getElementById("scrollProgress");
-    const revealItems = document.querySelectorAll(".scroll-reveal, .scroll-stagger");
-
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("revealed");
-          revealObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.14, rootMargin: "0px 0px -45px 0px" });
-
-    revealItems.forEach(item => revealObserver.observe(item));
-
-    requestAnimationFrame(() => {
-      revealItems.forEach(item => {
-        if (item.getBoundingClientRect().top < window.innerHeight * .92) {
-          item.classList.add("revealed");
-          revealObserver.unobserve(item);
-        }
-      });
-    });
-
-    function updateScrollProgress() {
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      const percent = max > 0 ? (window.scrollY / max) * 100 : 0;
-      if (scrollProgress) scrollProgress.style.width = `${Math.min(100, Math.max(0, percent))}%`;
-    }
-
-    window.addEventListener("scroll", updateScrollProgress, { passive: true });
-    window.addEventListener("resize", updateScrollProgress);
-    updateScrollProgress();
 
     // -------------------------------
     // Floating Back-to-Top Button
