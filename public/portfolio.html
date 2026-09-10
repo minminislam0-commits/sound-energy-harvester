@@ -237,6 +237,35 @@
     .nav-link.active::after { transform: scaleX(1); }
 
     .nav-actions { display: flex; align-items: center; gap: 9px; }
+    .back-main-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 43px;
+      padding: 10px 13px;
+      border-radius: 13px;
+      border: 1px solid var(--line);
+      color: var(--text);
+      background: var(--surface-2);
+      font-size: .86rem;
+      font-weight: 750;
+      white-space: nowrap;
+      box-shadow: 0 8px 22px rgba(0,0,0,.08);
+      transition: transform .2s ease, background .25s ease, border-color .25s ease, box-shadow .25s ease, color .25s ease;
+    }
+    .back-main-btn:hover {
+      transform: translateY(-2px);
+      color: var(--text);
+      background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 16%, var(--surface-2)), color-mix(in srgb, var(--accent-2) 12%, var(--surface-2)));
+      border-color: color-mix(in srgb, var(--accent) 48%, var(--line));
+      box-shadow: 0 10px 28px rgba(53,214,255,.12);
+    }
+    .back-main-btn:focus-visible {
+      outline: 2px solid var(--accent-2);
+      outline-offset: 3px;
+    }
+
     .theme-toggle, .menu-toggle {
       width: 43px;
       height: 43px;
@@ -765,6 +794,12 @@
       .nav-link { padding:12px 13px; }
       .menu-toggle { display:grid; }
       .theme-toggle { width:42px; height:42px; }
+      .back-main-btn {
+        min-height:42px;
+        padding:9px 11px;
+        font-size:.8rem;
+      }
+
       .hero { padding-top: 110px; }
       .hero-grid { gap: 34px; }
       .profile-card { width:min(340px,84vw); }
@@ -817,6 +852,7 @@
       </nav>
 
       <div class="nav-actions">
+        <a class="back-main-btn" href="index.html" aria-label="Back to Main Page">← Back to Main Page</a>
         <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark/light mode" title="Toggle theme">☾</button>
         <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false">☰</button>
       </div>
