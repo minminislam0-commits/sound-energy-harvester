@@ -778,6 +778,105 @@
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
+    /* ================================
+       FLOATING BACK TO TOP
+       ================================ */
+    .back-to-top {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 1000;
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line-strong);
+      border-radius: 50%;
+      color: var(--text);
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 8px 24px rgba(0,0,0,.22), var(--shadow);
+      font: 700 20px/1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(14px) scale(.88);
+      pointer-events: none;
+      transition:
+        opacity .28s ease,
+        visibility .28s ease,
+        transform .28s cubic-bezier(.22,1,.36,1),
+        background .3s ease,
+        color .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease;
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+      animation: backToTopIn .38s cubic-bezier(.22,1,.36,1);
+    }
+
+    .back-to-top:hover {
+      transform: translateY(-3px) scale(1.06);
+      border-color: var(--neon);
+      box-shadow: 0 10px 28px rgba(0,0,0,.18), 0 0 22px rgba(57,255,136,.20);
+    }
+
+    .back-to-top:active {
+      transform: translateY(0) scale(.96);
+    }
+
+    .back-to-top:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 3px;
+    }
+
+    .back-to-top .arrow {
+      display: block;
+      transform: translateY(-1px);
+      transition: transform .22s ease;
+    }
+
+    .back-to-top:hover .arrow {
+      transform: translateY(-4px);
+    }
+
+    body.light-mode .back-to-top {
+      box-shadow: 0 8px 24px rgba(37,42,75,.12), var(--shadow);
+    }
+
+    body.light-mode .back-to-top:hover {
+      box-shadow: 0 10px 28px rgba(37,42,75,.12), 0 0 22px rgba(79,70,229,.18);
+    }
+
+    @keyframes backToTopIn {
+      0% { opacity: 0; transform: translateY(14px) scale(.78); }
+      70% { opacity: 1; transform: translateY(-2px) scale(1.04); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @media (max-width: 720px) {
+      .back-to-top {
+        right: 16px;
+        bottom: 16px;
+        width: 46px;
+        height: 46px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .back-to-top,
+      .back-to-top .arrow {
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+      }
+    }
+
     /* Responsive Breakpoints */
     @media (max-width: 1050px) {
       .theory, .architecture, .facts, .simulator, .monitor, .chat, .telemetry { grid-column: span 6; }
@@ -793,6 +892,389 @@
       .system-status { width: 100%; justify-content: center; }
       h1 { font-size: 20px; }
     }
+
+    /* ================================
+       LIGHT / DARK MODE
+       Default theme = Dark Mode
+       ================================ */
+    :root {
+      --theme-transition: 0.3s ease;
+      --wave-active: rgba(255,255,255,.98);
+      --wave-active-shadow: rgba(168,255,203,.9);
+    }
+
+    body,
+    .topbar,
+    .nav-box,
+    .panel,
+    .meter-box,
+    .mini-card,
+    .node,
+    .monitor-stat,
+    .chat-window,
+    .chat-input,
+    .telemetry-item,
+    .info-card,
+    .system-status,
+    .nav-card,
+    .btn,
+    .quick-btn,
+    .wave {
+      transition:
+        background-color var(--theme-transition),
+        background var(--theme-transition),
+        color var(--theme-transition),
+        border-color var(--theme-transition),
+        box-shadow var(--theme-transition);
+    }
+
+    body.light-mode {
+      --bg: #f7f8fc;
+      --bg-soft: #eceefa;
+      --panel: rgba(255, 255, 255, 0.95);
+      --panel-2: rgba(249, 249, 255, 0.99);
+      --line: rgba(79, 70, 229, 0.20);
+      --line-strong: rgba(79, 70, 229, 0.48);
+      --neon: #4f46e5;
+      --neon-2: #3730a3;
+      --cyan: #2563eb;
+      --yellow: #9a6a00;
+      --danger: #d43e56;
+      --text: #1e2540;
+      --muted: #68708a;
+      --shadow: 0 0 26px rgba(79, 70, 229, 0.12);
+    }
+
+    body.light-mode {
+      --wave-active: rgba(79,70,229,.98);
+      --wave-active-shadow: rgba(99,102,241,.78);
+    }
+
+    body.light-mode {
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 10%, rgba(79,70,229,.09), transparent 30%),
+        radial-gradient(circle at 85% 0%, rgba(37,99,235,.07), transparent 25%),
+        linear-gradient(180deg, #ffffff 0%, #f1f7f3 48%, #edf4f0 100%);
+    }
+
+    body.light-mode::before {
+      opacity: .045;
+      background-image:
+        linear-gradient(rgba(23,49,34,.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(23,49,34,.08) 1px, transparent 1px);
+    }
+
+    body.light-mode .topbar {
+      background: linear-gradient(135deg, rgba(255,255,255,.98), rgba(238,247,242,.96));
+      box-shadow: 0 0 40px rgba(79,70,229,.08);
+    }
+
+    body.light-mode .nav-box {
+      background: rgba(247, 252, 249, .92);
+      box-shadow: inset 0 0 20px rgba(79,70,229,.04), 0 8px 32px rgba(35,39,70,.10);
+    }
+
+    body.light-mode .nav-card {
+      background: linear-gradient(145deg, rgba(79,70,229,.07), rgba(37,99,235,.025));
+    }
+
+    body.light-mode .nav-card:hover {
+      color: #24274a;
+      background: rgba(79,70,229,.13);
+    }
+
+    body.light-mode .system-status {
+      background: rgba(255,255,255,.72);
+    }
+
+    body.light-mode .panel {
+      background: linear-gradient(145deg, var(--panel), var(--panel-2));
+      box-shadow: var(--shadow);
+    }
+
+    body.light-mode .mini-card {
+      background: rgba(232, 244, 237, .72);
+    }
+
+    body.light-mode .node {
+      background: rgba(22,138,74,.06);
+    }
+
+    body.light-mode .meter-box {
+      background: rgba(243, 244, 253, .92);
+    }
+
+    body.light-mode .bar {
+      background: #dce9e1;
+      border-color: rgba(79,70,229,.22);
+    }
+
+    body.light-mode .wave {
+      background: linear-gradient(180deg, rgba(8,125,117,.045), rgba(22,138,74,.03));
+    }
+
+    body.light-mode .wave-grid {
+      opacity: .32;
+      background-image:
+        linear-gradient(rgba(8,125,117,.10) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(8,125,117,.10) 1px, transparent 1px);
+    }
+
+    body.light-mode .led-core {
+      background: radial-gradient(circle, #eefdf5 0%, #d6f5e2 62%, #b8dfc8 100%);
+      border-color: rgba(22,138,74,.36);
+    }
+
+    body.light-mode .monitor-stat,
+    body.light-mode .telemetry-item,
+    body.light-mode .info-card {
+      background: rgba(242, 243, 252, .82);
+    }
+
+    body.light-mode .chat-window {
+      background: #eef5f1;
+    }
+
+    body.light-mode .chat-input {
+      background: #ffffff;
+      color: var(--text);
+    }
+
+    body.light-mode .message.bot {
+      background: rgba(79,70,229,.07);
+    }
+
+    body.light-mode .message.user {
+      background: rgba(37,99,235,.07);
+    }
+
+    body.light-mode .quick-btn {
+      background: rgba(22,138,74,.07);
+    }
+
+    body.light-mode .footer {
+      color: #6d8276;
+    }
+
+    body.light-mode .success-banner {
+      color: #17402a;
+      background: rgba(22,138,74,.10);
+    }
+
+    /* Theme switch */
+    .theme-toggle {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
+      width: 176px;
+      height: 48px;
+      padding: 4px;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      color: var(--text);
+      background: rgba(57,255,136,.06);
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      overflow: hidden;
+      isolation: isolate;
+      box-shadow: inset 0 0 12px rgba(57,255,136,.04);
+      transition:
+        transform .2s ease,
+        background .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease;
+    }
+
+    .theme-toggle::before {
+      content: "";
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: calc(50% - 2px);
+      height: 38px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(57,255,136,.24), rgba(57,255,136,.10));
+      border: 1px solid rgba(57,255,136,.32);
+      box-shadow: 0 3px 12px rgba(57,255,136,.18);
+      transform: translateX(0);
+      transition:
+        transform .42s cubic-bezier(.22, 1, .36, 1),
+        background .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease,
+        filter .3s ease;
+      z-index: 0;
+    }
+
+    .theme-toggle .theme-option {
+      position: relative;
+      z-index: 1;
+      min-width: 0;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 6px;
+      color: var(--muted);
+      font: 700 11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      letter-spacing: .02em;
+      white-space: nowrap;
+      transition:
+        color .25s ease,
+        transform .28s ease,
+        opacity .25s ease;
+    }
+
+    .theme-toggle .theme-option.active {
+      color: var(--text);
+      transform: scale(1.03);
+    }
+
+    .theme-toggle .theme-option:not(.active) {
+      opacity: .8;
+    }
+
+    .theme-toggle .theme-option-icon {
+      margin-right: 5px;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .theme-toggle:hover {
+      transform: translateY(-2px);
+      border-color: var(--neon);
+      box-shadow: 0 0 20px rgba(57,255,136,.15);
+    }
+
+    .theme-toggle:active {
+      transform: translateY(0) scale(.985);
+    }
+
+    .theme-toggle.light-selected {
+      background: rgba(79,70,229,.07);
+      border-color: rgba(79,70,229,.48);
+      box-shadow: inset 0 0 12px rgba(79,70,229,.05);
+    }
+
+    .theme-toggle.light-selected::before {
+      transform: translateX(calc(100% + 0px));
+      background: linear-gradient(135deg, rgba(79,70,229,.20), rgba(37,99,235,.10));
+      border-color: rgba(79,70,229,.30);
+      box-shadow: 0 3px 12px rgba(79,70,229,.18);
+    }
+
+    .theme-toggle.light-selected .theme-option.active {
+      color: #3730a3;
+    }
+
+    .theme-toggle.theme-switching::before {
+      animation: themeSwitchGlow .42s ease;
+    }
+
+    @keyframes themeSwitchGlow {
+      0% {
+        filter: brightness(1);
+      }
+      45% {
+        filter: brightness(1.42);
+      }
+      100% {
+        filter: brightness(1);
+      }
+    }
+
+    .theme-toggle:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 2px;
+    }
+
+    body.light-mode .theme-toggle {
+      background: rgba(79,70,229,.06);
+      border-color: rgba(79,70,229,.35);
+      box-shadow: inset 0 0 12px rgba(79,70,229,.04);
+    }
+
+    body.light-mode .theme-toggle::before {
+      background: linear-gradient(135deg, rgba(79,70,229,.17), rgba(37,99,235,.09));
+      border-color: rgba(79,70,229,.28);
+      box-shadow: 0 3px 12px rgba(79,70,229,.14);
+    }
+
+    /* Light Mode only: cooler LED glow for the simulator */
+    body.light-mode .led-core.active {
+      background: radial-gradient(
+        circle,
+        #ffffff 0%,
+        #eef2ff 14%,
+        #818cf8 38%,
+        #4f46e5 67%,
+        #312e81 100%
+      );
+      border-color: #ffffff;
+      box-shadow:
+        0 0 24px rgba(129,140,248,.85),
+        0 0 52px rgba(79,70,229,.58),
+        0 0 90px rgba(37,99,235,.38);
+    }
+
+    @media (max-width: 380px) {
+      .theme-toggle {
+        width: 164px;
+        height: 46px;
+      }
+
+      .theme-toggle::before {
+        height: 36px;
+      }
+
+      .theme-toggle .theme-option {
+        font-size: 10px;
+        padding: 0 4px;
+      }
+
+      .theme-toggle .theme-option-icon {
+        font-size: 13px;
+        margin-right: 3px;
+      }
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 720px) {
+      .topbar-actions {
+        width: 100%;
+        justify-content: stretch;
+      }
+
+      .topbar-actions > * {
+        flex: 1 1 180px;
+      }
+
+      .theme-toggle {
+        width: 176px;
+        max-width: 100%;
+      }
+    }
+
+
+    @media (prefers-reduced-motion: reduce) {
+      .theme-toggle,
+      .theme-toggle::before,
+      .theme-toggle .theme-option {
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -804,9 +1286,24 @@
         <h1>শব্দ থেকে বিদ্যুৎ তৈরি (Acoustic Harvester)</h1>
         <p class="subtitle">Developed by Yamin Islam | Class 9 Science | Jhalakathi Govt. High School</p>
       </div>
-      <div class="system-status">
-        <span class="status-dot" aria-hidden="true"></span>
-        <span class="mono" id="systemStatus">SYSTEM ONLINE</span>
+      <div class="topbar-actions">
+        <div class="system-status">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span class="mono" id="systemStatus">SYSTEM ONLINE</span>
+        </div>
+        <button
+          class="theme-toggle"
+          id="themeToggle"
+          type="button"
+          aria-label="Switch to Light Mode"
+          title="Switch to Light Mode"
+        >
+          <span class="theme-option active" data-theme-option="dark">
+            <span class="theme-option-icon">🌙</span>DARK
+          </span><span class="theme-option" data-theme-option="light">
+            <span class="theme-option-icon">☀️</span>LIGHT
+          </span>
+        </button>
       </div>
     </header>
 
@@ -987,6 +1484,14 @@
       </article>
     </section>
 
+    <button
+      class="back-to-top"
+      id="backToTop"
+      type="button"
+      aria-label="Back to top"
+      title="Back to top"
+    ><span class="arrow" aria-hidden="true">↑</span></button>
+
     <div class="footer">ACOUSTIC ENERGY HARVESTER (শব্দ থেকে বিদ্যুৎ) // SCIENCE FAIR EDITION // DEVELOPED BY YAMIN ISLAM</div>
   </main>
 
@@ -1033,11 +1538,94 @@
       piezoActivity: document.getElementById("piezoActivity"),
       piezoBar: document.getElementById("piezoBar"),
       telemetryOutput: document.getElementById("telemetryOutput"),
-      systemStatus: document.getElementById("systemStatus")
+      systemStatus: document.getElementById("systemStatus"),
+      themeToggle: document.getElementById("themeToggle")
     };
 
     function clamp(value, min, max) {
       return Math.min(max, Math.max(min, value));
+    }
+
+
+    // -------------------------------
+    // Floating Back-to-Top Button
+    // -------------------------------
+    const backToTop = document.getElementById("backToTop");
+
+    function updateBackToTopVisibility() {
+      if (!backToTop) return;
+      backToTop.classList.toggle("show", window.scrollY > 420);
+    }
+
+    backToTop.addEventListener("click", () => {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    });
+
+    window.addEventListener("scroll", updateBackToTopVisibility, { passive: true });
+    updateBackToTopVisibility();
+
+    // -------------------------------
+    // Light / Dark Mode
+    // Default = Dark Mode
+    // -------------------------------
+    function applyTheme(theme) {
+      const isLight = theme === "light";
+      document.body.classList.toggle("light-mode", isLight);
+
+      if (el.themeToggle) {
+        el.themeToggle.classList.toggle("light-selected", isLight);
+        el.themeToggle.setAttribute(
+          "aria-pressed",
+          isLight ? "true" : "false"
+        );
+        el.themeToggle.setAttribute(
+          "aria-label",
+          isLight ? "Switch to Dark Mode" : "Switch to Light Mode"
+        );
+        el.themeToggle.setAttribute(
+          "title",
+          isLight ? "Switch to Dark Mode" : "Switch to Light Mode"
+        );
+
+        el.themeToggle.querySelectorAll(".theme-option").forEach(option => {
+          option.classList.toggle(
+            "active",
+            option.dataset.themeOption === (isLight ? "light" : "dark")
+          );
+        });
+      }
+
+      // Keep the browser's address/theme UI in sync.
+      const themeColor = isLight ? "#f4f8f6" : "#050807";
+      const themeMeta = document.querySelector('meta[name="theme-color"]');
+      if (themeMeta) themeMeta.setAttribute("content", themeColor);
+
+      try {
+        localStorage.setItem("acoustic-harvester-theme", isLight ? "light" : "dark");
+      } catch (error) {
+        // Ignore storage errors; the button still works for the current session.
+      }
+    }
+
+    function initTheme() {
+      // Dark Mode is always the default when the user has not selected a theme.
+      // A previous Light/Dark selection is remembered for convenience.
+      let selectedTheme = "dark";
+
+      try {
+        const stored = localStorage.getItem("acoustic-harvester-theme");
+        if (stored === "light" || stored === "dark") {
+          selectedTheme = stored;
+        }
+      } catch (error) {
+        // Keep the default: Dark Mode.
+      }
+
+      // Never use the device/browser color preference as the default.
+      applyTheme(selectedTheme);
     }
 
     function updateUI() {
@@ -1165,9 +1753,13 @@
       }
 
       ctx.lineWidth = state.ledOn ? 3.5 : 2.2;
-      ctx.strokeStyle = state.ledOn ? "rgba(255,255,255,.98)" : "rgba(57,255,136,.95)";
+      const themeStyles = getComputedStyle(document.documentElement);
+      const waveActive = themeStyles.getPropertyValue("--wave-active").trim();
+      const waveActiveShadow = themeStyles.getPropertyValue("--wave-active-shadow").trim();
+
+      ctx.strokeStyle = state.ledOn ? waveActive : "rgba(57,255,136,.95)";
       ctx.shadowBlur = state.ledOn ? 25 : 12;
-      ctx.shadowColor = state.ledOn ? "rgba(168,255,203,.9)" : "rgba(57,255,136,.8)";
+      ctx.shadowColor = state.ledOn ? waveActiveShadow : "rgba(57,255,136,.8)";
       ctx.stroke();
       ctx.shadowBlur = 0;
 
@@ -1271,8 +1863,24 @@
       button.addEventListener("click", () => askAI(button.dataset.question || button.textContent));
     });
 
+    // Theme toggle
+    el.themeToggle.addEventListener("click", () => {
+      const nextTheme = document.body.classList.contains("light-mode") ? "dark" : "light";
+
+      el.themeToggle.classList.remove("theme-switching");
+      void el.themeToggle.offsetWidth;
+      el.themeToggle.classList.add("theme-switching");
+
+      applyTheme(nextTheme);
+    });
+
+    el.themeToggle.addEventListener("animationend", () => {
+      el.themeToggle.classList.remove("theme-switching");
+    });
+
     // Initial Chatbot Message
     addMessage("bot", "স্বাগতম! আমি Nexus AI (স্মার্ট চ্যাটবট)। শব্দ থেকে বিদ্যুৎ তৈরির এই প্রজেক্ট নিয়ে আমাকে যেকোনো প্রশ্ন করতে পারো।");
+    initTheme();
     updateUI();
   </script>
 </body>
