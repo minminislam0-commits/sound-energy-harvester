@@ -396,6 +396,77 @@
       transform: translate(3px,-3px);
     }
 
+    /* Nova AI CTA — soft glow only, intentionally no glint/sweep */
+    .chat-nav-card {
+      position: relative;
+      justify-content: flex-start;
+      min-height: 70px;
+      gap: 11px;
+      overflow: hidden;
+      border-color: rgba(176, 106, 255, .46);
+      background:
+        radial-gradient(circle at 12% 50%, rgba(176, 106, 255, .16), transparent 38%),
+        linear-gradient(145deg, rgba(176, 106, 255, .10), rgba(0, 0, 0, .42));
+      box-shadow:
+        inset 0 0 22px rgba(176, 106, 255, .06),
+        0 0 20px rgba(176, 106, 255, .08);
+      animation: chatCtaPulse 3.9s ease-in-out infinite;
+    }
+
+    .chat-nav-card:hover {
+      background:
+        radial-gradient(circle at 12% 50%, rgba(176, 106, 255, .27), transparent 40%),
+        linear-gradient(145deg, rgba(176, 106, 255, .18), rgba(0, 0, 0, .34));
+      border-color: #c79bff;
+      box-shadow:
+        inset 0 0 22px rgba(176, 106, 255, .11),
+        0 0 30px rgba(176, 106, 255, .24);
+      transform: translateY(-5px) scale(1.01);
+    }
+
+    .chat-nav-icon {
+      width: 37px;
+      height: 37px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: 11px;
+      color: #13071f;
+      background: #b06aff;
+      box-shadow: 0 0 18px rgba(176, 106, 255, .42);
+      font-weight: 900;
+    }
+
+    .chat-nav-text {
+      display: grid;
+      gap: 3px;
+      text-align: left;
+      flex: 1;
+    }
+
+    .chat-nav-text strong {
+      font-size: 13px;
+      letter-spacing: .08em;
+      color: #ead7ff;
+    }
+
+    .chat-nav-text small {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: .04em;
+    }
+
+    @keyframes chatCtaPulse {
+      0%, 100% {
+        transform: translateY(0);
+        box-shadow: inset 0 0 22px rgba(176,106,255,.06), 0 0 16px rgba(176,106,255,.06);
+      }
+      50% {
+        transform: translateY(-2px);
+        box-shadow: inset 0 0 28px rgba(176,106,255,.11), 0 0 28px rgba(176,106,255,.17);
+      }
+    }
+
     @keyframes labCtaPulse {
       0%, 100% { box-shadow: inset 0 0 22px rgba(77,255,243,.06), 0 0 16px rgba(77,255,243,.06); }
       50% { box-shadow: inset 0 0 28px rgba(77,255,243,.10), 0 0 27px rgba(77,255,243,.14); }
@@ -411,10 +482,8 @@
     @media (prefers-reduced-motion: reduce) {
       .lab-nav-card,
       .lab-nav-card::before,
-      .lab-nav-card:hover .lab-nav-arrow {
-        animation: none !important;
-        transition-duration: .01ms !important;
-      }
+      .lab-nav-card:hover .lab-nav-arrow,
+      .chat-nav-card,
     }
 
     @keyframes portfolioCtaPulse {
@@ -440,21 +509,24 @@
       box-shadow: 0 0 18px rgba(57,255,136,.45);
     }
 
-    /* Interactive-Lab style scroll reveal animation */
+    /* Clean bottom-up scroll reveal: no fade, no blur */
     .main-reveal {
-      opacity: 0;
-      transform: translateY(24px);
-      filter: blur(2px);
+      opacity: 1;
+      visibility: hidden;
+      transform: translateY(48px);
+      will-change: transform;
       transition:
-        opacity .65s ease,
-        transform .65s cubic-bezier(.22,1,.36,1),
-        filter .65s ease;
+        transform .72s cubic-bezier(.22,1,.36,1),
+        visibility 0s linear .72s;
     }
 
     .main-reveal.visible {
       opacity: 1;
-      transform: none;
-      filter: none;
+      visibility: visible;
+      transform: translateY(0);
+      transition:
+        transform .72s cubic-bezier(.22,1,.36,1),
+        visibility 0s linear 0s;
     }
 
     /* The dashboard wrapper itself should never hide its children.
@@ -701,7 +773,7 @@
       z-index: 5;
       isolation: isolate;
       transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease, background .25s ease;
-      animation: simLabLauncherPulse 3s ease-in-out infinite;
+      animation: simLabLauncherPulse 3s ease-in-out infinite, simLabLauncherNudge 4.2s ease-in-out infinite;
     }
 
     .sim-lab-launch .lab-launch-icon {
@@ -765,6 +837,16 @@
     @keyframes simLabLauncherPulse {
       0%, 100% { box-shadow: inset 0 0 14px rgba(77,255,243,.05), 0 0 12px rgba(77,255,243,.06); }
       50% { box-shadow: inset 0 0 18px rgba(77,255,243,.09), 0 0 22px rgba(77,255,243,.12); }
+    }
+
+    /* A subtle reminder animation every few seconds so the lab control feels alive. */
+    @keyframes simLabLauncherNudge {
+      0%, 84%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+      86% { transform: translate3d(-2px, 0, 0) rotate(-2deg); }
+      88% { transform: translate3d(2px, 0, 0) rotate(2deg); }
+      90% { transform: translate3d(-2px, 0, 0) rotate(-1.5deg); }
+      92% { transform: translate3d(2px, 0, 0) rotate(1.5deg); }
+      94% { transform: translate3d(0, 0, 0) rotate(0deg); }
     }
 
     @media (max-width: 700px) {
@@ -2007,7 +2089,11 @@
       transform: translateY(24px);
       filter: blur(2px);
       will-change: opacity, transform, filter;
-      transition: opacity .65s ease, transform .65s cubic-bezier(.22,1,.36,1), filter .65s ease;
+      transition:
+        opacity .65s ease,
+        transform .65s cubic-bezier(.22,1,.36,1),
+        filter .65s ease;
+      animation: none;
     }
 
     .main-reveal.visible {
@@ -2016,9 +2102,11 @@
       filter: none;
     }
 
-    /* Fallback for browsers where the observer is unavailable */
+    /* The dashboard wrapper itself should never hide its children. */
     .main-reveal-stagger {
       opacity: 1;
+      transform: none;
+      filter: none;
     }
 
     .credits-card {
@@ -2100,8 +2188,9 @@
 
     @media (prefers-reduced-motion: reduce) {
       .main-reveal {
+        opacity: 1 !important;
+        visibility: visible !important;
         transform: none !important;
-        filter: none !important;
       }
       .credits-card::before { display: none; }
     }
@@ -2159,9 +2248,15 @@
           </span>
           <span class="lab-nav-arrow">↗</span>
         </a>
+        <a href="#chat-section" class="nav-card chat-nav-card" aria-label="Open Nova AI chatbot">
+          <span class="chat-nav-icon">🤖</span>
+          <span class="chat-nav-text">
+            <strong>NOVA AI</strong>
+            <small>Chatbot</small>
+          </span>
+        </a>
         <a href="#theory-section" class="nav-card">🔬 মেইন থিওরি (Theory)</a>
         <a href="#simulator-section" class="nav-card">⚡ লাইভ সিমুলেশন (Simulator)</a>
-        <a href="#chat-section" class="nav-card">🤖 স্মার্ট চ্যাটবট (Nexus AI)</a>
         <a href="#info-section" class="nav-card">📚 প্রশ্নোত্তর পর্ব (Q&A Info)</a>
       </div>
     </section>
@@ -2264,7 +2359,7 @@
 
       <!-- 06: AI Chatbot -->
       <article class="panel chat main-reveal" id="chat-section">
-        <div class="panel-label"><span>06 // NEXUS AI (স্মার্ট চ্যাটবট)</span><span class="tag">API CONNECTED</span></div>
+        <div class="panel-label"><span>06 // NOVA AI (Chatbot)</span><span class="tag">API CONNECTED</span></div>
         <div class="chat-window" id="chatWindow" aria-live="polite"></div>
         <div class="quick-actions">
           <button class="quick-btn" data-question="How does acoustic energy harvesting work?">How does it work?</button>
@@ -2274,7 +2369,7 @@
           <button class="quick-btn" data-question="What are the limitations of this project?">Limitations?</button>
         </div>
         <div class="chat-input-row">
-          <input class="chat-input" id="chatInput" type="text" placeholder="Nexus AI-কে প্রজেক্ট সম্পর্কে যেকোনো প্রশ্ন করুন (Ask anything)..." autocomplete="off">
+          <input class="chat-input" id="chatInput" type="text" placeholder="Nova AI-কে প্রজেক্ট সম্পর্কে যেকোনো প্রশ্ন করুন (Ask anything)..." autocomplete="off">
           <button class="btn primary" id="sendBtn">SEND</button>
         </div>
       </article>
@@ -2342,6 +2437,7 @@
           <li>Masons</li>
           <li>Taky</li>
           <li>Jahid</li>
+          <li>Abdullah</li>
         </ul>
       </div>
     </section>
@@ -2358,7 +2454,7 @@
   </main>
 
   <script>
-    // Interactive Science Lab-style scroll motion with sequential reveals.
+    // Interactive Science Lab-style scroll reveal with a gentle one-by-one queue.
     const mainScrollProgress = document.getElementById("mainScrollProgress");
     const mainRevealItems = [...document.querySelectorAll(".main-reveal:not(.visible)")];
     const mainPrefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -2366,7 +2462,7 @@
     if (mainPrefersReduced) {
       mainRevealItems.forEach((item) => item.classList.add("visible"));
     } else if ("IntersectionObserver" in window) {
-      let revealQueue = [];
+      const revealQueue = [];
       let revealTimer = null;
       let isRevealing = false;
 
@@ -2379,40 +2475,38 @@
 
         isRevealing = true;
         const item = revealQueue.shift();
-        item.classList.add("visible");
-        mainRevealObserver.unobserve(item);
-
-        revealTimer = window.setTimeout(revealNext, 125);
+        if (!item.classList.contains("visible")) {
+          item.classList.add("visible");
+        }
+        observer.unobserve(item);
+        revealTimer = window.setTimeout(revealNext, 90);
       };
 
-      const mainRevealObserver = new IntersectionObserver((entries) => {
-        const freshEntries = entries
-          .filter((entry) => entry.isIntersecting && !entry.target.classList.contains("visible"))
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-
-        freshEntries.forEach((entry) => {
-          if (!revealQueue.includes(entry.target)) revealQueue.push(entry.target);
-        });
-
+      const queueReveal = (item) => {
+        if (!item || item.classList.contains("visible") || revealQueue.includes(item)) return;
+        revealQueue.push(item);
         revealQueue.sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top);
         if (!isRevealing) revealNext();
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries
+          .filter((entry) => entry.isIntersecting && !entry.target.classList.contains("visible"))
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
+          .forEach((entry) => queueReveal(entry.target));
       }, {
         threshold: 0.04,
         rootMargin: "0px 0px 100px 0px"
       });
 
-      mainRevealItems.forEach((item) => mainRevealObserver.observe(item));
+      mainRevealItems.forEach((item) => observer.observe(item));
 
-      // Catch the opening viewport without changing the existing page-load animation.
+      // Immediately queue anything already visible on first paint.
       requestAnimationFrame(() => {
-        const initial = mainRevealItems
+        mainRevealItems
           .filter((item) => item.getBoundingClientRect().top < window.innerHeight * 0.92)
-          .sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top);
-
-        initial.forEach((item) => {
-          if (!revealQueue.includes(item)) revealQueue.push(item);
-        });
-        if (!isRevealing) revealNext();
+          .sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top)
+          .forEach(queueReveal);
       });
     } else {
       mainRevealItems.forEach((item) => item.classList.add("visible"));
@@ -2705,7 +2799,7 @@
     requestAnimationFrame(drawWave);
 
     // -------------------------------
-    // Backend API Connected Chatbot (NEXUS AI)
+    // Backend API Connected Chatbot (NOVA AI)
     // -------------------------------
     const chatWindow = document.getElementById("chatWindow");
     const chatInput = document.getElementById("chatInput");
@@ -2717,7 +2811,7 @@
       const label = document.createElement("span");
       label.className = "msg-label";
       // Update chatbot label name
-      label.innerHTML = role === "bot" ? "🤖 NEXUS AI" : "👤 YOU";
+      label.innerHTML = role === "bot" ? "🤖 NOVA AI" : "👤 YOU";
 
       const body = document.createElement("span");
       body.textContent = text;
@@ -2735,7 +2829,7 @@
 
       const label = document.createElement("span");
       label.className = "msg-label";
-      label.innerHTML = "🤖 NEXUS AI";
+      label.innerHTML = "🤖 NOVA AI";
 
       const status = document.createElement("span");
       status.className = "processing";
@@ -2813,7 +2907,7 @@
     });
 
     // Initial Chatbot Message
-    addMessage("bot", "স্বাগতম! আমি Nexus AI (স্মার্ট চ্যাটবট)। শব্দ থেকে বিদ্যুৎ তৈরির এই প্রজেক্ট নিয়ে আমাকে যেকোনো প্রশ্ন করতে পারো।");
+    addMessage("bot", "স্বাগতম! আমি Nova AI (Chatbot)। শব্দ থেকে বিদ্যুৎ তৈরির এই প্রজেক্ট নিয়ে আমাকে যেকোনো প্রশ্ন করতে পারো।");
     initTheme();
     updateUI();
   </script>
