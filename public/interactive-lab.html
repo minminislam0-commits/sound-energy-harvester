@@ -69,6 +69,26 @@ h1{margin:0;font:700 clamp(26px,4vw,42px)/1.1 ui-monospace,SFMono-Regular,Menlo,
 .quiz{display:grid;grid-template-columns:1fr 1fr;gap:14px}.quiz-card{padding:16px;border:1px solid var(--line);border-radius:14px;background:rgba(0,0,0,.2)}.quiz-card h3{margin:0 0 12px;font-size:15px;line-height:1.5}.options{display:grid;gap:8px}.option{width:100%;text-align:left;padding:11px 13px;border:1px solid rgba(57,255,136,.17);border-radius:11px;background:rgba(57,255,136,.025);color:var(--text);transition:.2s ease}.option:hover{border-color:var(--cyan);transform:translateX(3px)}.option.correct{border-color:var(--neon);background:rgba(57,255,136,.14)}.option.wrong{border-color:var(--danger);background:rgba(255,107,131,.1)}.option:disabled{cursor:default;opacity:.95}.feedback{margin-top:9px;min-height:20px;color:var(--muted);font-size:11px;line-height:1.5}.quiz-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px}.quiz-score{color:var(--neon2);font-size:13px;font-weight:700}
 .sim-note{padding:12px;border:1px solid rgba(255,227,110,.25);border-radius:11px;background:rgba(255,227,110,.045);color:var(--yellow);font-size:11px;line-height:1.6}
 .footer{margin-top:26px;padding:20px;text-align:center;border-top:1px solid rgba(57,255,136,.1);color:#5d7465;font:11px ui-monospace,monospace;letter-spacing:.08em;line-height:1.9}.footer a{color:var(--neon2)}
+
+/* Corner navigation menu */
+.corner-nav{position:fixed;top:16px;right:16px;z-index:40;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.corner-nav-toggle{width:44px;height:44px;border:1px solid var(--line-strong);border-radius:12px;background:rgba(4,12,8,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:var(--neon);display:grid;place-items:center;box-shadow:0 0 22px rgba(57,255,136,.11);transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease,background .22s ease}
+.corner-nav-toggle:hover{transform:translateY(-2px);border-color:var(--neon);box-shadow:0 0 28px rgba(57,255,136,.2)}
+.corner-nav-toggle[aria-expanded="true"]{background:rgba(8,24,15,.95);border-color:var(--neon);box-shadow:0 0 30px rgba(57,255,136,.22)}
+.corner-nav-dots{display:flex;flex-direction:column;gap:3px;align-items:center;justify-content:center}
+.corner-nav-dots span{display:block;width:4px;height:4px;border-radius:50%;background:currentColor;box-shadow:0 0 7px currentColor}
+.corner-nav-panel{position:absolute;top:54px;right:0;width:min(290px,calc(100vw - 28px));padding:10px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(145deg,rgba(8,22,14,.97),rgba(3,9,6,.97));box-shadow:0 18px 42px rgba(0,0,0,.34),0 0 28px rgba(57,255,136,.11);opacity:0;transform:translateY(-8px) scale(.98);transform-origin:top right;pointer-events:none;visibility:hidden;transition:opacity .22s ease,transform .22s cubic-bezier(.22,1,.36,1),visibility .22s ease}
+.corner-nav-panel.open{opacity:1;transform:none;pointer-events:auto;visibility:visible}
+.corner-nav-head{padding:8px 10px 9px;color:var(--muted);font-size:9px;letter-spacing:.16em;text-transform:uppercase;border-bottom:1px dashed rgba(57,255,136,.14);margin-bottom:7px}
+.corner-nav-list{display:grid;gap:4px;max-height:min(70vh,560px);overflow:auto}
+.corner-nav-link{display:flex;align-items:center;gap:10px;width:100%;padding:10px 11px;border:1px solid transparent;border-radius:11px;background:transparent;color:var(--text);text-decoration:none;font:700 11px/1.35 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;transition:background .18s ease,border-color .18s ease,transform .18s ease,color .18s ease}
+.corner-nav-link:hover{transform:translateX(2px);background:rgba(57,255,136,.07);border-color:rgba(57,255,136,.2);color:var(--neon2)}
+.corner-nav-num{width:28px;flex:0 0 28px;color:var(--cyan);font-size:9px;letter-spacing:.05em}
+.corner-nav-label{min-width:0}
+body.light-mode .corner-nav-toggle{background:rgba(255,255,255,.9);box-shadow:0 10px 28px rgba(37,72,53,.13)}
+body.light-mode .corner-nav-panel{background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(242,249,245,.98));box-shadow:0 18px 40px rgba(37,72,53,.13),0 0 24px rgba(22,138,74,.08)}
+@media(max-width:760px){.corner-nav{top:10px;right:10px}.corner-nav-toggle{width:42px;height:42px}.corner-nav-panel{top:50px;width:min(282px,calc(100vw - 20px))}}
+@media(prefers-reduced-motion:reduce){.corner-nav-toggle,.corner-nav-panel,.corner-nav-link{transition:none}}
 .back-top{position:fixed;right:18px;bottom:18px;z-index:1000;width:46px;height:46px;border:1px solid var(--line-strong);border-radius:50%;color:var(--text);background:var(--panel);opacity:0;visibility:hidden;transform:translateY(10px);transition:.25s;box-shadow:0 10px 25px rgba(0,0,0,.25)}.back-top.show{opacity:1;visibility:visible;transform:none}.back-top:hover{border-color:var(--neon);box-shadow:0 0 22px rgba(57,255,136,.2)}
 .toast{position:fixed;right:18px;bottom:76px;z-index:1100;padding:11px 14px;border:1px solid var(--line-strong);border-radius:11px;background:var(--panel);color:var(--text);font-size:12px;opacity:0;transform:translateY(10px);pointer-events:none;transition:.25s}.toast.show{opacity:1;transform:none}
 .presentation-mode .hide-presentation{display:none!important}.presentation-mode .app{width:min(1540px,96vw)}.presentation-mode .panel{padding:16px}.presentation-mode .wave-wrap{height:360px}.presentation-mode .metric-value{font-size:34px}
@@ -85,6 +105,24 @@ body.light-mode .readout,body.light-mode .metric,body.light-mode .chart-card,bod
 <body>
 <div class="progress" id="progress"></div>
 <div class="app">
+<div class="corner-nav" id="cornerNav">
+  <button class="corner-nav-toggle" id="cornerNavToggle" type="button" aria-label="Open lab navigation" aria-expanded="false" aria-controls="cornerNavPanel" title="Lab Navigation">
+    <span class="corner-nav-dots" aria-hidden="true"><span></span><span></span><span></span></span>
+  </button>
+  <nav class="corner-nav-panel" id="cornerNavPanel" aria-label="Interactive Science Lab sections">
+    <div class="corner-nav-head">LAB NAVIGATION // SECTIONS</div>
+    <div class="corner-nav-list">
+      <a class="corner-nav-link" href="#visualizer"><span class="corner-nav-num">01</span><span class="corner-nav-label">Live Sound Visualizer</span></a>
+      <a class="corner-nav-link" href="#energy-core-section"><span class="corner-nav-num">02</span><span class="corner-nav-label">Energy Core</span></a>
+      <a class="corner-nav-link" href="#energy-dashboard-section"><span class="corner-nav-num">03</span><span class="corner-nav-label">Energy Generation Dashboard</span></a>
+      <a class="corner-nav-link" href="#flow-section"><span class="corner-nav-num">04</span><span class="corner-nav-label">How It Works — Interactive Flow</span></a>
+      <a class="corner-nav-link" href="#experiment-section"><span class="corner-nav-num">05</span><span class="corner-nav-label">Live Experiment Dashboard</span></a>
+      <a class="corner-nav-link" href="#notes-section"><span class="corner-nav-num">06</span><span class="corner-nav-label">Science Notes</span></a>
+      <a class="corner-nav-link" href="#highlights-section"><span class="corner-nav-num">07</span><span class="corner-nav-label">Project Highlights</span></a>
+      <a class="corner-nav-link" href="#quizSection"><span class="corner-nav-num">08</span><span class="corner-nav-label">Mini Science Quiz</span></a>
+    </div>
+  </nav>
+</div>
   <header class="topbar reveal visible">
     <div>
       <div class="eyebrow">ACOUSTIC ENERGY HARVESTER // SCIENCE LAB</div>
@@ -128,7 +166,7 @@ body.light-mode .readout,body.light-mode .metric,body.light-mode .chart-card,bod
       </div>
     </section>
 
-    <section class="panel span-4 reveal core-panel">
+    <section class="panel span-4 reveal core-panel" id="energy-core-section">
       <div class="panel-label"><span>02 // Energy Core</span><span class="tag">SAFE DEMO</span></div>
       <div class="status-pill"><span class="status-dot" id="statusDot"></span><span id="systemStatus">● SYSTEM ACTIVE</span></div>
       <div class="energy-core"><div class="core-ring"></div><div class="core-ring r2"></div><div class="led-core active" id="ledCore"></div></div>
@@ -137,7 +175,7 @@ body.light-mode .readout,body.light-mode .metric,body.light-mode .chart-card,bod
       <div class="control-row"><button class="btn" id="resetBtn" type="button">↺ Reset Simulation</button></div>
     </section>
 
-    <section class="panel span-12 reveal">
+    <section class="panel span-12 reveal" id="energy-dashboard-section">
       <div class="panel-label"><span>03 // Energy Generation Dashboard</span><span class="tag">SIMULATION DATA</span></div>
       <div class="metric-grid">
         <article class="metric"><div class="kicker">Voltage</div><div class="metric-value" id="voltage">2.80</div><span class="metric-unit">V</span><div class="spark"><svg viewBox="0 0 220 48" preserveAspectRatio="none"><polyline id="sparkVoltage" fill="none" stroke="var(--neon)" stroke-width="2.5" points=""></polyline></svg></div></article>
@@ -151,7 +189,7 @@ body.light-mode .readout,body.light-mode .metric,body.light-mode .chart-card,bod
       </div>
     </section>
 
-    <section class="panel span-12 reveal">
+    <section class="panel span-12 reveal" id="flow-section">
       <div class="panel-label"><span>04 // How It Works — Interactive Flow</span><span class="tag">CLICK A STEP</span></div>
       <div class="flow" id="flow">
         <button class="flow-step active" data-step="0" type="button"><span class="step-num">01</span><h3>Sound Wave</h3><p>Pressure changes travel through the air as a sound wave.</p></button>
@@ -163,7 +201,7 @@ body.light-mode .readout,body.light-mode .metric,body.light-mode .chart-card,bod
       <div class="flow-detail" id="flowDetail">Sound creates mechanical vibrations that can interact with a piezoelectric material.</div>
     </section>
 
-    <section class="panel span-7 reveal">
+    <section class="panel span-7 reveal" id="experiment-section">
       <div class="panel-label"><span>05 // ⚡ Live Experiment Dashboard</span><span class="tag">AUTO UPDATE</span></div>
       <div class="chart-grid">
         <div class="chart-card"><div class="chart-meta"><span>Live Voltage</span><b id="voltageLive">2.80 V</b></div><canvas class="chart" id="voltageChart"></canvas></div>
@@ -177,7 +215,7 @@ body.light-mode .readout,body.light-mode .metric,body.light-mode .chart-card,bod
       </div>
     </section>
 
-    <section class="panel span-5 reveal">
+    <section class="panel span-5 reveal" id="notes-section">
       <div class="panel-label"><span>06 // Science Notes</span><span class="tag">CLASS 9</span></div>
       <p class="muted" style="margin:0 0 14px;line-height:1.7">This dashboard is a visual learning tool. It shows how changes in sound and vibration can be connected to an energy-harvesting idea.</p>
       <div class="sim-note">Real Experimental Measurement = data read from physical sensors.<br><br>Simulation = demonstration values generated by JavaScript for the science-fair webpage.</div>
@@ -189,7 +227,7 @@ body.light-mode .readout,body.light-mode .metric,body.light-mode .chart-card,bod
       </div>
     </section>
 
-    <section class="panel span-12 reveal">
+    <section class="panel span-12 reveal" id="highlights-section">
       <div class="panel-label"><span>07 // Project Highlights</span><span class="tag">SCIENCE FAIR</span></div>
       <div class="highlights">
         <article class="highlight"><div class="highlight-icon">⚡</div><h3>Converts Sound Vibrations</h3><p>Shows the idea of turning mechanical vibration into an electrical signal.</p></article>
@@ -220,7 +258,17 @@ body.light-mode .readout,body.light-mode .metric,body.light-mode .chart-card,bod
 "use strict";
 const $=(s,r=document)=>r.querySelector(s);
 const $$=(s,r=document)=>[...r.querySelectorAll(s)];
-const safeSet=(id,value)=>{const e=$(id);if(e)e.textContent=value};
+const safeSet=(id,value)=>{const e=$(id);if(e)e.textContent=value};const cornerNavToggle=$("#cornerNavToggle"),cornerNavPanel=$("#cornerNavPanel"),cornerNavLinks=$$(".corner-nav-link");
+function setCornerNav(open){
+  if(!cornerNavToggle||!cornerNavPanel)return;
+  cornerNavToggle.setAttribute("aria-expanded",String(open));
+  cornerNavPanel.classList.toggle("open",open);
+}
+cornerNavToggle?.addEventListener("click",()=>setCornerNav(cornerNavToggle.getAttribute("aria-expanded")!=="true"));
+cornerNavLinks.forEach(link=>link.addEventListener("click",()=>setCornerNav(false)));
+document.addEventListener("click",e=>{if(!$("#cornerNav")?.contains(e.target))setCornerNav(false)});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")setCornerNav(false)});
+
 const clamp=(n,min,max)=>Math.min(max,Math.max(min,n));
 const prefersReduced=window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches||false;
 
